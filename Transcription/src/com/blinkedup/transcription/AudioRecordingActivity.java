@@ -70,15 +70,14 @@ public class AudioRecordingActivity extends Activity {
 		}
 
 		
-		
-		return (file.getAbsolutePath() + "/" + System.currentTimeMillis() + file_exts[currentFormat]);	
+		return (file.getAbsolutePath() + "/" + "REC1" + file_exts[currentFormat]);	
 
 	
 	}
 	
 	
 	private void rename() {
-	
+		 String srt = "";
 		// this context will use when we work with Alert Dialog
 				final Context context = this;
 
@@ -99,7 +98,17 @@ public class AudioRecordingActivity extends Activity {
     	 String srt = input.getEditableText().toString();
     	 Toast.makeText(context,srt,Toast.LENGTH_LONG).show();    
     	 
-    
+    	 String filepath = Environment.getExternalStorageDirectory().getPath();
+ 		File file = new File(filepath, AUDIO_RECORDER_FOLDER);
+     	//	File oldfile =new File(getFilename());
+     	//  File newfile =new File(file.getAbsolutePath() + "/" + "im_new" + file_exts[currentFormat]);
+     	 
+     	  if (file != null && file.exists()) {
+               File from = new File(getFilename().toString());
+               File to = new File(file.getAbsolutePath().toString() + "/" + input.getEditableText().toString() + file_exts[currentFormat]); 
+               from.renameTo(to);
+           }
+
     	 
     	} // End of onClick(DialogInterface dialog, int whichButton)
     }); //End of alert.setPositiveButton
@@ -112,19 +121,7 @@ public class AudioRecordingActivity extends Activity {
     	AlertDialog alertDialog = alert.create();
     	alertDialog.show();
     	
-    	String filepath = Environment.getExternalStorageDirectory().getPath();
-		File file = new File(filepath, AUDIO_RECORDER_FOLDER);
-
-	
-    	//	File oldfile =new File(getFilename());
-    	//  File newfile =new File(file.getAbsolutePath() + "/" + "im_new" + file_exts[currentFormat]);
-    	 
-    	  if (file != null && file.exists()) {
-              File from = new File(getFilename());
-              File to = new File(file.getAbsolutePath() + "/" + "im_new" + file_exts[currentFormat]);
-              from.renameTo(to);
-          }
-
+    	
 
 	}
 	
