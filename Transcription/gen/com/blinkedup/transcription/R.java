@@ -40,7 +40,7 @@ public final class R {
     }
     public static final class id {
         public static final int LinearLayout1=0x7f080001;
-        public static final int action_settings=0x7f08001b;
+        public static final int action_settings=0x7f08001f;
         public static final int btnFormat=0x7f080019;
         public static final int btnLoad=0x7f080006;
         public static final int btnLogin=0x7f080004;
@@ -50,6 +50,10 @@ public final class R {
         public static final int btnVolDown=0x7f08000d;
         public static final int btnVolUp=0x7f08000c;
         public static final int btnlogout=0x7f080007;
+        public static final int buttonreset=0x7f08001d;
+        public static final int buttonstart=0x7f08001b;
+        public static final int buttonstop=0x7f08001c;
+        public static final int chronometer=0x7f08001a;
         public static final int etPassword=0x7f080003;
         public static final int etUsername=0x7f080002;
         public static final int listView1=0x7f080009;
@@ -63,7 +67,7 @@ public final class R {
         public static final int textViewOutput=0x7f080010;
         public static final int tglPlayPause=0x7f08000a;
         public static final int txtpassword=0x7f080013;
-        public static final int txtuser=0x7f08001a;
+        public static final int txtuser=0x7f08001e;
         public static final int txtusername=0x7f080011;
         public static final int txtwelcome=0x7f08000f;
         public static final int username=0x7f080012;
@@ -81,7 +85,8 @@ public final class R {
         public static final int dropdown_item=0x7f030009;
         public static final int loginsignup=0x7f03000a;
         public static final int main=0x7f03000b;
-        public static final int welcome=0x7f03000c;
+        public static final int main1=0x7f03000c;
+        public static final int welcome=0x7f03000d;
     }
     public static final class menu {
         public static final int audio_record=0x7f070000;

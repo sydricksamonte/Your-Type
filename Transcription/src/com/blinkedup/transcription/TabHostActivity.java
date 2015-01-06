@@ -42,6 +42,14 @@ public class TabHostActivity extends TabActivity {
 				.setContent(intent);
 		tabHost.addTab(spec);
 		
+		intent = new Intent().setClass(this, AndroidChronometer.class);
+		spec = tabHost
+				.newTabSpec("contact")
+				.setIndicator("TIMER",
+						res.getDrawable(R.drawable.ic_tab_contact))
+				.setContent(intent);
+		tabHost.addTab(spec);
+		
 		//set tab which one you want open first time 0 or 1 or 2
 		tabHost.setCurrentTab(0);
 		
