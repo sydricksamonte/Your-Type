@@ -34,7 +34,6 @@
         <activity android:name=".ContactActivity" />
         <activity android:name=".Welcome" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".AndroidChronometer" />
         
         <activity
             android:name=".RecordingsActivity"
