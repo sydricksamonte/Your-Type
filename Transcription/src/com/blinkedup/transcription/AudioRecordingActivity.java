@@ -2,6 +2,8 @@ package com.blinkedup.transcription;
 
 import java.io.File;
 import java.io.IOException;
+
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -9,16 +11,19 @@ import android.content.DialogInterface;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class AudioRecordingActivity extends Activity {
 	private static final String AUDIO_RECORDER_FILE_EXT_3GP = ".3gp";
 	private static final String AUDIO_RECORDER_FILE_EXT_MP4 = ".mp4";
-	private static final String AUDIO_RECORDER_FOLDER = "AudioRecorder";
+	private static final String AUDIO_RECORDER_FOLDER = "YourType";
 
 	private MediaRecorder recorder = null;
 	private int currentFormat = 0;
@@ -26,6 +31,16 @@ public class AudioRecordingActivity extends Activity {
 			MediaRecorder.OutputFormat.THREE_GPP };
 	private String file_exts[] = { AUDIO_RECORDER_FILE_EXT_MP4,
 			AUDIO_RECORDER_FILE_EXT_3GP };
+	
+	private TextView timerValue;
+	
+	private long startTime = 0L;
+	
+	private Handler customHandler = new Handler();
+	
+	long timeInMilliseconds = 0L;
+	long timeSwapBuff = 0L;
+	long updatedTime = 0L;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +50,8 @@ public class AudioRecordingActivity extends Activity {
 		setButtonHandlers();
 		enableButtons(false);
 		setFormatButtonCaption();
+		
+		timerValue = (TextView) findViewById(R.id.timerValue);
 	}
 
 	private void setButtonHandlers() {
@@ -129,6 +146,9 @@ public class AudioRecordingActivity extends Activity {
 	
 
 	private void startRecording() {
+		
+		startTime = SystemClock.uptimeMillis();
+		customHandler.postDelayed(updateTimerThread, 0);
 		recorder = new MediaRecorder();
 
 		recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -151,7 +171,8 @@ public class AudioRecordingActivity extends Activity {
 
 	private void stopRecording() {
 		
-		
+		timeSwapBuff += timeInMilliseconds;
+		customHandler.removeCallbacks(updateTimerThread);
 		
 		if (null != recorder) {
 			recorder.stop();
@@ -163,6 +184,25 @@ public class AudioRecordingActivity extends Activity {
 
 		 rename();
 	}
+	
+	private Runnable updateTimerThread = new Runnable() {
+
+		public void run() {
+			
+			timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
+			
+			updatedTime = timeSwapBuff + timeInMilliseconds;
+
+			int secs = (int) (updatedTime / 1000);
+			int mins = secs / 60;
+			secs = secs % 60;
+			int milliseconds = (int) (updatedTime % 1000);
+			timerValue.setText("" + mins + ":"
+					+ String.format("%02d", secs));
+			customHandler.postDelayed(this, 0);
+		}
+
+	};
 
 	private void displayFormatDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
