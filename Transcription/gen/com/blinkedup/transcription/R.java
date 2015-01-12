@@ -40,13 +40,13 @@ public final class R {
     }
     public static final class id {
         public static final int LinearLayout1=0x7f080001;
-        public static final int action_settings=0x7f08001b;
-        public static final int btnFormat=0x7f080019;
+        public static final int action_settings=0x7f08001d;
+        public static final int btnFormat=0x7f08001b;
         public static final int btnLoad=0x7f080006;
         public static final int btnLogin=0x7f080004;
         public static final int btnSave=0x7f080005;
-        public static final int btnStart=0x7f080017;
-        public static final int btnStop=0x7f080018;
+        public static final int btnStart=0x7f080019;
+        public static final int btnStop=0x7f08001a;
         public static final int btnVolDown=0x7f08000d;
         public static final int btnVolUp=0x7f08000c;
         public static final int btnlogout=0x7f080007;
@@ -57,13 +57,15 @@ public final class R {
         public static final int logout=0x7f08000e;
         public static final int lstAllUsers=0x7f080008;
         public static final int password=0x7f080014;
+        public static final int pauseButton=0x7f080018;
         public static final int seekBar1=0x7f08000b;
         public static final int signup=0x7f080016;
         public static final int textView1=0x7f080000;
         public static final int textViewOutput=0x7f080010;
         public static final int tglPlayPause=0x7f08000a;
+        public static final int timerValue=0x7f080017;
         public static final int txtpassword=0x7f080013;
-        public static final int txtuser=0x7f08001a;
+        public static final int txtuser=0x7f08001c;
         public static final int txtusername=0x7f080011;
         public static final int txtwelcome=0x7f08000f;
         public static final int username=0x7f080012;
@@ -99,6 +101,7 @@ public final class R {
         public static final int hello_world=0x7f050003;
         public static final int start_recording=0x7f050009;
         public static final int stop_recording=0x7f05000a;
+        public static final int timerVal=0x7f05000c;
         public static final int title_activity_audio_record=0x7f050005;
         public static final int title_activity_record=0x7f050006;
         public static final int title_activity_recordings=0x7f050007;
