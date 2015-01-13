@@ -2,8 +2,11 @@ package com.blinkedup.transcription;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
+import java.util.List;
 
+import android.app.ListActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,10 +18,16 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.Format;
+import java.text.SimpleDateFormat; 
+
+import java.util.Calendar;
 
 public class AudioRecordingActivity extends Activity {
 	private static final String AUDIO_RECORDER_FILE_EXT_3GP = ".3gp";
@@ -41,9 +50,18 @@ public class AudioRecordingActivity extends Activity {
 	long timeInMilliseconds = 0L;
 	long timeSwapBuff = 0L;
 	long updatedTime = 0L;
+	
+	private RecordingOperations recordingDBoperation;
 
+	/*public void addUser(View view) {
+
+	
+
+	}*/
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
@@ -52,6 +70,9 @@ public class AudioRecordingActivity extends Activity {
 		setFormatButtonCaption();
 		
 		timerValue = (TextView) findViewById(R.id.timerValue);
+		
+		recordingDBoperation = new RecordingOperations(this);
+		recordingDBoperation.open();
 	}
 
 	private void setButtonHandlers() {
@@ -124,6 +145,20 @@ public class AudioRecordingActivity extends Activity {
                File from = new File(getFilename().toString());
                File to = new File(file.getAbsolutePath().toString() + "/" + input.getEditableText().toString() + file_exts[currentFormat]); 
                from.renameTo(to);
+               
+           //	ArrayAdapter adapter = (ArrayAdapter) getListAdapter();
+
+    		//EditText text = (EditText) findViewById(R.id.editText1);
+
+    		//adapter.add(rec);
+               
+               Calendar c = Calendar.getInstance();
+               SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM:dd HH:mm:ss");
+               String strDate = sdf.format(c.getTime());
+               
+           	recordingDBoperation.addRecording(input.getEditableText().toString(), strDate, "", 0, 0, 0, true, file_exts[currentFormat],"");
+
+           			
            }
 
     	 
@@ -183,6 +218,7 @@ public class AudioRecordingActivity extends Activity {
 		}
 
 		 rename();
+		 
 	}
 	
 	private Runnable updateTimerThread = new Runnable() {
