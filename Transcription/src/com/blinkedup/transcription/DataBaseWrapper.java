@@ -32,8 +32,8 @@ public class DataBaseWrapper extends SQLiteOpenHelper {
 
 
 	   
-	private static final String DATABASE_NAME = "dbYourType.db";
-	private static final int DATABASE_VERSION = 2;
+	private static final String DATABASE_NAME = "dbYourType";
+	private static final int DATABASE_VERSION = 8;
 
 	// creation SQLite statement
 	//private static final String DATABASE_CREATE = "create table " + STUDENTS
@@ -45,25 +45,27 @@ public class DataBaseWrapper extends SQLiteOpenHelper {
 	public static final String INSTALL_ID = "_id";
 	public static final String INSTALL_INSTALL_CODE = "_installCode";
 		*/
-	private static final String DATABASE_CREATE = "create table " + RECORDINGS
-			+ "(" + RECORDING_ID + " integer PRIMARY KEY AUTOINCREMENT UNIQUE, "
+	private static final String DATABASE_CREATE = "create table " +  RECORDINGS + "(" + RECORDING_ID + " integer PRIMARY KEY AUTOINCREMENT UNIQUE, "
 			+ RECORDING_NAME + " text," + RECORDING_DATE_ADDED + " date," +
 			RECORDING_DATE_UPLOADED + " date," +RECORDING_DURATION + " text," +
 			RECORDING_STATUS + " integer," +RECORDING_ORIGIN + " integer," +
 			RECORDING_ISACTIVE + " boolean," +RECORDING_FILE_TYPE + " text," +
-			RECORDING_DATE_FINALIZED + " date);   " 
-					+
-					"create table " + UPDATES + "(" + UPDATE_ID +
-					" integer PRIMARY KEY AUTOINCREMENT UNIQUE, "
-					+ UPDATE_DATE_ADDED + " date," + UPDATE_REMAINING_SEC + " integer," +
-					UPDATE_ISACTIVE + " boolean);" 
-					+
-					"create table " + INSTALLS + "(" + INSTALL_ID +
-					" integer PRIMARY KEY AUTOINCREMENT UNIQUE, "
-					+ INSTALL_INSTALL_CODE + " text);"
-					+ "INSERT INTO" + UPDATES +" ("+ UPDATE_ISACTIVE + "," +UPDATE_REMAINING_SEC+") VALUES (\"1\",\"0\")";
+			RECORDING_DATE_FINALIZED + " date);";
+	private static final String DATABASE_CREATE2 = "create table " + UPDATES + "(" + UPDATE_ID +
+			" integer PRIMARY KEY AUTOINCREMENT UNIQUE, "
+			+ UPDATE_DATE_ADDED + " date," + UPDATE_REMAINING_SEC + " integer," +
+			UPDATE_ISACTIVE + " boolean);";
+	private static final String DATABASE_CREATE3 = "create table " + INSTALLS + "(" + INSTALL_ID +
+			" integer PRIMARY KEY AUTOINCREMENT UNIQUE, "
+			+ INSTALL_INSTALL_CODE + " text);";
+	private static final String DATABASE_GENERATE_UPDATE = "INSERT INTO " + UPDATES +" ("+ UPDATE_ISACTIVE + "," +UPDATE_REMAINING_SEC+") VALUES (\"1\",\"0\");"
+			+ " create table " + INSTALLS + "(" + INSTALL_ID +
+			" integer PRIMARY KEY AUTOINCREMENT UNIQUE, "
+			+ INSTALL_INSTALL_CODE + " text);"
+			;
 	
-
+	//Log.v("aa_cat",DATABASE_CREATE);
+	
 	//INSERT INTO updates (isActive,remaining_sec) VALUES (\"1\",\"0\")";
 
 	   
@@ -75,7 +77,9 @@ public class DataBaseWrapper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(DATABASE_CREATE);
-
+		db.execSQL(DATABASE_CREATE2);
+		db.execSQL(DATABASE_CREATE3);
+		db.execSQL(DATABASE_GENERATE_UPDATE);
 	}
 
 	@Override
