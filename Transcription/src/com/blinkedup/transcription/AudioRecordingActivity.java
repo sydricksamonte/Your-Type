@@ -2,11 +2,7 @@ package com.blinkedup.transcription;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
-import java.util.List;
-
-import android.app.ListActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -18,13 +14,11 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.Format;
 import java.text.SimpleDateFormat; 
 
 import java.util.Calendar;
@@ -51,8 +45,8 @@ public class AudioRecordingActivity extends Activity {
 	long timeSwapBuff = 0L;
 	long updatedTime = 0L;
 	
-	private RecordingOperations recordingDBoperation;
-
+	//private RecordingDB recordingDBoperation;
+	RecordingDB mydb;
 	/*public void addUser(View view) {
 
 	
@@ -71,8 +65,7 @@ public class AudioRecordingActivity extends Activity {
 		
 		timerValue = (TextView) findViewById(R.id.timerValue);
 		
-		recordingDBoperation = new RecordingOperations(this);
-		recordingDBoperation.open();
+		mydb = new RecordingDB(this);
 	}
 
 	private void setButtonHandlers() {
@@ -156,9 +149,12 @@ public class AudioRecordingActivity extends Activity {
                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM:dd HH:mm:ss");
                String strDate = sdf.format(c.getTime());
                
-           	recordingDBoperation.addRecording(input.getEditableText().toString(), strDate, "", 0, 0, 0, true, file_exts[currentFormat],"");
-
-           			
+               if(mydb.insertContact(input.getEditableText().toString(), strDate, "", 0, 0, 0, true, file_exts[currentFormat],"")) {
+                    Toast.makeText(getApplicationContext(), "Recording Added", Toast.LENGTH_SHORT).show();	
+               }		
+               else{
+                   Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();	
+                }	
            }
 
     	 
@@ -177,9 +173,6 @@ public class AudioRecordingActivity extends Activity {
 
 	}
 	
-	
-	
-
 	private void startRecording() {
 		
 		startTime = SystemClock.uptimeMillis();

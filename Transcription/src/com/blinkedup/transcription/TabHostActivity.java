@@ -23,7 +23,7 @@ public class TabHostActivity extends TabActivity {
 		Intent intent; // Reusable Intent for each tab
 
 		// Create an Intent to launch an Activity for the tab (to be reused)
-		intent = new Intent().setClass(this, MainActivity.class);
+		intent = new Intent().setClass(this, FeedActivity.class);
 		spec = tabHost.newTabSpec("home")
 				.setIndicator("", res.getDrawable(R.drawable.ic_tab_home))
 				.setContent(intent);
