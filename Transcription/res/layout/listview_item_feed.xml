@@ -6,17 +6,103 @@
     android:padding="10dp" >
     
     <TextView 
-        android:id="@+id/code"
+        android:id="@+id/recId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"    
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true" 
+    	android:visibility="gone" />
     
-    <TextView 
+     <TextView 
+        android:id="@+id/recName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"    
+         />
+     
+     <TextView 
+        android:id="@+id/recStat"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="false"    
+   
+        android:layout_marginTop="15sp"
+        android:layout_below="@id/recName"
+        android:visibility="gone"
+         />
+     
+     <TextView 
+        android:id="@+id/recStatDesc"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"    
+   
+        android:layout_marginTop="16sp"
+      
+         />
+     <TextView 
+        android:id="@+id/recDateAdd"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"    
+        android:layout_marginTop="32sp"
+    />
+      
+      <TextView 
+        android:id="@+id/recDateFin"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"    
+        android:layout_centerVertical="true"
+      	android:visibility="gone" />
+      
+   	<TextView 
+        android:id="@+id/recDateUploaded"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"    
+        android:layout_centerVertical="true" 
+        android:visibility="gone"/>
+   	
+   	<TextView 
+        android:id="@+id/recDurat"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"    
+        android:layout_centerVertical="true" 
+        android:visibility="gone"/>
+   	
+   	<TextView 
+        android:id="@+id/recFileType"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"    
+        android:layout_centerVertical="true" 
+        android:visibility="gone"/>
+   	
+   	<TextView 
+        android:id="@+id/recIsActive"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"    
+        android:layout_centerVertical="true"
+        android:visibility="gone" />
+   	
+   	<TextView 
+        android:id="@+id/recOrigin"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"    
+        android:layout_centerVertical="true" 
+        android:visibility="gone"/>
+   	
+   		
+     	 
+    <!-- <TextView 
         android:id="@+id/name"
         android:layout_width="150dp"
         android:layout_height="wrap_content"  
-        android:layout_toRightOf="@id/code"                
+        android:layout_toRightOf="@id/recId"                
         android:layout_centerVertical="true" />
     
     <TextView 
@@ -25,5 +111,5 @@
         android:layout_height="wrap_content"  
         android:layout_toRightOf="@id/name"
         android:layout_centerVertical="true" />
-    
+     -->
 </RelativeLayout>

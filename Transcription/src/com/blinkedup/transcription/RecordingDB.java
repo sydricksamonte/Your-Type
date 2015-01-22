@@ -85,7 +85,7 @@ public class RecordingDB extends SQLiteOpenHelper{
         return mDB.query(DATABASE_TABLE, new String[] { RECORDING_ID,  RECORDING_NAME , RECORDING_DATE_ADDED, RECORDING_DATE_UPLOADED
         		, RECORDING_DURATION, RECORDING_STATUS, RECORDING_ORIGIN, RECORDING_ISACTIVE, RECORDING_FILE_TYPE, RECORDING_DATE_FINALIZED } , 
         		null, null, null, null, 
-        		RECORDING_NAME + " asc ");
+        		RECORDING_DATE_ADDED + " desc ");
 	}
 
 	public void addRecording(String name, String dateAdded, String dateUploaded, int duration, int status, int origin, boolean isActive, String fileType, String dateFinalized) {
@@ -124,6 +124,7 @@ public class RecordingDB extends SQLiteOpenHelper{
 		// TODO Auto-generated method stub		
 	}
 
+	
 
 	
 	
