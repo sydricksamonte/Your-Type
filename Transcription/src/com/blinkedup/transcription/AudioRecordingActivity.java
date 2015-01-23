@@ -22,6 +22,7 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat; 
 
 import java.util.Calendar;
+import java.util.TimeZone;
 
 public class AudioRecordingActivity extends Activity {
 	private static final String AUDIO_RECORDER_FILE_EXT_3GP = ".3gp";
@@ -66,6 +67,23 @@ public class AudioRecordingActivity extends Activity {
 		timerValue = (TextView) findViewById(R.id.timerValue);
 		
 		mydb = new RecordingDB(this);
+		
+		mydb = new RecordingDB(this);
+		
+		 Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM:dd HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String strDate = sdf.format(c.getTime());
+  
+        Log.e("asd",strDate);
+        
+        if(mydb.insertContact("Sampling Record", strDate, "", 0, 0, 0, true, file_exts[currentFormat],"")) {
+             Toast.makeText(getApplicationContext(), "Recording Added", Toast.LENGTH_SHORT).show();	
+        }		
+        else{
+            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();	
+        }
+        
 	}
 
 	private void setButtonHandlers() {
