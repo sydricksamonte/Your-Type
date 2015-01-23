@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
     android:orientation="horizontal" 
@@ -36,17 +37,24 @@
        	android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"    
-   
         android:layout_marginTop="16sp"
-      
-         />
+	    android:drawableLeft="@drawable/stat_circle"
+		android:drawablePadding="3dip"
+	/>
      <TextView 
         android:id="@+id/recDateAdd"
        	android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"    
         android:layout_marginTop="32sp"
+        
     />
+     <!-- <ImageView  
+        android:id="@+id/DrawingImageView"
+        	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+    
+         /> --> 
       
       <TextView 
         android:id="@+id/recDateFin"
