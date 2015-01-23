@@ -65,9 +65,6 @@ public class AudioRecordingActivity extends Activity {
 		setFormatButtonCaption();
 		
 		timerValue = (TextView) findViewById(R.id.timerValue);
-		
-		mydb = new RecordingDB(this);
-		
 		mydb = new RecordingDB(this);
 		
 		 Calendar c = Calendar.getInstance();
