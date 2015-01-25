@@ -10,6 +10,9 @@ package com.blinkedup.transcription;
 public final class R {
     public static final class attr {
     }
+    public static final class color {
+        public static final int white=0x7f060000;
+    }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
 
@@ -24,79 +27,79 @@ public final class R {
     public static final class drawable {
         public static final int about=0x7f020000;
         public static final int about2=0x7f020001;
-        public static final int colors_gray=0x7f020002;
-        public static final int colors_green=0x7f020003;
-        public static final int colors_orange=0x7f020004;
-        public static final int contact=0x7f020005;
-        public static final int contact2=0x7f020006;
-        public static final int home=0x7f020007;
-        public static final int home2=0x7f020008;
-        public static final int ic_launcher=0x7f020009;
-        public static final int ic_stat_green=0x7f02000a;
-        public static final int ic_tab_about=0x7f02000b;
-        public static final int ic_tab_account=0x7f02000c;
-        public static final int ic_tab_contact=0x7f02000d;
-        public static final int ic_tab_home=0x7f02000e;
-        public static final int ic_tab_info=0x7f02000f;
-        public static final int ic_tab_record=0x7f020010;
-        public static final int ldpi_normal=0x7f020011;
-        public static final int ldpi_small=0x7f020012;
-        public static final int login_button=0x7f020013;
-        public static final int register_button=0x7f020014;
-        public static final int shape=0x7f020015;
-        public static final int stat_circle=0x7f020016;
-        public static final int tab_cog=0x7f020017;
-        public static final int tab_cog_ch=0x7f020018;
-        public static final int tab_feed=0x7f020019;
-        public static final int tab_feed_ch=0x7f02001a;
-        public static final int tab_info=0x7f02001b;
-        public static final int tab_info_ch=0x7f02001c;
-        public static final int tab_rec=0x7f02001d;
-        public static final int tab_rec_ch=0x7f02001e;
+        public static final int circle_toggle_btn=0x7f020002;
+        public static final int colors_gray=0x7f020003;
+        public static final int colors_green=0x7f020004;
+        public static final int colors_orange=0x7f020005;
+        public static final int contact=0x7f020006;
+        public static final int contact2=0x7f020007;
+        public static final int home=0x7f020008;
+        public static final int home2=0x7f020009;
+        public static final int ic_launcher=0x7f02000a;
+        public static final int ic_stat_green=0x7f02000b;
+        public static final int ic_tab_about=0x7f02000c;
+        public static final int ic_tab_account=0x7f02000d;
+        public static final int ic_tab_contact=0x7f02000e;
+        public static final int ic_tab_home=0x7f02000f;
+        public static final int ic_tab_info=0x7f020010;
+        public static final int ic_tab_record=0x7f020011;
+        public static final int ldpi_normal=0x7f020012;
+        public static final int ldpi_small=0x7f020013;
+        public static final int login_button=0x7f020014;
+        public static final int register_button=0x7f020015;
+        public static final int shape=0x7f020016;
+        public static final int stat_circle=0x7f020017;
+        public static final int tab_cog=0x7f020018;
+        public static final int tab_cog_ch=0x7f020019;
+        public static final int tab_feed=0x7f02001a;
+        public static final int tab_feed_ch=0x7f02001b;
+        public static final int tab_info=0x7f02001c;
+        public static final int tab_info_ch=0x7f02001d;
+        public static final int tab_rec=0x7f02001e;
+        public static final int tab_rec_ch=0x7f02001f;
     }
     public static final class id {
-        public static final int LinearLayout1=0x7f080002;
-        public static final int action_settings=0x7f080029;
-        public static final int btnFormat=0x7f080027;
-        public static final int btnLoad=0x7f080007;
-        public static final int btnLogin=0x7f080005;
-        public static final int btnSave=0x7f080006;
-        public static final int btnStart=0x7f080025;
-        public static final int btnStop=0x7f080026;
-        public static final int btnVolDown=0x7f08000e;
-        public static final int btnVolUp=0x7f08000d;
-        public static final int btnlogout=0x7f080008;
-        public static final int etPassword=0x7f080004;
-        public static final int etUsername=0x7f080003;
-        public static final int listView1=0x7f08000a;
-        public static final int listview=0x7f080001;
-        public static final int login=0x7f080021;
-        public static final int logout=0x7f08000f;
-        public static final int lstAllUsers=0x7f080009;
-        public static final int password=0x7f080020;
-        public static final int pauseButton=0x7f080024;
-        public static final int recDateAdd=0x7f080016;
-        public static final int recDateFin=0x7f080017;
-        public static final int recDateUploaded=0x7f080018;
-        public static final int recDurat=0x7f080019;
-        public static final int recFileType=0x7f08001a;
-        public static final int recId=0x7f080012;
-        public static final int recIsActive=0x7f08001b;
-        public static final int recName=0x7f080013;
-        public static final int recOrigin=0x7f08001c;
-        public static final int recStat=0x7f080014;
-        public static final int recStatDesc=0x7f080015;
-        public static final int seekBar1=0x7f08000c;
-        public static final int signup=0x7f080022;
-        public static final int textView1=0x7f080000;
-        public static final int textViewOutput=0x7f080011;
-        public static final int tglPlayPause=0x7f08000b;
-        public static final int timerValue=0x7f080023;
-        public static final int txtpassword=0x7f08001f;
-        public static final int txtuser=0x7f080028;
-        public static final int txtusername=0x7f08001d;
-        public static final int txtwelcome=0x7f080010;
-        public static final int username=0x7f08001e;
+        public static final int LinearLayout1=0x7f090002;
+        public static final int action_settings=0x7f090028;
+        public static final int btnFormat=0x7f090026;
+        public static final int btnLoad=0x7f090007;
+        public static final int btnLogin=0x7f090005;
+        public static final int btnSave=0x7f090006;
+        public static final int btnStart=0x7f090025;
+        public static final int btnVolDown=0x7f09000e;
+        public static final int btnVolUp=0x7f09000d;
+        public static final int btnlogout=0x7f090008;
+        public static final int etPassword=0x7f090004;
+        public static final int etUsername=0x7f090003;
+        public static final int listView1=0x7f09000a;
+        public static final int listview=0x7f090001;
+        public static final int login=0x7f090021;
+        public static final int logout=0x7f09000f;
+        public static final int lstAllUsers=0x7f090009;
+        public static final int password=0x7f090020;
+        public static final int recDateAdd=0x7f090016;
+        public static final int recDateFin=0x7f090017;
+        public static final int recDateUploaded=0x7f090018;
+        public static final int recDurat=0x7f090019;
+        public static final int recFileType=0x7f09001a;
+        public static final int recId=0x7f090012;
+        public static final int recIsActive=0x7f09001b;
+        public static final int recName=0x7f090013;
+        public static final int recOrigin=0x7f09001c;
+        public static final int recStat=0x7f090014;
+        public static final int recStatDesc=0x7f090015;
+        public static final int reset=0x7f090024;
+        public static final int seekBar1=0x7f09000c;
+        public static final int signup=0x7f090022;
+        public static final int textView1=0x7f090000;
+        public static final int textViewOutput=0x7f090011;
+        public static final int tglPlayPause=0x7f09000b;
+        public static final int timerValue=0x7f090023;
+        public static final int txtpassword=0x7f09001f;
+        public static final int txtuser=0x7f090027;
+        public static final int txtusername=0x7f09001d;
+        public static final int txtwelcome=0x7f090010;
+        public static final int username=0x7f09001e;
     }
     public static final class layout {
         public static final int activity_about=0x7f030000;
@@ -116,10 +119,10 @@ public final class R {
         public static final int welcome=0x7f03000e;
     }
     public static final class menu {
-        public static final int audio_record=0x7f070000;
-        public static final int main=0x7f070001;
-        public static final int record=0x7f070002;
-        public static final int recordings=0x7f070003;
+        public static final int audio_record=0x7f080000;
+        public static final int main=0x7f080001;
+        public static final int record=0x7f080002;
+        public static final int recordings=0x7f080003;
     }
     public static final class string {
         public static final int action_settings=0x7f050004;
@@ -131,7 +134,6 @@ public final class R {
         public static final int hello_world=0x7f050003;
         public static final int start_recording=0x7f050009;
         public static final int stop_recording=0x7f05000a;
-        public static final int timerVal=0x7f05000c;
         public static final int title_activity_audio_record=0x7f050005;
         public static final int title_activity_record=0x7f050006;
         public static final int title_activity_recordings=0x7f050007;
@@ -158,10 +160,10 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f060000;
+        public static final int AppBaseTheme=0x7f070000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f060001;
+        public static final int AppTheme=0x7f070001;
     }
 }

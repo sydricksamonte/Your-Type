@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="hello">Hello World, AudioRecordingActivity!</string>
-	<string name="app_info">This is a sample application to record audio.\n\nTo start recording press \"Record\" button, to stop recording press \"Stop\" button.</string>
+	<string name="app_info">To start recording press \"Record\" button, to stop recording press \"Stop\" button.</string>
     <string name="app_name">Transcription</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -12,6 +12,8 @@
     <string name="start_recording">Record</string>
     <string name="stop_recording">Stop</string>
     <string name="audio_format">Format</string>
-    <string name="timerVal">00:00</string>
+    <color name="white">#000000</color>
+
+    
 
 </resources>
