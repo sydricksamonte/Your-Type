@@ -35,6 +35,7 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 	ListView mListView;		
 	DateUtils dateFunc;
 	String dateFormatted = "";
+	String strDuration = "";
 	Drawable img;
 	Typeface tfRegular;
 	Typeface tfUltra;
@@ -115,6 +116,16 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 					if (txv.getId() ==  R.id.recDateAdd){
 						dateFormatted = dateFunc.convertStringToDate(cursor.getString(cursor.getColumnIndex("_date_added")));
 						txv.setText(dateFormatted);
+						txv.setTypeface(tfRegular);
+					}
+					return true;
+				}
+				else if (column == 4) {
+					TextView txv = (TextView) view;
+					
+					if (txv.getId() ==  R.id.recDurat){
+						strDuration = dateFunc.convIntToLength(cursor.getString(cursor.getColumnIndex("_duration")));
+						txv.setText(strDuration);
 						txv.setTypeface(tfRegular);
 					}
 					return true;

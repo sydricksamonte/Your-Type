@@ -52,13 +52,16 @@
         android:layout_marginTop="32sp"
         android:textSize="12sp"
     />
-     <!-- <ImageView  
-        android:id="@+id/DrawingImageView"
-        	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
     
-         /> --> 
-      
+      	<TextView 
+        android:id="@+id/recDurat"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"    
+        android:layout_marginTop="32sp"
+        android:textSize="12sp" 
+        />
+        
       <TextView 
         android:id="@+id/recDateFin"
        	android:layout_width="wrap_content"
@@ -75,13 +78,7 @@
         android:layout_centerVertical="true" 
         android:visibility="gone"/>
    	
-   	<TextView 
-        android:id="@+id/recDurat"
-       	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"    
-        android:layout_centerVertical="true" 
-        android:visibility="gone"/>
+   
    	
    	<TextView 
         android:id="@+id/recFileType"

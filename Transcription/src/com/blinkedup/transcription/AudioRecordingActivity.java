@@ -80,7 +80,7 @@ public class AudioRecordingActivity extends Activity {
   
         Log.e("asd",strDate);
         
-        if(mydb.insertContact("Sampling Record", strDate, "", 0, 0, 0, true, file_exts[currentFormat],"")) {
+        if(mydb.insertContact("Sampling Record", strDate, "", 3605, 0, 0, true, file_exts[currentFormat],"")) {
              Toast.makeText(getApplicationContext(), "Recording Added", Toast.LENGTH_SHORT).show();	
         }		
         else{
@@ -121,14 +121,7 @@ public class AudioRecordingActivity extends Activity {
    		
    	});
         
-     
-
-     
-        
-    	
-  
-        
-        // Bind the method to be called when the reset button pressed        
+     // Bind the method to be called when the reset button pressed        
         View stopButton = findViewById(R.id.reset);
         stopButton.setOnClickListener(new View.OnClickListener() {			
    			public void onClick(View v) {
@@ -143,7 +136,6 @@ public class AudioRecordingActivity extends Activity {
         
     }
     
-	
 	// Method called when the start buttons pressed
 	 private void startButtonClick(long now)
 	 {       
