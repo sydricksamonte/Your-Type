@@ -18,7 +18,8 @@
         android:id="@+id/recName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"    
+        android:layout_alignParentLeft="true"  
+        android:textSize="15sp" 
          />
      
      <TextView 
@@ -27,9 +28,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="false"    
    
-        android:layout_marginTop="15sp"
+        android:layout_marginTop="16sp"
         android:layout_below="@id/recName"
         android:visibility="gone"
+       	
          />
      
      <TextView 
@@ -37,9 +39,10 @@
        	android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"    
-        android:layout_marginTop="16sp"
+        android:layout_marginTop="17sp"
 	    android:drawableLeft="@drawable/stat_circle"
 		android:drawablePadding="3dip"
+		android:textSize="12sp"
 	/>
      <TextView 
         android:id="@+id/recDateAdd"
@@ -47,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"    
         android:layout_marginTop="32sp"
-        
+        android:textSize="12sp"
     />
      <!-- <ImageView  
         android:id="@+id/DrawingImageView"

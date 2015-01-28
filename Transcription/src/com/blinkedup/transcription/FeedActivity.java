@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.net.Uri;
@@ -35,14 +36,19 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 	DateUtils dateFunc;
 	String dateFormatted = "";
 	Drawable img;
+	Typeface tfRegular;
+	Typeface tfUltra;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
         
-    	 //drawingImageView = (ImageView) findViewById(R.id.DrawingImageView);
-        
+        tfRegular = Typeface.createFromAsset(getAssets(),
+                "Avenir_Reg.ttf");
+        tfUltra = Typeface.createFromAsset(getAssets(),
+                "Avenir_Ultra.ttf");
+    	
         dateFunc = new DateUtils();
         mListView = (ListView) findViewById(R.id.listview);        
         
@@ -62,49 +68,14 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 			@Override public boolean setViewValue(View view, Cursor cursor, int column) 
 			{ 
 			
-			//	final ImageView drawingImageView = (ImageView) view.findViewById(R.id.DrawingImageView);
-				//File imgFile = new  File("/sdcard/Images/test_image.jpg");
-
-				//if(imgFile.exists()){
-				
-				   // Bitmap myBitmap = BitmapFactory.d
-
-				 //   ImageView myImage = (ImageView) findViewById(R.id.DrawingImageView);
-
-				 //   myImage.setImageResource(R.drawable.ic_stat_green);
-
-				//}
-				/* Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-			        Bitmap bitmap = Bitmap.createBitmap(30, 30, conf);
-			        		
-			        Canvas canvas = new Canvas(bitmap);
-			        
-			     
-			     // Circle
-			        Paint paint = new Paint();
-			        paint.setColor(Color.GREEN);
-			        paint.setStyle(Paint.Style.STROKE);
-			        float x = 20;
-			        float y = 20;
-			        float radius = 5;
-			        canvas.drawCircle(x, y, radius, paint);
-			        
-			        
-			        drawingImageView.setImageBitmap(bitmap);
-			        */
-			        //////////////////////
-			        
-			        
-			        
 				if (column == 5) { 
 					TextView tv = (TextView) view;
-					//ImageView iv = new ImageView(this);
 					if (tv.getId() ==  R.id.recStatDesc){
 						 
 						String statVal = cursor.getString(cursor.getColumnIndex("_status"));
 						String statDesc;
 						if (statVal.equals("1")){
-							statDesc = "Uploaded - Awaiting Process";
+							statDesc = "Uploaded — Awaiting Process";
 							img = getResources().getDrawable( R.drawable.colors_orange );
 							img.setBounds( 0, 0, 12, 12 );
 							tv.setCompoundDrawables( img, null, null, null );
@@ -122,36 +93,29 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 							tv.setCompoundDrawables( img, null, null, null );
 						}
 						tv.setText(statDesc);
-						//tv.setBackgroundDrawable(background)(R.drawable.shape);
+						tv.setTypeface(tfRegular);
 						
-						
-						
-					//	ShapeDrawable shapeDrawable = (ShapeDrawable)tv.getBackground();
-						//shapeDrawable.getPaint().setColor(Color.parseColor("#800080"));
-						//   ImageView myImage = (ImageView) findViewById(R.id.DrawingImageView);
-
-						//    myImage.setImageResource(R.drawable.ic_stat_green);
-
-						//return true; 
-					//}
-					//else if (iv.getId() == R.id.DrawingImageView){
-						
-					       
-					        
-					        return true; 
+						 return true; 
 					}
 					else{
 						return false; 
 					}
 				}
+				else if (column == 1) { 
+					TextView tvxx = (TextView) view;
+					tvxx.setTypeface(tfRegular);
+					tvxx.setText(cursor.getString(cursor.getColumnIndex("_name")));
+						tvxx.setTypeface(tfRegular);
+					
+					 return true;
+				}
 				else if (column == 2) {
 					TextView txv = (TextView) view;
 					
 					if (txv.getId() ==  R.id.recDateAdd){
-						//Log.e("OIdx",cursor.getString(cursor.getColumnIndex("_date_added")));
 						dateFormatted = dateFunc.convertStringToDate(cursor.getString(cursor.getColumnIndex("_date_added")));
 						txv.setText(dateFormatted);
-						
+						txv.setTypeface(tfRegular);
 					}
 					return true;
 				}
@@ -160,8 +124,6 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 				}
 			} 
 		}); 
-				
-	
 		
 		/** Creating a loader for populating listview from sqlite database */
 		/** This statement, invokes the method onCreatedLoader() */
@@ -169,18 +131,7 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 		
     }
 
-    
-    public String getStat(String stat)
-    {   
-    	String desc = "";
-        if (stat.equals("0")){
-        	desc = "Unuploaded";
-        }
-        else{
-        	desc = "Awaiting Process!";
-        }
-        return desc;
-    }
+   
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

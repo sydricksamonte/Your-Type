@@ -36,7 +36,7 @@ public class DateUtils {
 		String converted;
 		Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
 
-	    DateFormat formatter = new SimpleDateFormat("dd MMM - hh:mm a");    
+	    DateFormat formatter = new SimpleDateFormat("dd MMM — hh:mm a");    
 	    formatter.setTimeZone(TimeZone.getDefault());  
 
 	    converted = formatter.format(localeDate.getTime());
