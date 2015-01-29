@@ -13,9 +13,8 @@ public class RecordingDB extends SQLiteOpenHelper{
 	private static String DBNAME = "dbYourTypeTrans";
 	
 	/** Version number of the database */
-	private static int VERSION = 4;
-	
-	//public static final String RECORDINGS = "Recordings";
+	private static int VERSION = 6;
+
 	public static final String RECORDING_ID = "_id";
 	public static final String RECORDING_NAME = "_name";
 	public static final String RECORDING_DATE_ADDED = "_date_added";
@@ -26,6 +25,7 @@ public class RecordingDB extends SQLiteOpenHelper{
 	public static final String RECORDING_ISACTIVE = "_isActive";
 	public static final String RECORDING_FILE_TYPE = "_fileType";
 	public static final String RECORDING_DATE_FINALIZED = "_date_finalized";
+	public static final String RECORDING_PATH = "_path_loc";
     
     /** A constant, stores the the table name */
     private static final String DATABASE_TABLE = "Recordings";
@@ -52,7 +52,7 @@ public class RecordingDB extends SQLiteOpenHelper{
 				RECORDING_DATE_UPLOADED + " date," +RECORDING_DURATION + " text," +
 				RECORDING_STATUS + " integer," +RECORDING_ORIGIN + " integer," +
 				RECORDING_ISACTIVE + " boolean," +RECORDING_FILE_TYPE + " text," +
-				RECORDING_DATE_FINALIZED + " date);";
+				RECORDING_DATE_FINALIZED + " date,"+ RECORDING_PATH + " text);";
 		
 		/*String sql = 	"create table "+ DATABASE_TABLE + " ( "
 						+ KEY_ROW_ID + " integer primary key autoincrement , "
@@ -83,24 +83,24 @@ public class RecordingDB extends SQLiteOpenHelper{
 	/** Returns all the customers in the table */
 	public Cursor getAllCustomers(){
         return mDB.query(DATABASE_TABLE, new String[] { RECORDING_ID,  RECORDING_NAME , RECORDING_DATE_ADDED, RECORDING_DATE_UPLOADED
-        		, RECORDING_DURATION, RECORDING_STATUS, RECORDING_ORIGIN, RECORDING_ISACTIVE, RECORDING_FILE_TYPE, RECORDING_DATE_FINALIZED } , 
+        		, RECORDING_DURATION, RECORDING_STATUS, RECORDING_ORIGIN, RECORDING_ISACTIVE, RECORDING_FILE_TYPE, RECORDING_DATE_FINALIZED,  RECORDING_PATH  } , 
         		null, null, null, null, 
         		RECORDING_DATE_ADDED + " desc ");
 	}
 
-	public void addRecording(String name, String dateAdded, String dateUploaded, int duration, int status, int origin, boolean isActive, String fileType, String dateFinalized) {
+	public void addRecording(String name, String dateAdded, String dateUploaded, int duration, int status, int origin, boolean isActive, String fileType, String dateFinalized, String path) {
 		// TODO Auto-generated method stub
 		String query_sql = "INSERT INTO "+ DATABASE_TABLE + "(" + RECORDING_ID + ", "
         		+ RECORDING_NAME + "," + RECORDING_DATE_ADDED + " ," +
         		RECORDING_DATE_UPLOADED + " ," +RECORDING_DURATION + " ," +
         		RECORDING_STATUS + " ," + RECORDING_ORIGIN + " ," +
         		RECORDING_ISACTIVE + " ," + RECORDING_FILE_TYPE + " ," +
-        		RECORDING_DATE_FINALIZED + ") VALUES ("+name+", "+dateAdded+", "+dateUploaded+","+duration+", "+status+", "+origin+", "+isActive+", "+fileType+", "+dateFinalized+");";
+        		RECORDING_DATE_FINALIZED + " ," + RECORDING_PATH + ") VALUES ("+name+", "+dateAdded+", "+dateUploaded+","+duration+", "+status+", "+origin+", "+isActive+", "+fileType+", "+dateFinalized+", "+path+");";
               
         		 mDB.execSQL(query_sql);
 	}
 	
-	public boolean insertContact(String name, String dateAdded, String dateUploaded, int duration, int status, int origin, boolean isActive, String fileType, String dateFinalized) {
+	public boolean insertContact(String name, String dateAdded, String dateUploaded, int duration, int status, int origin, boolean isActive, String fileType, String dateFinalized, String path) {
 		
 	    //  SQLiteDatabase db = this.getWritableDatabase();
 	      ContentValues contentValues = new ContentValues();
@@ -114,6 +114,7 @@ public class RecordingDB extends SQLiteOpenHelper{
 	      contentValues.put(RECORDING_ISACTIVE, isActive);
 	      contentValues.put(RECORDING_FILE_TYPE, fileType);
 	      contentValues.put(RECORDING_DATE_FINALIZED, dateFinalized);
+	      contentValues.put(RECORDING_PATH, path);
 
 	      mDB.insert(DATABASE_TABLE, null, contentValues);
 	      return true;

@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,11 +26,15 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cursor> {
+public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cursor>, OnItemClickListener {
 	
 	SimpleCursorAdapter mAdapter;	
 	ListView mListView;		
@@ -39,6 +44,7 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 	Drawable img;
 	Typeface tfRegular;
 	Typeface tfUltra;
+	Button showDetail; 
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +57,10 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
                 "Avenir_Ultra.ttf");
     	
         dateFunc = new DateUtils();
-        mListView = (ListView) findViewById(R.id.listview);        
+        mListView = (ListView) findViewById(R.id.listview);  
+        //ListView listview = (ListView) findViewById(R.id.listview1);
+        mListView.setOnItemClickListener(this);
+        
         
 		mAdapter = new SimpleCursorAdapter(getBaseContext(),
                 R.layout.listview_item_feed,
@@ -107,7 +116,8 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 					tvxx.setTypeface(tfRegular);
 					tvxx.setText(cursor.getString(cursor.getColumnIndex("_name")));
 						tvxx.setTypeface(tfRegular);
-					
+					//	showDetail = (Button) findViewById(R.id.);
+					//	showDetail.setOnClickListener(new AddButtonClickHandler());
 					 return true;
 				}
 				else if (column == 2) {
@@ -167,4 +177,38 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 	public void onLoaderReset(Loader<Cursor> arg0) {
 		mAdapter.swapCursor(null);
 	}
+	/////
+	public class AddButtonClickHandler implements OnClickListener {
+		public void onClick(View view) {
+			//int num1 = Integer.parseInt(firstNum.getText().toString());
+			//int num2 = Integer.parseInt(secondNum.getText().toString());
+			Intent explicitIntent = new Intent(FeedActivity.this,
+					FeedDetailActivity.class);
+			explicitIntent.putExtra("RECID","1");
+			startActivity(explicitIntent);
+			
+		}
+	}
+	 public void onItemClick(AdapterView<?> l, View v, int position, long id) {
+	        Log.i("HelloListView", "You clicked Item: " + id + " at position:" + position);
+	        String recId = "-";
+	        TextView tc = (TextView)v.findViewById(R.id.recId);
+	       
+	        recId = tc.getText().toString();
+	       
+	        Intent explicitIntent = new Intent(FeedActivity.this,
+					FeedDetailActivity.class);
+	       
+
+			explicitIntent.putExtra("INTENT_RECORDING_ID",recId);
+			explicitIntent.putExtra("INTENT_RECORDING_NAME",recId);
+			explicitIntent.putExtra("INTENT_DATE_UPLOADED",recId);
+			explicitIntent.putExtra("INTENT_DURATION",recId);
+			explicitIntent.putExtra("INTENT_STATUS",recId);
+			explicitIntent.putExtra("INTENT_ORIGIN",recId);
+			explicitIntent.putExtra("INTENT_FILE_TYPE",recId);
+			explicitIntent.putExtra("INTENT_DATE_FINALIZED",recId);
+			startActivity(explicitIntent);
+	    }
+	
 }
