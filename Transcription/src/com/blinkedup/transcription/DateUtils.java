@@ -61,5 +61,13 @@ public class DateUtils {
 			  return hrStr  +":"+ mnStr +":"+ secStr;
 		  }
 	}
+	public String getDate(){
+		Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String strDate = sdf.format(c.getTime());
+        
+        return strDate;
+	}
 
 }
