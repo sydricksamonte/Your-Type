@@ -1,17 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
     android:layout_width="fill_parent"
-    android:background="#808080"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:padding="15dip" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/sentence1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="About Tab"
-        android:textSize="35sp"
-        android:textColor="#ffffff" />
+        android:text="Your Type is a mobile transcription service designed to make your life easier. Simply register and begin uploading your audio. You will receive the typed document in your email. \n \n We work with law firms, medical specialists, journalists and students. Start working smarter today with Your Type.  You must register to have your recordings processed. \n \n"
+        android:textColor="#666666"
+        android:textSize="18sp" />
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" >
+
+        <ImageButton
+            android:id="@+id/imageButton1"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/btn_mail" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_fb" 
+            android:background="@null"/>
+
+        <ImageButton
+            android:id="@+id/imageButton3"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/btn_tweeter" />
+
+    </LinearLayout>
+
+</LinearLayout>

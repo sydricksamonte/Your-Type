@@ -35,7 +35,7 @@ public class TabHostActivity extends TabActivity {
 				.setContent(intent);
 		tabHost.addTab(spec);
 		
-		intent = new Intent().setClass(this, RecordingsActivity.class);
+		intent = new Intent().setClass(this, AboutActivity.class);
 		spec = tabHost
 				.newTabSpec("contact")
 				.setIndicator("",
@@ -48,6 +48,8 @@ public class TabHostActivity extends TabActivity {
 				.setIndicator("", res.getDrawable(R.drawable.ic_tab_account))
 				.setContent(intent);
 		tabHost.addTab(spec);
+		
+		
 
 		// Do the same for the other tabs
 		

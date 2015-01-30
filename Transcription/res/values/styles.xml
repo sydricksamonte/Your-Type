@@ -23,6 +23,21 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+<item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item>
+
     </style>
+    
+    <style name="WindowTitleBackground">     
+        <item name="android:background">@color/blue</item>
+    </style>
+    
+
+
+
+
+
+
+
+
 
 </resources>
