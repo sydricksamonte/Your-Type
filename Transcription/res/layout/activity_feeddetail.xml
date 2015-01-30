@@ -2,10 +2,214 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-    <TextView
-        android:id="@+id/resultView"
+    android:orientation="vertical"
+     android:gravity="center" 
+     android:padding="10dp" >
+    
+    <TextView 
+        android:id="@+id/recId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"   
+    	android:visibility="gone" />
+    
+	<TextView 
+        android:id="@+id/recName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@android:style/TextAppearance.Medium" 
+         />
+         
+         <TextView 
+        android:id="@+id/recStat"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="false"    
+        android:layout_marginTop="16sp"
+        android:visibility="gone"
+       	
+         />
+     
+	<TextView 
+        android:id="@+id/recStatDesc1"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"    
+        android:layout_marginTop="5sp"
+        android:layout_below="@id/recName"
+	    android:drawableLeft="@drawable/stat_circle"
+		android:drawablePadding="3dip"
+		style="@android:style/TextAppearance.Small"
+	/>
+	
+	<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge" android:text="TEXT" />
+        android:layout_marginTop="20sp" >
+
+        <SeekBar
+            android:id="@+id/seekBar1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/btnVolUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="U" />
+            
+     	<SeekBar
+            android:id="@+id/volShow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btnVolDown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="DO" />
+            
+    </LinearLayout>
+    
+	
+	
+	<LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+		<TextView 
+        	android:text="Date Added  "
+       		android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignParentLeft="true" 
+        	android:layout_marginTop="2sp"   
+        	android:textStyle="bold"
+        	android:layout_below="@id/btnVolDown"
+        	style="@android:style/TextAppearance.Small"
+    	/>
+
+		<TextView 
+        	android:id="@+id/recDateAdd"
+       		android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignParentLeft="true"    
+        	android:layout_marginTop="2sp"
+        	android:layout_below="@id/btnVolDown"
+        	style="@android:style/TextAppearance.Small"
+    	/>
+    	
+  	</LinearLayout>
+	
+	<TextView 
+        android:id="@+id/recDurat"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"    
+        android:layout_marginTop="2sp"
+        android:layout_below="@id/recDateAdd"
+        style="@android:style/TextAppearance.Small"
+        />
+   
+	<TextView 
+        android:id="@+id/recDateFin"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"    
+        android:layout_centerVertical="true"
+      	android:visibility="gone" />
+
+	<TextView 
+        android:id="@+id/recDateUploaded"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"    
+        android:layout_centerVertical="true" 
+        android:visibility="gone"/>
+
+	<TextView 
+        android:id="@+id/recFileType"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"    
+        android:layout_centerVertical="true" 
+        android:visibility="gone"/>
+
+	<TextView 
+        android:id="@+id/recIsActive"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"    
+        android:layout_centerVertical="true"
+        android:visibility="gone" />
+   	
+   	<TextView 
+        android:id="@+id/recOrigin"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"    
+        android:layout_centerVertical="true" 
+        android:visibility="gone"/>
+        
+ 	<TextView 
+        android:id="@+id/recPath"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"    
+        android:layout_centerVertical="true" 
+        android:visibility="gone"/>
+        
+        
+	<LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="30sp" >
+        
+		<Button
+            android:id="@+id/btnPlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Play" 
+ 		/>
+            
+		<Button
+            android:id="@+id/btnStop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Stop" />
+            
+   		<Button
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Dele" />
+            
+   		<Button
+            android:id="@+id/btnRename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Rnme" />
+            
+    	<Button
+            android:id="@+id/btnUpload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Upld" />
+            
+	 </LinearLayout>
+   	
 </LinearLayout>
