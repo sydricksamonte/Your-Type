@@ -51,10 +51,8 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
         
-        tfRegular = Typeface.createFromAsset(getAssets(),
-                "Avenir_Reg.ttf");
-        tfUltra = Typeface.createFromAsset(getAssets(),
-                "Avenir_Ultra.ttf");
+       // tfRegular = Typeface.createFromAsset(getAssets(),"Avenir_Reg.ttf");
+       // tfUltra = Typeface.createFromAsset(getAssets(),"Avenir_Ultra.ttf");
     	
         dateFunc = new DateUtils();
         mListView = (ListView) findViewById(R.id.listview);  
@@ -103,7 +101,7 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 							tv.setCompoundDrawables( img, null, null, null );
 						}
 						tv.setText(statDesc);
-						tv.setTypeface(tfRegular);
+						//tv.setTypeface(tfRegular);
 						
 						 return true; 
 					}
@@ -113,9 +111,9 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 				}
 				else if (column == 1) { 
 					TextView tvxx = (TextView) view;
-					tvxx.setTypeface(tfRegular);
+					//tvxx.setTypeface(tfRegular);
 					tvxx.setText(cursor.getString(cursor.getColumnIndex("_name")));
-						tvxx.setTypeface(tfRegular);
+					//	tvxx.setTypeface(tfRegular);
 					//	showDetail = (Button) findViewById(R.id.);
 					//	showDetail.setOnClickListener(new AddButtonClickHandler());
 					 return true;
@@ -126,7 +124,7 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 					if (txv.getId() ==  R.id.recDateAdd){
 						dateFormatted = dateFunc.convertStringToDate(cursor.getString(cursor.getColumnIndex("_date_added")));
 						txv.setText(dateFormatted);
-						txv.setTypeface(tfRegular);
+						//txv.setTypeface(tfRegular);
 					}
 					return true;
 				}
@@ -136,7 +134,7 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 					if (txv.getId() ==  R.id.recDurat){
 						strDuration = dateFunc.convIntToLength(cursor.getString(cursor.getColumnIndex("_duration")));
 						txv.setText(strDuration);
-						txv.setTypeface(tfRegular);
+						//txv.setTypeface(tfRegular);
 					}
 					return true;
 				}
@@ -190,24 +188,34 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 		}
 	}
 	 public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-	        Log.i("HelloListView", "You clicked Item: " + id + " at position:" + position);
-	        String recId = "-";
-	        TextView tc = (TextView)v.findViewById(R.id.recId);
+	        //Log.i("HelloListView", "You clicked Item: " + id + " at position:" + position);
+	        
+	        TextView tc_recId = (TextView)v.findViewById(R.id.recId);
+	        TextView tc_recName = (TextView)v.findViewById(R.id.recName);
+	        TextView tc_recStat = (TextView)v.findViewById(R.id.recStat);
+	        TextView tc_recDateAdd = (TextView)v.findViewById(R.id.recDateAdd);
+	        TextView tc_recDurat = (TextView)v.findViewById(R.id.recDurat);
+	        TextView tc_recDateFin = (TextView)v.findViewById(R.id.recDateFin);
+	        TextView tc_recDateUploaded = (TextView)v.findViewById(R.id.recDateUploaded);
+	        TextView tc_recFileType = (TextView)v.findViewById(R.id.recFileType);
+	        TextView tc_recOrigin = (TextView)v.findViewById(R.id.recOrigin);
+	        TextView tc_recPath = (TextView)v.findViewById(R.id.recPath);
 	       
-	        recId = tc.getText().toString();
+	       
 	       
 	        Intent explicitIntent = new Intent(FeedActivity.this,
 					FeedDetailActivity.class);
 	       
-
-			explicitIntent.putExtra("INTENT_RECORDING_ID",recId);
-			explicitIntent.putExtra("INTENT_RECORDING_NAME",recId);
-			explicitIntent.putExtra("INTENT_DATE_UPLOADED",recId);
-			explicitIntent.putExtra("INTENT_DURATION",recId);
-			explicitIntent.putExtra("INTENT_STATUS",recId);
-			explicitIntent.putExtra("INTENT_ORIGIN",recId);
-			explicitIntent.putExtra("INTENT_FILE_TYPE",recId);
-			explicitIntent.putExtra("INTENT_DATE_FINALIZED",recId);
+	        explicitIntent.putExtra("INTENT_RECORDING_ID",tc_recId.getText().toString());
+			explicitIntent.putExtra("INTENT_RECORDING_NAME",tc_recName.getText().toString());
+			explicitIntent.putExtra("INTENT_DATE_ADDED",tc_recDateAdd.getText().toString());
+			explicitIntent.putExtra("INTENT_DATE_UPLOADED",tc_recDateUploaded.getText().toString());
+			explicitIntent.putExtra("INTENT_DURATION",tc_recDurat.getText().toString());
+			explicitIntent.putExtra("INTENT_STATUS",tc_recStat.getText().toString());
+			explicitIntent.putExtra("INTENT_ORIGIN",tc_recOrigin.getText().toString());
+			explicitIntent.putExtra("INTENT_FILE_TYPE",tc_recFileType.getText().toString());
+			explicitIntent.putExtra("INTENT_DATE_FINALIZED",tc_recDateFin.getText().toString());
+			explicitIntent.putExtra("INTENT_PATH",tc_recPath.getText().toString());
 			startActivity(explicitIntent);
 	    }
 	

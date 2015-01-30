@@ -13,7 +13,7 @@ import android.util.Log;
 
 public class DateUtils {
 	public String convertStringToDate(String dateToConv){
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM:dd HH:mm:ss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		Date convertedDate = new Date();
 		 String localTime = "";
