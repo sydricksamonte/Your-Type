@@ -55,27 +55,33 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:padding="15dp" 
+         >
 
-        <Button
-            android:id="@+id/btnVolUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="U" />
+         <ImageView
+        android:id="@+id/imgVolDown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/pic_volume_min" 
+        android:layout_weight="0.13" 
+            android:padding="5dp"
+            />
             
      	<SeekBar
             android:id="@+id/volShow"
+            android:layout_marginTop="20sp"  
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="0.5" />
 
-        <Button
-            android:id="@+id/btnVolDown"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="DO" />
+        <ImageView
+        android:id="@+id/imgVolUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/pic_volume" 
+        android:layout_weight="0.13" 
+            android:padding="5dp"/>
             
     </LinearLayout>
     
@@ -93,7 +99,7 @@
         	android:layout_alignParentLeft="true" 
         	android:layout_marginTop="2sp"   
         	android:textStyle="bold"
-        	android:layout_below="@id/btnVolDown"
+        	android:layout_below="@id/imgVolUp"
         	style="@android:style/TextAppearance.Small"
     	/>
 
@@ -103,7 +109,7 @@
         	android:layout_height="wrap_content"
         	android:layout_alignParentLeft="true"    
         	android:layout_marginTop="2sp"
-        	android:layout_below="@id/btnVolDown"
+        	android:layout_below="@id/imgVolUp"
         	style="@android:style/TextAppearance.Small"
     	/>
     	
@@ -170,45 +176,66 @@
         
 	<LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+  		android:layout_height="40dp"
         android:orientation="horizontal"
-        android:layout_marginTop="30sp" >
+        android:layout_marginTop="20sp"
+        android:layout_weight="0.33"
+         android:padding="20dp" 
+         >
         
-		<Button
+		<ImageButton
             android:id="@+id/btnPlay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Play" 
+           android:layout_width="fill_parent" 
+           android:layout_weight="0.33" 
+           android:layout_height="fill_parent"
+            android:scaleType="fitCenter"
+            android:padding="2dp" 
+            android:background="@android:color/transparent"
+			android:src="@drawable/btn_play"
  		/>
             
-		<Button
+		<ImageButton
             android:id="@+id/btnStop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Stop" />
+            android:layout_width="fill_parent" 
+           android:layout_weight="0.33" 
+           android:layout_height="fill_parent"
+            android:scaleType="fitCenter"
+            android:padding="2dp" 
+             android:background="@android:color/transparent"
+			android:src="@drawable/btn_pause"
+			 />
             
-   		<Button
+   		<ImageButton
             android:id="@+id/btnDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Dele" />
+           android:layout_width="fill_parent" 
+           android:layout_weight="0.33" 
+           android:layout_height="fill_parent"
+            android:scaleType="fitCenter"
+            android:padding="2dp" 
+             android:background="@android:color/transparent"
+			android:src="@drawable/btn_delete"
+			/>
             
-   		<Button
+   		<ImageButton
             android:id="@+id/btnRename"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Rnme" />
+          android:layout_width="fill_parent" 
+           android:layout_weight="0.33" 
+           android:layout_height="fill_parent"
+            android:scaleType="fitCenter"
+            android:padding="2dp" 
+             android:background="@android:color/transparent"
+			android:src="@drawable/btn_rename"
+			 />
             
-    	<Button
+    	<ImageButton
             android:id="@+id/btnUpload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Upld" />
+            android:layout_width="fill_parent" 
+           android:layout_weight="0.33" 
+           android:layout_height="fill_parent"
+            android:scaleType="fitCenter"
+            android:padding="2dp" 
+             android:background="@android:color/transparent"
+			android:src="@drawable/btn_upload" />
             
 	 </LinearLayout>
    	

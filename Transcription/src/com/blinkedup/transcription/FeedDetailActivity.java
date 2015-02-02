@@ -1,5 +1,6 @@
 package com.blinkedup.transcription;
 
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -83,4 +84,9 @@ public class FeedDetailActivity extends Activity{
 		tc_recPath.setText(recPath);
 		
 	}
+	
+	//Button btnPlayDyn = (Button)findViewById(R.id.btnPlay);
+	//btnPlayDyn.setLayoutParams(new LayoutParams(300, 300));
+	
+	
 }

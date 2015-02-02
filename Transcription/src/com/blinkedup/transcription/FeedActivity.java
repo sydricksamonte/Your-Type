@@ -58,7 +58,7 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
         mListView = (ListView) findViewById(R.id.listview);  
         //ListView listview = (ListView) findViewById(R.id.listview1);
         mListView.setOnItemClickListener(this);
-        
+       
         
 		mAdapter = new SimpleCursorAdapter(getBaseContext(),
                 R.layout.listview_item_feed,
@@ -216,6 +216,7 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 			explicitIntent.putExtra("INTENT_FILE_TYPE",tc_recFileType.getText().toString());
 			explicitIntent.putExtra("INTENT_DATE_FINALIZED",tc_recDateFin.getText().toString());
 			explicitIntent.putExtra("INTENT_PATH",tc_recPath.getText().toString());
+			explicitIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(explicitIntent);
 	    }
 	
