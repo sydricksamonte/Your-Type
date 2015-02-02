@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".TabHostActivity"
+            android:name=".SplashScreen"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustNothing" >
             <intent-filter>
@@ -35,7 +35,11 @@
         <activity android:name=".Welcome" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".FeedActivity" />
+        <activity android:name=".TabHostActivity" />
+        <activity android:name=".AboutActivity" />
+        <activity android:name=".SendEmailActivity" />
         <activity android:name=".FeedDetailActivity" />
+      
         <activity
             android:name=".RecordingsActivity"
             android:label="@string/title_activity_recordings" >

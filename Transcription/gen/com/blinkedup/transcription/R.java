@@ -11,6 +11,7 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
+        public static final int blue=0x7f060001;
         public static final int white=0x7f060000;
     }
     public static final class dimen {
@@ -27,96 +28,124 @@ public final class R {
     public static final class drawable {
         public static final int about=0x7f020000;
         public static final int about2=0x7f020001;
-        public static final int circle_toggle_btn=0x7f020002;
-        public static final int colors_gray=0x7f020003;
-        public static final int colors_green=0x7f020004;
-        public static final int colors_orange=0x7f020005;
-        public static final int contact=0x7f020006;
-        public static final int contact2=0x7f020007;
-        public static final int home=0x7f020008;
-        public static final int home2=0x7f020009;
-        public static final int ic_launcher=0x7f02000a;
-        public static final int ic_stat_green=0x7f02000b;
-        public static final int ic_tab_about=0x7f02000c;
-        public static final int ic_tab_account=0x7f02000d;
-        public static final int ic_tab_contact=0x7f02000e;
-        public static final int ic_tab_home=0x7f02000f;
-        public static final int ic_tab_info=0x7f020010;
-        public static final int ic_tab_record=0x7f020011;
-        public static final int ldpi_normal=0x7f020012;
-        public static final int ldpi_small=0x7f020013;
-        public static final int login_button=0x7f020014;
-        public static final int register_button=0x7f020015;
-        public static final int shape=0x7f020016;
-        public static final int stat_circle=0x7f020017;
-        public static final int tab_cog=0x7f020018;
-        public static final int tab_cog_ch=0x7f020019;
-        public static final int tab_feed=0x7f02001a;
-        public static final int tab_feed_ch=0x7f02001b;
-        public static final int tab_info=0x7f02001c;
-        public static final int tab_info_ch=0x7f02001d;
-        public static final int tab_rec=0x7f02001e;
-        public static final int tab_rec_ch=0x7f02001f;
+        public static final int btn_fb=0x7f020002;
+        public static final int btn_mail=0x7f020003;
+        public static final int btn_tweeter=0x7f020004;
+        public static final int circle_toggle_btn=0x7f020005;
+        public static final int colors_gray=0x7f020006;
+        public static final int colors_green=0x7f020007;
+        public static final int colors_orange=0x7f020008;
+        public static final int contact=0x7f020009;
+        public static final int contact2=0x7f02000a;
+        public static final int home=0x7f02000b;
+        public static final int home2=0x7f02000c;
+        public static final int ic_launcher=0x7f02000d;
+        public static final int ic_stat_green=0x7f02000e;
+        public static final int ic_tab_about=0x7f02000f;
+        public static final int ic_tab_account=0x7f020010;
+        public static final int ic_tab_contact=0x7f020011;
+        public static final int ic_tab_home=0x7f020012;
+        public static final int ic_tab_info=0x7f020013;
+        public static final int ic_tab_record=0x7f020014;
+        public static final int ldpi_normal=0x7f020015;
+        public static final int ldpi_small=0x7f020016;
+        public static final int login_button=0x7f020017;
+        public static final int register_button=0x7f020018;
+        public static final int shape=0x7f020019;
+        public static final int splashscreen=0x7f02001a;
+        public static final int stat_circle=0x7f02001b;
+        public static final int tab_cog=0x7f02001c;
+        public static final int tab_cog_ch=0x7f02001d;
+        public static final int tab_feed=0x7f02001e;
+        public static final int tab_feed_ch=0x7f02001f;
+        public static final int tab_info=0x7f020020;
+        public static final int tab_info_ch=0x7f020021;
+        public static final int tab_rec=0x7f020022;
+        public static final int tab_rec_ch=0x7f020023;
     }
     public static final class id {
-        public static final int LinearLayout1=0x7f090002;
-        public static final int action_settings=0x7f090028;
-        public static final int btnFormat=0x7f090026;
-        public static final int btnLoad=0x7f090007;
-        public static final int btnLogin=0x7f090005;
-        public static final int btnSave=0x7f090006;
-        public static final int btnStart=0x7f090025;
-        public static final int btnVolDown=0x7f09000e;
-        public static final int btnVolUp=0x7f09000d;
-        public static final int btnlogout=0x7f090008;
-        public static final int etPassword=0x7f090004;
-        public static final int etUsername=0x7f090003;
-        public static final int listView1=0x7f09000a;
-        public static final int listview=0x7f090001;
-        public static final int login=0x7f090021;
-        public static final int logout=0x7f09000f;
-        public static final int lstAllUsers=0x7f090009;
-        public static final int password=0x7f090020;
-        public static final int recDateAdd=0x7f090016;
-        public static final int recDateFin=0x7f090017;
-        public static final int recDateUploaded=0x7f090018;
-        public static final int recDurat=0x7f090019;
-        public static final int recFileType=0x7f09001a;
-        public static final int recId=0x7f090012;
-        public static final int recIsActive=0x7f09001b;
-        public static final int recName=0x7f090013;
-        public static final int recOrigin=0x7f09001c;
-        public static final int recStat=0x7f090014;
-        public static final int recStatDesc=0x7f090015;
-        public static final int reset=0x7f090024;
-        public static final int seekBar1=0x7f09000c;
-        public static final int signup=0x7f090022;
-        public static final int textView1=0x7f090000;
-        public static final int textViewOutput=0x7f090011;
-        public static final int tglPlayPause=0x7f09000b;
-        public static final int timerValue=0x7f090023;
-        public static final int txtpassword=0x7f09001f;
-        public static final int txtuser=0x7f090027;
-        public static final int txtusername=0x7f09001d;
-        public static final int txtwelcome=0x7f090010;
-        public static final int username=0x7f09001e;
+        public static final int LinearLayout1=0x7f090000;
+        public static final int action_settings=0x7f09003d;
+        public static final int btnDelete=0x7f090021;
+        public static final int btnFormat=0x7f09003b;
+        public static final int btnLoad=0x7f090028;
+        public static final int btnLogin=0x7f090026;
+        public static final int btnPlay=0x7f09001f;
+        public static final int btnRename=0x7f090022;
+        public static final int btnSave=0x7f090027;
+        public static final int btnStop=0x7f090020;
+        public static final int btnUpload=0x7f090023;
+        public static final int btnVolDown=0x7f090016;
+        public static final int btnVolUp=0x7f090014;
+        public static final int btnlogout=0x7f090029;
+        public static final int buttonSend=0x7f09000d;
+        public static final int editTextMessage=0x7f09000c;
+        public static final int editTextSubject=0x7f09000a;
+        public static final int editTextTo=0x7f090008;
+        public static final int etPassword=0x7f090025;
+        public static final int etUsername=0x7f090024;
+        public static final int imageButton1=0x7f090002;
+        public static final int imageButton2=0x7f090003;
+        public static final int imageButton3=0x7f090004;
+        public static final int imageView1=0x7f09002d;
+        public static final int linearLayout1=0x7f090006;
+        public static final int listView1=0x7f09002b;
+        public static final int listview=0x7f09000e;
+        public static final int login=0x7f090036;
+        public static final int logout=0x7f09002e;
+        public static final int lstAllUsers=0x7f09002a;
+        public static final int password=0x7f090035;
+        public static final int recDateAdd=0x7f090017;
+        public static final int recDateFin=0x7f090019;
+        public static final int recDateUploaded=0x7f09001a;
+        public static final int recDurat=0x7f090018;
+        public static final int recFileType=0x7f09001b;
+        public static final int recId=0x7f09000f;
+        public static final int recIsActive=0x7f09001c;
+        public static final int recName=0x7f090010;
+        public static final int recOrigin=0x7f09001d;
+        public static final int recPath=0x7f09001e;
+        public static final int recStat=0x7f090011;
+        public static final int recStatDesc=0x7f090031;
+        public static final int recStatDesc1=0x7f090012;
+        public static final int reset=0x7f09003a;
+        public static final int seekBar1=0x7f090013;
+        public static final int sentence1=0x7f090001;
+        public static final int signup=0x7f090037;
+        public static final int textView1=0x7f090005;
+        public static final int textViewMessage=0x7f09000b;
+        public static final int textViewOutput=0x7f090030;
+        public static final int textViewPhoneNo=0x7f090007;
+        public static final int textViewSubject=0x7f090009;
+        public static final int tglPlayPause=0x7f09002c;
+        public static final int timerValue=0x7f090039;
+        public static final int txtpassword=0x7f090034;
+        public static final int txtuser=0x7f09003c;
+        public static final int txtusername=0x7f090032;
+        public static final int txtwelcome=0x7f09002f;
+        public static final int username=0x7f090033;
+        public static final int visualizerView=0x7f090038;
+        public static final int volShow=0x7f090015;
     }
     public static final class layout {
         public static final int activity_about=0x7f030000;
         public static final int activity_contact=0x7f030001;
-        public static final int activity_feed=0x7f030002;
-        public static final int activity_home=0x7f030003;
-        public static final int activity_login_signup=0x7f030004;
-        public static final int activity_main=0x7f030005;
-        public static final int activity_recordings=0x7f030006;
-        public static final int activity_register=0x7f030007;
-        public static final int activity_tab_host=0x7f030008;
-        public static final int activity_welcome=0x7f030009;
-        public static final int dropdown_item=0x7f03000a;
-        public static final int listview_item_feed=0x7f03000b;
-        public static final int loginsignup=0x7f03000c;
-        public static final int main=0x7f03000d;
-        public static final int welcome=0x7f03000e;
+        public static final int activity_email=0x7f030002;
+        public static final int activity_feed=0x7f030003;
+        public static final int activity_feeddetail=0x7f030004;
+        public static final int activity_home=0x7f030005;
+        public static final int activity_login_signup=0x7f030006;
+        public static final int activity_main=0x7f030007;
+        public static final int activity_recordings=0x7f030008;
+        public static final int activity_register=0x7f030009;
+        public static final int activity_splash=0x7f03000a;
+        public static final int activity_tab_host=0x7f03000b;
+        public static final int activity_welcome=0x7f03000c;
+        public static final int dropdown_item=0x7f03000d;
+        public static final int listview_item_feed=0x7f03000e;
+        public static final int loginsignup=0x7f03000f;
+        public static final int main=0x7f030010;
+        public static final int welcome=0x7f030011;
     }
     public static final class menu {
         public static final int audio_record=0x7f080000;
@@ -139,6 +168,7 @@ public final class R {
         public static final int title_activity_recordings=0x7f050007;
     }
     public static final class style {
+        public static final int ActionBar=0x7f070003;
         /** 
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
@@ -162,8 +192,9 @@ public final class R {
          */
         public static final int AppBaseTheme=0x7f070000;
         /**  Application theme. 
- All customizations that are NOT specific to a particular API-level can go here. 
+ Application theme. 
          */
         public static final int AppTheme=0x7f070001;
+        public static final int WindowTitleBackground=0x7f070002;
     }
 }

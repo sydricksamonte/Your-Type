@@ -68,13 +68,13 @@ public class AudioRecordingActivity extends Activity {
 	 private MediaPlayer mPlayer;
 	  private MediaPlayer mSilentPlayer;  /* to avoid tunnel player issue */
 	  private VisualizerView mVisualizerView;
-
+	DateUtils dateFunc;
 	
 	//private RecordingDB recordingDBoperation;
 	RecordingDB mydb;
 	/*public void addUser(View view) {
 
-	
+
 
 	}*/
 	@Override
@@ -89,20 +89,9 @@ public class AudioRecordingActivity extends Activity {
 		setFormatButtonCaption();
 
 		mydb = new RecordingDB(this);
+		dateFunc = new DateUtils();
 		
-		 Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM:dd HH:mm:ss");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String strDate = sdf.format(c.getTime());
-  
-        Log.e("asd",strDate);
-        
-        if(mydb.insertContact("Sampling Record", strDate, "", 3605, 0, 0, true, file_exts[currentFormat],"")) {
-             Toast.makeText(getApplicationContext(), "Recording Added", Toast.LENGTH_SHORT).show();	
-        }		
-        else{
-            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();	
-        }
+       
         
      // Locate the view to the elapsed time on screen and initialize
         timerView = (TextView) findViewById(R.id.timerValue);
@@ -129,6 +118,7 @@ public class AudioRecordingActivity extends Activity {
     				if (isChecked)
     					
     					startRecording();
+    				
     						
     					
     				else
@@ -145,9 +135,14 @@ public class AudioRecordingActivity extends Activity {
    			public void onClick(View v) {
    		        // get time button pressed
    				long now = System.currentTimeMillis();
+   				
    				stopButtonClick(now);		
    				stopRecording();
    				resetButtonClick(now);
+   				
+   				
+   				
+   				
    			}
    		});
 
@@ -181,10 +176,10 @@ public class AudioRecordingActivity extends Activity {
 
 	  private void init()
 	  {
-	    mPlayer = MediaPlayer.create(this, R.raw.test);
-	    mPlayer.setLooping(true);
+	  //  mPlayer = MediaPlayer.create(this, R.raw.test);
+	  //  mPlayer.setLooping(true);
 	   // mPlayer.start();
-		  mPlayer.stop();
+		//  mPlayer.stop();
 		  
 		  recorder = new MediaRecorder();
 
@@ -194,7 +189,7 @@ public class AudioRecordingActivity extends Activity {
 	    mVisualizerView.link(recorder);
 
 	    // Start with just line renderer
-	    addLineRenderer();
+	  //  addLineRenderer();
 	  }
 
 	  private void cleanUp()
@@ -375,6 +370,9 @@ public class AudioRecordingActivity extends Activity {
 	 // Method called when the reset button pressed.    
 	 private void resetButtonClick(long now)
 	 {
+		 
+		
+		 
 	 	// Set the elapsed time to 0..
 	 	accumTime = 0;   	
 
@@ -587,16 +585,16 @@ public class AudioRecordingActivity extends Activity {
 
     		//adapter.add(rec);
                
-               Calendar c = Calendar.getInstance();
-               SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM:dd HH:mm:ss");
-               String strDate = sdf.format(c.getTime());
+               String strDate = dateFunc.getDate();
                
-               if(mydb.insertContact(input.getEditableText().toString(), strDate, "", total, 0, 0, true, file_exts[currentFormat],"")) {
-                    Toast.makeText(getApplicationContext(), "Recording Added", Toast.LENGTH_SHORT).show();	
-               }		
+               Log.w("asd",strDate);
+               
+               if(mydb.insertContact(input.getEditableText().toString(), strDate, "", 3605, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
+                Toast.makeText(getApplicationContext(), "Recording Added", Toast.LENGTH_SHORT).show(); 
+               }  
                else{
-                   Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();	
-                }	
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show(); 
+               }
            }
 
     	 
@@ -611,7 +609,7 @@ public class AudioRecordingActivity extends Activity {
     	AlertDialog alertDialog = alert.create();
     	alertDialog.show();
     	
-    	
+    	mVisualizerView.clearRenderers();
 
 	}
 	
@@ -644,7 +642,7 @@ public class AudioRecordingActivity extends Activity {
 
 	private void stopRecording() {
 		
-		mVisualizerView.clearRenderers();
+		
 		
 		if (null != recorder) {
 			recorder.stop();
