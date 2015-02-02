@@ -40,7 +40,6 @@ public class DateUtils {
 	    formatter.setTimeZone(TimeZone.getDefault());  
 
 	    converted = formatter.format(localeDate.getTime());
-	    Log.e("OIdaax",converted);
 		return converted;
 	}
 	

@@ -53,7 +53,7 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
         
        // tfRegular = Typeface.createFromAsset(getAssets(),"Avenir_Reg.ttf");
        // tfUltra = Typeface.createFromAsset(getAssets(),"Avenir_Ultra.ttf");
-    	
+        Log.e("sasasa","sdfsd");
         dateFunc = new DateUtils();
         mListView = (ListView) findViewById(R.id.listview);  
         //ListView listview = (ListView) findViewById(R.id.listview1);
@@ -66,8 +66,8 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
                 new String[] { RecordingDB.RECORDING_DATE_ADDED, RecordingDB.RECORDING_DATE_FINALIZED, RecordingDB.RECORDING_DATE_UPLOADED,
 			RecordingDB.RECORDING_DURATION, RecordingDB.RECORDING_FILE_TYPE, RecordingDB.RECORDING_ID,
 			RecordingDB.RECORDING_ISACTIVE, RecordingDB.RECORDING_NAME, RecordingDB.RECORDING_ORIGIN,
-			RecordingDB.RECORDING_STATUS, RecordingDB.RECORDING_STATUS},
-                new int[] { R.id.recDateAdd , R.id.recDateFin, R.id.recDateUploaded, R.id.recDurat , R.id.recFileType, R.id.recId, R.id.recIsActive , R.id.recName, R.id.recOrigin, R.id.recStat, R.id.recStatDesc }, 0);		
+			RecordingDB.RECORDING_STATUS, RecordingDB.RECORDING_STATUS, RecordingDB.RECORDING_PATH},
+                new int[] { R.id.recDateAdd , R.id.recDateFin, R.id.recDateUploaded, R.id.recDurat , R.id.recFileType, R.id.recId, R.id.recIsActive , R.id.recName, R.id.recOrigin, R.id.recStat, R.id.recStatDesc, R.id.recPath }, 0);		
 	
 		
 		mListView.setAdapter(mAdapter);		
@@ -200,7 +200,7 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 	        TextView tc_recFileType = (TextView)v.findViewById(R.id.recFileType);
 	        TextView tc_recOrigin = (TextView)v.findViewById(R.id.recOrigin);
 	        TextView tc_recPath = (TextView)v.findViewById(R.id.recPath);
-	       
+	        Log.e("sasasa",tc_recPath.getText().toString());
 	       
 	       
 	        Intent explicitIntent = new Intent(FeedActivity.this,
@@ -216,7 +216,7 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 			explicitIntent.putExtra("INTENT_FILE_TYPE",tc_recFileType.getText().toString());
 			explicitIntent.putExtra("INTENT_DATE_FINALIZED",tc_recDateFin.getText().toString());
 			explicitIntent.putExtra("INTENT_PATH",tc_recPath.getText().toString());
-			explicitIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			
 			startActivity(explicitIntent);
 	    }
 	
