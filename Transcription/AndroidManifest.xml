@@ -39,6 +39,7 @@
         <activity android:name=".AboutActivity" />
         <activity android:name=".SendEmailActivity" />
         <activity android:name=".FeedDetailActivity" />
+        <activity android:name=".UploadActivity" />
       
         <activity
             android:name=".RecordingsActivity"
