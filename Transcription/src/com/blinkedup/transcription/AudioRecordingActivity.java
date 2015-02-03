@@ -90,8 +90,6 @@ public class AudioRecordingActivity extends Activity {
 
 		mydb = new RecordingDB(this);
 		dateFunc = new DateUtils();
-		
-       
         
      // Locate the view to the elapsed time on screen and initialize
         timerView = (TextView) findViewById(R.id.timerValue);
@@ -587,9 +585,9 @@ public class AudioRecordingActivity extends Activity {
                
                String strDate = dateFunc.getDate();
                
-               Log.w("asd",strDate);
+               Log.w("asd!",file.getAbsolutePath().toString() + "/" + input.getEditableText().toString() +  file_exts[currentFormat]);
                
-               if(mydb.insertContact(input.getEditableText().toString(), strDate, "", 3605, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
+               if(mydb.insertContact(input.getEditableText().toString(), strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" + input.getEditableText().toString() +  file_exts[currentFormat] )) {
                 Toast.makeText(getApplicationContext(), "Recording Added", Toast.LENGTH_SHORT).show(); 
                }  
                else{
