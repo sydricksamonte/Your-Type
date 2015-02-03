@@ -18,8 +18,10 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -32,7 +34,11 @@ import android.widget.ToggleButton;
 public class FeedDetailActivity extends Activity{
 	
 	SeekBar seekBar;
-	Button btnVolUp, btnVolDown;
+	SeekBar seekVolume;
+	
+	 private int maxVolume;
+	    private int curVolume;
+	    
 	ToggleButton tglPlayPause;
 	
 	MediaPlayer mediaPlayer;
@@ -40,21 +46,33 @@ public class FeedDetailActivity extends Activity{
 	Music musicSelected;
 	Handler seekHandler = new Handler();
 	String recPath;
+	Boolean isPlaying = false;
+	TextView tc_recDurat;
+	TextView tc_recDuratBack;
+	DateUtils du;
 	
+	@Override
+	public void onPause() {
+	    super.onPause();
+	    mediaPlayer.stop();
+	}
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_feeddetail);
 		
-		TextView tc_recId = (TextView)findViewById(R.id.recId);
-	 	TextView tc_recName = (TextView)findViewById(R.id.recName);
-		TextView tc_recStat = (TextView)findViewById(R.id.recStatDesc1);
-		TextView tc_recDateAdd = (TextView)findViewById(R.id.recDateAdd);
-	  	TextView tc_recDurat = (TextView)findViewById(R.id.recDurat);
-		TextView tc_recDateFin = (TextView)findViewById(R.id.recDateFin);
-	 	TextView tc_recDateUploaded = (TextView)findViewById(R.id.recDateUploaded);
-		TextView tc_recFileType = (TextView)findViewById(R.id.recFileType);
-	 	TextView tc_recOrigin = (TextView)findViewById(R.id.recOrigin);
-	  	TextView tc_recPath = (TextView)findViewById(R.id.recPath);
+		du = new DateUtils();
+		TextView tc_recId = (TextView)findViewById(R.id.recDetId);
+	 	TextView tc_recName = (TextView)findViewById(R.id.recDetName);
+		TextView tc_recStat = (TextView)findViewById(R.id.recDetStatDesc1);
+		TextView tc_recDateAdd = (TextView)findViewById(R.id.recDetDateAdd);
+	    tc_recDurat = (TextView)findViewById(R.id.recDetDurat);
+	    tc_recDuratBack = (TextView)findViewById(R.id.recDetDuratBack);
+		TextView tc_recDateFin = (TextView)findViewById(R.id.recDetDateFin);
+	 	TextView tc_recDateUploaded = (TextView)findViewById(R.id.recDetDateUploaded);
+		TextView tc_recFileType = (TextView)findViewById(R.id.recDetFileType);
+	 	TextView tc_recOrigin = (TextView)findViewById(R.id.recDetOrigin);
+	  	TextView tc_recPath = (TextView)findViewById(R.id.recDetPath);
 	        
 	 
 	  	
@@ -112,45 +130,41 @@ public class FeedDetailActivity extends Activity{
 		recPath = (String) intent.getSerializableExtra("INTENT_PATH");
 		tc_recPath.setText(recPath);
 		//LoadMusic();
+		if (mediaPlayer == null){
+	        // it's ok, we can call this constructor
+			mediaPlayer = new MediaPlayer();  
 		
-		Log.w("oida!",recPath);
-		mediaPlayer = new MediaPlayer();
+		Log.e("EEEE","CALLED!!!!!!!!!!!");
+		}
+		try {
+			mediaPlayer.setDataSource(recPath);
+			mediaPlayer.prepare();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			Toast.makeText(getApplicationContext(), e1.getLocalizedMessage(), Toast.LENGTH_LONG);
+		}
 		
 		ImageButton mClickButton1 = (ImageButton)findViewById(R.id.btnPlay);
 		mClickButton1.setOnClickListener( new OnClickListener() {
 			 @Override
 	            public void onClick(View v) {
 	                // TODO Auto-generated method stub
-				 
-				 try {
-					
-					mediaPlayer.setDataSource(recPath);
-					mediaPlayer.prepare();
-					seekBar.setMax(mediaPlayer.getDuration());
-					mediaPlayer.start();
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG);
-					
-					//Toast.makeText(getApplicationContext(),  e.printStackTrace(), Toast.LENGTH_LONG);
-				} catch (SecurityException e) {
-					// TODO Auto-generated catch block
-					Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG);
-					
-				} catch (IllegalStateException e) {
-					// TODO Auto-generated catch block
-					Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG);
-					
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG);
-					
+				 if (mediaPlayer !=null){
+						try {
+							
+						
+							seekBar.setMax(mediaPlayer.getDuration());
+							mediaPlayer.start();
+							
+							seekUpdate();
+		
+						} catch (IllegalStateException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} 
+						
 				}
-					
-					
-				
 			 }
-	            
 	   });
 		
 		ImageButton mClickButton2 = (ImageButton)findViewById(R.id.btnStop);
@@ -158,7 +172,7 @@ public class FeedDetailActivity extends Activity{
 			 @Override
 	            public void onClick(View v) {
 	                // TODO Auto-generated method stub
-				 mediaPlayer.stop();
+				 mediaPlayer.pause();
 			 }
 	            
 	   });
@@ -198,43 +212,71 @@ public class FeedDetailActivity extends Activity{
 		
 
 		seekBar = (SeekBar) findViewById(R.id.seekBar1);
+		seekVolume = (SeekBar) findViewById(R.id.volShow);
 	
 		//btnVolUp = (Button) findViewById(R.id.btnVolUp);
 		//btnVolDown = (Button) findViewById(R.id.btnVolDown);
 		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
+		initialiseVolumeSeekBar();
 		
+		if (mediaPlayer !=null) seekUpdate();
+		
+		seekBar.setOnTouchListener(new OnTouchListener(){
+			public boolean onTouch(View v, MotionEvent event) {
+				seekChange(v);
+				return false;
+			}
+		});
 	}
+	private void initialiseVolumeSeekBar() {
+
+        maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        curVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        seekVolume.setMax(maxVolume);
+        seekVolume.setProgress(curVolume);
+        seekVolume
+                .setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onStopTrackingTouch(SeekBar arg0) {
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar arg0) {
+
+                    }
+
+                    @Override
+                    public void onProgressChanged(SeekBar arg0, int arg1,
+                            boolean arg2) {
+                        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                                arg1, 0);
+                    }
+                });
+    }
+		
 	private void seekChange(View v){
-		if (mediaPlayer !=null && mediaPlayer.isPlaying()){
-			SeekBar sb= (SeekBar) v;
-			mediaPlayer.seekTo(sb.getProgress());
+		if ((mediaPlayer !=null)){
+				SeekBar sb= (SeekBar) v;
+				mediaPlayer.seekTo(sb.getProgress());
+				tc_recDurat.setText(du.convIntBaseToLength(mediaPlayer.getCurrentPosition() / 1000));
+				tc_recDuratBack.setText(du.convIntBaseToLength((mediaPlayer.getDuration()-mediaPlayer.getCurrentPosition())/1000));
+				if (sb.getProgress() == 100){
+					sb.setProgress(0);
+				}
 		}
 	}
-	private void LoadMusic(){
-	
-		
-	}
-	
-	Runnable run = new Runnable(){
 
+	Runnable run = new Runnable(){
 		@Override
 		public void run() {
-
 			seekUpdate();
-			
-			
 		}
-		
 	};
-	
+		
 	private void seekUpdate(){
 		seekBar.setProgress(mediaPlayer.getCurrentPosition());
+		tc_recDurat.setText(du.convIntBaseToLength(mediaPlayer.getCurrentPosition() / 1000));
+		tc_recDuratBack.setText(du.convIntBaseToLength((mediaPlayer.getDuration()-mediaPlayer.getCurrentPosition())/1000));
 		seekHandler.postDelayed(run, 1000);
 	}
-	
-//Button btnPlayDyn = (Button)findViewById(R.id.btnPlay);
-	//btnPlayDyn.setLayoutParams(new LayoutParams(300, 300));
-	
-	
 }

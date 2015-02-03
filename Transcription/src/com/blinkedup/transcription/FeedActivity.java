@@ -16,6 +16,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -45,12 +46,12 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 	Typeface tfRegular;
 	Typeface tfUltra;
 	Button showDetail; 
-	
+	public MediaPlayer mediaPlayer;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
-        
+        mediaPlayer = new MediaPlayer();
        // tfRegular = Typeface.createFromAsset(getAssets(),"Avenir_Reg.ttf");
        // tfUltra = Typeface.createFromAsset(getAssets(),"Avenir_Ultra.ttf");
         Log.e("sasasa","sdfsd");

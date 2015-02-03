@@ -7,87 +7,19 @@
      android:padding="10dp" >
     
     <TextView 
-        android:id="@+id/recId"
+        android:id="@+id/recDetId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"   
     	android:visibility="gone" />
     
 	<TextView 
-        android:id="@+id/recName"
+        android:id="@+id/recDetName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@android:style/TextAppearance.Medium" 
          />
          
-         <TextView 
-        android:id="@+id/recStat"
-       	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="false"    
-        android:layout_marginTop="16sp"
-        android:visibility="gone"
-       	
-         />
-     
-	<TextView 
-        android:id="@+id/recStatDesc1"
-       	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"    
-        android:layout_marginTop="5sp"
-        android:layout_below="@id/recName"
-	    android:drawableLeft="@drawable/stat_circle"
-		android:drawablePadding="3dip"
-		style="@android:style/TextAppearance.Small"
-	/>
-	
-	<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20sp" >
-
-        <SeekBar
-            android:id="@+id/seekBar1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="15dp" 
-         >
-
-         <ImageView
-        android:id="@+id/imgVolDown"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/pic_volume_min" 
-        android:layout_weight="0.13" 
-            android:padding="5dp"
-            />
-            
-     	<SeekBar
-            android:id="@+id/volShow"
-            android:layout_marginTop="20sp"  
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5" />
-
-        <ImageView
-        android:id="@+id/imgVolUp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/pic_volume" 
-        android:layout_weight="0.13" 
-            android:padding="5dp"/>
-            
-    </LinearLayout>
-    
-	
-	
-	<LinearLayout
+         <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
@@ -99,34 +31,115 @@
         	android:layout_alignParentLeft="true" 
         	android:layout_marginTop="2sp"   
         	android:textStyle="bold"
-        	android:layout_below="@id/imgVolUp"
+        	android:layout_below="@id/recDetName"
         	style="@android:style/TextAppearance.Small"
     	/>
 
 		<TextView 
-        	android:id="@+id/recDateAdd"
+        	android:id="@+id/recDetDateAdd"
        		android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:layout_alignParentLeft="true"    
         	android:layout_marginTop="2sp"
-        	android:layout_below="@id/imgVolUp"
+        	android:layout_below="@id/recDetName"
         	style="@android:style/TextAppearance.Small"
     	/>
     	
   	</LinearLayout>
+  	
+         <TextView 
+        android:id="@+id/recDetStat"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="false"    
+        android:layout_marginTop="25sp"
+        android:visibility="gone"
+       	
+         />
+     
 	
+	
+	<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp" >
+
 	<TextView 
-        android:id="@+id/recDurat"
+        android:id="@+id/recDetDuratBack"
        	android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"    
-        android:layout_marginTop="2sp"
-        android:layout_below="@id/recDateAdd"
+        android:layout_marginTop="5sp"
         style="@android:style/TextAppearance.Small"
         />
+        
+        <SeekBar
+            android:id="@+id/seekBar1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+         
+            android:layout_weight="1" />
+            
+            	<TextView 
+        android:id="@+id/recDetDurat"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"    
+        android:layout_marginTop="5sp"
+        style="@android:style/TextAppearance.Small"
+        />
+    </LinearLayout>
+
+    
+    <TextView 
+        android:id="@+id/recDetStatDesc1"
+       	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"    
+        android:layout_marginTop="20sp"
+        android:layout_below="@id/seekBar1"
+	    android:drawableLeft="@drawable/stat_circle"
+		android:drawablePadding="3dip"
+		style="@android:style/TextAppearance.Small"
+	/>
+
+	<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="25dp" 
+      
+         >
+
+         <ImageView
+        android:id="@+id/imgDetVolDown"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/pic_volume_min" 
+        android:layout_weight="0.13" 
+       	android:padding="5dp"
+            />
+            
+     	<SeekBar
+            android:id="@+id/volShow"
+            android:layout_marginTop="4sp"  
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+         	android:progressDrawable="@drawable/black_scrubber_progress"
+   			android:thumb="@drawable/black_scrubber_control" />
+
+        <ImageView
+        android:id="@+id/imgVolUp"
+         android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/pic_volume" 
+        android:layout_weight="0.13" 
+            android:padding="5dp"/>
+            
+    </LinearLayout>
    
 	<TextView 
-        android:id="@+id/recDateFin"
+        android:id="@+id/recDetDateFin"
        	android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"    
@@ -134,7 +147,7 @@
       	android:visibility="gone" />
 
 	<TextView 
-        android:id="@+id/recDateUploaded"
+        android:id="@+id/recDetDateUploaded"
        	android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"    
@@ -142,7 +155,7 @@
         android:visibility="gone"/>
 
 	<TextView 
-        android:id="@+id/recFileType"
+        android:id="@+id/recDetFileType"
        	android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"    
@@ -150,7 +163,7 @@
         android:visibility="gone"/>
 
 	<TextView 
-        android:id="@+id/recIsActive"
+        android:id="@+id/recDetIsActive"
        	android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"    
@@ -158,7 +171,7 @@
         android:visibility="gone" />
    	
    	<TextView 
-        android:id="@+id/recOrigin"
+        android:id="@+id/recDetOrigin"
        	android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"    
@@ -166,7 +179,7 @@
         android:visibility="gone"/>
         
  	<TextView 
-        android:id="@+id/recPath"
+        android:id="@+id/recDetPath"
        	android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"    
@@ -175,19 +188,19 @@
         
         
 	<LinearLayout
-        android:layout_width="wrap_content"
-  		android:layout_height="40dp"
+        android:layout_width="match_parent"
+  		android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20sp"
-        android:layout_weight="0.33"
+        android:layout_marginTop="5sp"
          android:padding="20dp" 
+        
          >
         
 		<ImageButton
             android:id="@+id/btnPlay"
            android:layout_width="fill_parent" 
            android:layout_weight="0.33" 
-           android:layout_height="fill_parent"
+           android:layout_height="45dp"
             android:scaleType="fitCenter"
             android:padding="2dp" 
             android:background="@android:color/transparent"

@@ -60,6 +60,23 @@ public class DateUtils {
 			  return hrStr  +":"+ mnStr +":"+ secStr;
 		  }
 	}
+	public String convIntBaseToLength(int len){
+		  int parsedLen = len;
+		  int hr = parsedLen/3600;
+		  int rem = parsedLen%3600;
+		  int mn = rem/60;
+		  int sec = rem%60;
+		  String hrStr = (hr<10 ? "0" : "")+hr;
+		  String mnStr = (mn<10 ? "0" : "")+mn;
+		  String secStr = (sec<10 ? "0" : "")+sec; 
+		  
+		  if (hr==0){
+			  return  mnStr +":"+ secStr;
+		  }
+		  else{
+			  return hrStr  +":"+ mnStr +":"+ secStr;
+		  }
+	}
 	public String getDate(){
 		Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
