@@ -130,6 +130,7 @@ public class FeedDetailActivity extends Activity{
 		tc_recOrigin.setText(recOrigin);
 		
 		recPath = (String) intent.getSerializableExtra("INTENT_PATH");
+		recPath = recPath + recName  + recFileType;
 		tc_recPath.setText(recPath + recName  + recFileType);
 		Log.e("SSS",recPath + recName  + recFileType);
 		
@@ -227,7 +228,7 @@ public class FeedDetailActivity extends Activity{
 		//btnVolDown = (Button) findViewById(R.id.btnVolDown);
 		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		initialiseVolumeSeekBar();
-		
+		try{
 		if (mediaPlayer !=null) seekUpdate();
 		
 		seekBar.setOnTouchListener(new OnTouchListener(){
@@ -236,6 +237,11 @@ public class FeedDetailActivity extends Activity{
 				return false;
 			}
 		});
+		}
+		catch(Exception e){
+			Log.e("TANGA5",e.getLocalizedMessage());
+			
+		}
 	}
 	private void initialiseVolumeSeekBar() {
 
@@ -280,11 +286,17 @@ public class FeedDetailActivity extends Activity{
 			}
 		}
 	}
-
+	
 	Runnable run = new Runnable(){
 		@Override
 		public void run() {
+			try{
 			seekUpdate();
+			}
+			catch(Exception e){
+				Log.e("TANGA5",e.getLocalizedMessage());
+				
+			}
 		}
 	};
 		
