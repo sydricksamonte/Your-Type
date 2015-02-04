@@ -72,7 +72,11 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 	
 		
 		mListView.setAdapter(mAdapter);		
+		mListView.setEmptyView(findViewById(R.id.empty_list_item));
 		
+		TextView noitem;
+		noitem = (TextView) findViewById(R.id.empty_list_item);
+		noitem.setTextColor(getResources().getColor(R.color.graylight2));
 		mAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() { 
 			@Override public boolean setViewValue(View view, Cursor cursor, int column) 
 			{ 
