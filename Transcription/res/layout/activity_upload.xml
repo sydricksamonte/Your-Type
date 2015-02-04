@@ -2,17 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-     android:gravity="center" 
+    android:orientation="vertical" 
      android:padding="10dp" >
     
-    <TextView 
-        android:id="@+id/recId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"   
-    	android:visibility="gone" />
+    <Spinner
+        android:id="@+id/spnType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/rec_arrays"
+        android:prompt="@string/rec_prompt" />
     
-    
+ 		<TextView 
+        	android:text="Recording Note  "
+       		android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignParentLeft="true" 
+        	android:layout_marginTop="1sp"   
+        	android:textStyle="italic"
+        	style="@android:style/TextAppearance.Small"
+    	/>
     <EditText
     	android:id="@+id/txtDesc"
     	android:layout_width="fill_parent"
@@ -23,155 +31,5 @@
     	android:maxLines="6" 
      />
     
-	<TextView 
-        android:id="@+id/recName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@android:style/TextAppearance.Medium" 
-         />
-         
-         <TextView 
-        android:id="@+id/recStat"
-       	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="false"    
-        android:layout_marginTop="16sp"
-        android:visibility="gone"
-       	
-         />
-     
-	<TextView 
-        android:id="@+id/recStatDesc1"
-       	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"    
-        android:layout_marginTop="5sp"
-        android:layout_below="@id/recName"
-	    android:drawableLeft="@drawable/stat_circle"
-		android:drawablePadding="3dip"
-		style="@android:style/TextAppearance.Small"
-	/>
 	
-	
-
-		<TextView 
-        	android:id="@+id/recDateAdd"
-       		android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_alignParentLeft="true"    
-        	android:layout_marginTop="2sp"
-        	android:layout_below="@id/imgVolUp"
-        	style="@android:style/TextAppearance.Small"
-    	/>
-    	
-  
-	
-	<TextView 
-        android:id="@+id/recDurat"
-       	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"    
-        android:layout_marginTop="2sp"
-        android:layout_below="@id/recDateAdd"
-        style="@android:style/TextAppearance.Small"
-        />
-   
-	<TextView 
-        android:id="@+id/recFileType"
-       	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"    
-        android:layout_centerVertical="true" 
-        android:visibility="gone"/>
-
-	<TextView 
-        android:id="@+id/recIsActive"
-       	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"    
-        android:layout_centerVertical="true"
-        android:visibility="gone" />
-   	
-   	<TextView 
-        android:id="@+id/recOrigin"
-       	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"    
-        android:layout_centerVertical="true" 
-        android:visibility="gone"/>
-        
- 	<TextView 
-        android:id="@+id/recPath"
-       	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"    
-        android:layout_centerVertical="true" 
-        android:visibility="gone"/>
-        
-        
-	<LinearLayout
-        android:layout_width="wrap_content"
-  		android:layout_height="40dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="20sp"
-        android:layout_weight="0.33"
-         android:padding="20dp" 
-         >
-        
-		<ImageButton
-            android:id="@+id/btnPlay"
-           android:layout_width="fill_parent" 
-           android:layout_weight="0.33" 
-           android:layout_height="fill_parent"
-            android:scaleType="fitCenter"
-            android:padding="2dp" 
-            android:background="@android:color/transparent"
-			android:src="@drawable/btn_play"
- 		/>
-            
-		<ImageButton
-            android:id="@+id/btnStop"
-            android:layout_width="fill_parent" 
-           android:layout_weight="0.33" 
-           android:layout_height="fill_parent"
-            android:scaleType="fitCenter"
-            android:padding="2dp" 
-             android:background="@android:color/transparent"
-			android:src="@drawable/btn_pause"
-			 />
-            
-   		<ImageButton
-            android:id="@+id/btnDelete"
-           android:layout_width="fill_parent" 
-           android:layout_weight="0.33" 
-           android:layout_height="fill_parent"
-            android:scaleType="fitCenter"
-            android:padding="2dp" 
-             android:background="@android:color/transparent"
-			android:src="@drawable/btn_delete"
-			/>
-            
-   		<ImageButton
-            android:id="@+id/btnRename"
-          android:layout_width="fill_parent" 
-           android:layout_weight="0.33" 
-           android:layout_height="fill_parent"
-            android:scaleType="fitCenter"
-            android:padding="2dp" 
-             android:background="@android:color/transparent"
-			android:src="@drawable/btn_rename"
-			 />
-            
-    	<ImageButton
-            android:id="@+id/btnUpload"
-            android:layout_width="fill_parent" 
-           android:layout_weight="0.33" 
-           android:layout_height="fill_parent"
-            android:scaleType="fitCenter"
-            android:padding="2dp" 
-             android:background="@android:color/transparent"
-			android:src="@drawable/btn_upload" />
-            
-	 </LinearLayout>
-   	
 </LinearLayout>

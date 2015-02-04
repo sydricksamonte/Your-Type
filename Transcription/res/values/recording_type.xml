@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rec_prompt">Choose Recording Type</string>
+ 
+    <string-array name="rec_arrays">
+        <item>Memo</item>
+        <item>Letter</item>
+        <item>Time cost</item>
+    </string-array>
+ 
+</resources>

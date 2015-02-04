@@ -65,21 +65,16 @@ public class AudioRecordingActivity extends Activity {
 	private boolean timerRunning = false;	// true if timer is running
 	ToggleButton tglPlayPause;				//toggle play pause button
 	
-	 private MediaPlayer mPlayer;
-	  private MediaPlayer mSilentPlayer;  /* to avoid tunnel player issue */
-	  private VisualizerView mVisualizerView;
+	private MediaPlayer mPlayer;
+	private MediaPlayer mSilentPlayer;  /* to avoid tunnel player issue */
+	private VisualizerView mVisualizerView;
 	DateUtils dateFunc;
 	
-	//private RecordingDB recordingDBoperation;
+	
 	RecordingDB mydb;
-	/*public void addUser(View view) {
-
-
-
-	}*/
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
@@ -98,10 +93,6 @@ public class AudioRecordingActivity extends Activity {
         // Initialize an ArrayList to hold the laps
         laps = new Laps();
 
-        // Locate the view to the laps on screen and initialize
- //       lapView = (TextView) findViewById(R.id.laps);
-      //  lapView.setText(laps.toString());
-        
         // Initialize a Handler for the System to periodically call
         timerHandler = new Handler();
         
@@ -113,19 +104,16 @@ public class AudioRecordingActivity extends Activity {
     			long now = System.currentTimeMillis();
     			
     			if (tglPlayPause !=null){
-    				if (isChecked)
-    					
+    				if (isChecked){
     					startRecording();
-    				
-    						
-    					
-    				else
-    			
-    				stopButtonClick(now);
+    				}
+    				else{
+    					stopButtonClick(now);
+    				}
     			}
-   		}
+    		}
    		
-   	});
+    	});
         
      // Bind the method to be called when the reset button pressed        
         View stopButton = findViewById(R.id.reset);
@@ -137,13 +125,16 @@ public class AudioRecordingActivity extends Activity {
    				stopButtonClick(now);		
    				stopRecording();
    				resetButtonClick(now);
-   				
-   				
-   				
-   				
    			}
    		});
-
+      /*  String strDate = dateFunc.getDate();
+		if(mydb.insertContact("Kksdf sjf sjopdf spodf psdpof sdf gsrg er", strDate, "", total, 0, 0, true, file_exts[currentFormat],"","C://sdfsdsfd/" )) {
+         Toast.makeText(getApplicationContext(), "Recording Added", Toast.LENGTH_SHORT).show(); 
+        }  
+        else{
+         Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show(); 
+        }
+        */
         
     }
 	
@@ -186,8 +177,6 @@ public class AudioRecordingActivity extends Activity {
 	    mVisualizerView = (VisualizerView) findViewById(R.id.visualizerView);
 	    mVisualizerView.link(recorder);
 
-	    // Start with just line renderer
-	  //  addLineRenderer();
 	  }
 
 	  private void cleanUp()
@@ -206,19 +195,7 @@ public class AudioRecordingActivity extends Activity {
 	    }
 	  }
 	  
-	  // Workaround (for Galaxy S4)
-	  //
-	  // "Visualization does not work on the new Galaxy devices"
-	  //    https://github.com/felixpalmer/android-visualizer/issues/5
-	  //
-	  // NOTE: 
-	  //   This code is not required for visualizing default "test.mp3" file,
-	  //   because tunnel player is used when duration is longer than 1 minute.
-	  //   (default "test.mp3" file: 8 seconds)
-	  //
 	  private void initTunnelPlayerWorkaround() {
-	    // Read "tunnel.decode" system property to determine
-	    // the workaround is needed
 	    if (TunnelPlayerWorkaround.isTunnelDecodeEnabled(this)) {
 	      mSilentPlayer = TunnelPlayerWorkaround.createSilentMediaPlayer(this);
 	    }
@@ -322,11 +299,8 @@ public class AudioRecordingActivity extends Activity {
     
 	// Method called when the start buttons pressed
 	 private void startButtonClick(long now)
-	 {       
-		 
-		 
-		 
-	 	// Remove any timers in progress
+	 {
+		 // Remove any timers in progress
 	     timerHandler.removeCallbacks(updateTimerTask);
 	     
 	     // Update the TOD the handler started and the TOD for the first lap started
@@ -376,16 +350,7 @@ public class AudioRecordingActivity extends Activity {
 
 	 	// remove all laps
 	 	laps.clear();
-	 //	timerView.setText(formatTime(accumTime));
 	
-	 	
-	
-	 	
-	 	// Initialize the elapsed time
-	//	timerView.setText(formatTime(0));
-	 	
-	     // Update the TOD the handler started and the TOD the first lap started
-	 	// Note that this is only necessary if reset pressed while timer running
 	 	if (timerRunning)
 	 	{
 	         startTime = now;
@@ -393,13 +358,7 @@ public class AudioRecordingActivity extends Activity {
 	 	}
 	 	
 	 }
-	 
-
-	 
-
-	 
-
-	 
+	
 	 // task executed after timer expired
 	 private Runnable updateTimerTask = new Runnable() 
 	 {	
@@ -576,18 +535,12 @@ public class AudioRecordingActivity extends Activity {
                File from = new File(getFilename().toString());
                File to = new File(file.getAbsolutePath().toString() + "/" + input.getEditableText().toString() + file_exts[currentFormat]); 
                from.renameTo(to);
-               
-           //	ArrayAdapter adapter = (ArrayAdapter) getListAdapter();
-
-    		//EditText text = (EditText) findViewById(R.id.editText1);
-
-    		//adapter.add(rec);
-               
+                
                String strDate = dateFunc.getDate();
                
-               Log.w("asd!",file.getAbsolutePath().toString() + "/" + input.getEditableText().toString() +  file_exts[currentFormat]);
+              // Log.w("asd!",file.getAbsolutePath().toString() + "/" + input.getEditableText().toString() +  file_exts[currentFormat]);
                
-               if(mydb.insertContact(input.getEditableText().toString(), strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" + input.getEditableText().toString() +  file_exts[currentFormat] )) {
+               if(mydb.insertContact(input.getEditableText().toString(), strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
                 Toast.makeText(getApplicationContext(), "Recording Added", Toast.LENGTH_SHORT).show(); 
                }  
                else{
@@ -596,8 +549,8 @@ public class AudioRecordingActivity extends Activity {
            }
 
     	 
-    	} // End of onClick(DialogInterface dialog, int whichButton)
-    }); //End of alert.setPositiveButton
+    	} 
+    }); 
     	alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
     	  public void onClick(DialogInterface dialog, int whichButton) {
     	    // Canceled.
@@ -639,9 +592,6 @@ public class AudioRecordingActivity extends Activity {
 	}
 
 	private void stopRecording() {
-		
-		
-		
 		if (null != recorder) {
 			recorder.stop();
 			recorder.reset();
@@ -649,13 +599,9 @@ public class AudioRecordingActivity extends Activity {
 
 			recorder = null;
 		}
-
-		 rename();
-		 
+		rename();
 	}
 	
-
-
 	private void displayFormatDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		String formats[] = { "MPEG 4", "3GPP" };

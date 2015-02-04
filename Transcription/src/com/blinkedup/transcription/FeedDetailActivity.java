@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -50,6 +51,7 @@ public class FeedDetailActivity extends Activity{
 	TextView tc_recDurat;
 	TextView tc_recDuratBack;
 	DateUtils du;
+	ImageButton mClickButton1;
 	
 	@Override
 	public void onPause() {
@@ -73,7 +75,7 @@ public class FeedDetailActivity extends Activity{
 		TextView tc_recFileType = (TextView)findViewById(R.id.recDetFileType);
 	 	TextView tc_recOrigin = (TextView)findViewById(R.id.recDetOrigin);
 	  	TextView tc_recPath = (TextView)findViewById(R.id.recDetPath);
-	        
+	      
 	 
 	  	
 		Intent intent = getIntent();
@@ -128,43 +130,50 @@ public class FeedDetailActivity extends Activity{
 		tc_recOrigin.setText(recOrigin);
 		
 		recPath = (String) intent.getSerializableExtra("INTENT_PATH");
-		tc_recPath.setText(recPath);
-		//LoadMusic();
-		if (mediaPlayer == null){
-	        // it's ok, we can call this constructor
-			mediaPlayer = new MediaPlayer();  
+		tc_recPath.setText(recPath + recName  + recFileType);
+		Log.e("SSS",recPath + recName  + recFileType);
 		
-		Log.e("EEEE","CALLED!!!!!!!!!!!");
-		}
 		try {
+			if (mediaPlayer == null){
+		        // it's ok, we can call this constructor
+				mediaPlayer = new MediaPlayer();  
+			}
 			mediaPlayer.setDataSource(recPath);
 			mediaPlayer.prepare();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
+			Log.e("TANGA2",e1.getLocalizedMessage());
 			Toast.makeText(getApplicationContext(), e1.getLocalizedMessage(), Toast.LENGTH_LONG);
 		}
 		
-		ImageButton mClickButton1 = (ImageButton)findViewById(R.id.btnPlay);
+	    mClickButton1 = (ImageButton)findViewById(R.id.btnPlay);
 		mClickButton1.setOnClickListener( new OnClickListener() {
+			
 			 @Override
 	            public void onClick(View v) {
+				 mClickButton1.setColorFilter(Color.argb(150, 155, 155, 155));
 	                // TODO Auto-generated method stub
-				 if (mediaPlayer !=null){
+				 
 						try {
+							if (mediaPlayer !=null){
 							
-						
 							seekBar.setMax(mediaPlayer.getDuration());
 							mediaPlayer.start();
 							
 							seekUpdate();
+							}
 		
 						} catch (IllegalStateException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+							Toast.makeText(getApplicationContext(), "Unable to play file", Toast.LENGTH_LONG);
+							Log.e("TANGA",e.getLocalizedMessage());
+							//e.printStackTrace();
 						} 
 						
-				}
+				
+				 mClickButton1.setColorFilter(null);
 			 }
+		
 	   });
 		
 		ImageButton mClickButton2 = (ImageButton)findViewById(R.id.btnStop);
@@ -184,18 +193,18 @@ public class FeedDetailActivity extends Activity{
             public void onClick(View v) {
                 // TODO Auto-generated method stub
             	Log.e("OI","sdfsdf");
-            	TextView tc_recId = (TextView)findViewById(R.id.recId);
-        	 	TextView tc_recName = (TextView)findViewById(R.id.recName);
-        		TextView tc_recStat = (TextView)findViewById(R.id.recStatDesc1);
-        		TextView tc_recDateAdd = (TextView)findViewById(R.id.recDateAdd);
-        	  	TextView tc_recDurat = (TextView)findViewById(R.id.recDurat);
-        		TextView tc_recFileType = (TextView)findViewById(R.id.recFileType);
-        	 	TextView tc_recOrigin = (TextView)findViewById(R.id.recOrigin);
-        	  	TextView tc_recPath = (TextView)findViewById(R.id.recPath);
+            	TextView tc_recId = (TextView)findViewById(R.id.recDetId);
+        	 	TextView tc_recName = (TextView)findViewById(R.id.recDetName);
+        		TextView tc_recStat = (TextView)findViewById(R.id.recDetStatDesc1);
+        		TextView tc_recDateAdd = (TextView)findViewById(R.id.recDetDateAdd);
+        	  	TextView tc_recDurat = (TextView)findViewById(R.id.recDetDurat);
+        		TextView tc_recFileType = (TextView)findViewById(R.id.recDetFileType);
+        	 	TextView tc_recOrigin = (TextView)findViewById(R.id.recDetOrigin);
+        	  	TextView tc_recPath = (TextView)findViewById(R.id.recDetPath);
         	      
         	  	Intent explicitIntent = new Intent(FeedDetailActivity.this,
      	        		UploadActivity.class);
-     	       
+     	      
      	        explicitIntent.putExtra("INTENT_UPLOAD_RECORDING_ID",tc_recId.getText().toString());
      			explicitIntent.putExtra("INTENT_UPLOAD_RECORDING_NAME",tc_recName.getText().toString());
      			explicitIntent.putExtra("INTENT_UPLOAD_DATE_ADDED",tc_recDateAdd.getText().toString());
@@ -256,6 +265,7 @@ public class FeedDetailActivity extends Activity{
 		
 	private void seekChange(View v){
 		if ((mediaPlayer !=null)){
+			try{
 				SeekBar sb= (SeekBar) v;
 				mediaPlayer.seekTo(sb.getProgress());
 				tc_recDurat.setText(du.convIntBaseToLength(mediaPlayer.getCurrentPosition() / 1000));
@@ -263,6 +273,11 @@ public class FeedDetailActivity extends Activity{
 				if (sb.getProgress() == 100){
 					sb.setProgress(0);
 				}
+			}
+			catch(Exception e){
+				Log.e("TANGA3",e.getLocalizedMessage());
+				
+			}
 		}
 	}
 
