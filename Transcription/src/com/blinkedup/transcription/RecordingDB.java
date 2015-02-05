@@ -120,6 +120,14 @@ public class RecordingDB extends SQLiteOpenHelper{
 	      return true;
 	   }
 	
+		public boolean deleteContact(String id) {
+		
+	    //  SQLiteDatabase db = this.getWritableDatabase();
+			SQLiteDatabase db = this.getWritableDatabase();
+		    db.delete(DATABASE_TABLE, RECORDING_ID + "=" + id, null);
+		    return true;
+	   }
+	
 	@Override
 	public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
 		// TODO Auto-generated method stub		

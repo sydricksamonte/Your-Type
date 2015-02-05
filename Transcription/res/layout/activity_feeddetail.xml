@@ -124,10 +124,10 @@
             android:layout_marginTop="4sp"  
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
          	android:progressDrawable="@drawable/black_scrubber_progress"
    			android:thumb="@drawable/black_scrubber_control" />
-
+			
         <ImageView
         android:id="@+id/imgVolUp"
          android:layout_width="40dp"

@@ -51,12 +51,22 @@ public class FeedDetailActivity extends Activity{
 	TextView tc_recDurat;
 	TextView tc_recDuratBack;
 	DateUtils du;
-	ImageButton mClickButton1;
+	RecordingDB mydb;
+	ImageButton dynBtnPlay;
+	ImageButton dynBtnPause;
+	ImageButton dynBtnDelete;
+	ImageButton dynBtnRename;
+	ImageButton dynBtnUpload;
+	
+	String rec_id;
 	
 	@Override
 	public void onPause() {
 	    super.onPause();
+	    if (mediaPlayer != null){
 	    mediaPlayer.stop();
+	    mediaPlayer.release();
+	    }
 	}
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +74,8 @@ public class FeedDetailActivity extends Activity{
 		setContentView(R.layout.activity_feeddetail);
 		
 		du = new DateUtils();
+		mydb = new RecordingDB(this);
+		
 		TextView tc_recId = (TextView)findViewById(R.id.recDetId);
 	 	TextView tc_recName = (TextView)findViewById(R.id.recDetName);
 		TextView tc_recStat = (TextView)findViewById(R.id.recDetStatDesc1);
@@ -79,7 +91,7 @@ public class FeedDetailActivity extends Activity{
 	 
 	  	
 		Intent intent = getIntent();
-		String rec_id = (String) intent.getSerializableExtra("INTENT_RECORDING_ID");
+		rec_id = (String) intent.getSerializableExtra("INTENT_RECORDING_ID");
 		tc_recId.setText(rec_id);
 		
 		String recName = (String) intent.getSerializableExtra("INTENT_RECORDING_NAME");
@@ -116,6 +128,7 @@ public class FeedDetailActivity extends Activity{
 		
 		String recDurat = (String) intent.getSerializableExtra("INTENT_DURATION");
 		tc_recDurat.setText(recDurat);
+		
 		Toast.makeText(getApplicationContext(), "You selected", Toast.LENGTH_LONG);
 		String recDateFin = (String) intent.getSerializableExtra("INTENT_DATE_FINALIZED");
 		tc_recDateFin.setText(recDateFin);
@@ -133,67 +146,120 @@ public class FeedDetailActivity extends Activity{
 		recPath = recPath + recName  + recFileType;
 		tc_recPath.setText(recPath + recName  + recFileType);
 		Log.e("SSS",recPath + recName  + recFileType);
-		
-		try {
-			if (mediaPlayer == null){
-		        // it's ok, we can call this constructor
-				mediaPlayer = new MediaPlayer();  
+		dynBtnPlay = (ImageButton)findViewById(R.id.btnPlay);
+		dynBtnPause = (ImageButton)findViewById(R.id.btnStop);
+		dynBtnDelete = (ImageButton)findViewById(R.id.btnDelete);
+		dynBtnRename = (ImageButton)findViewById(R.id.btnRename);
+		dynBtnUpload = (ImageButton)findViewById(R.id.btnUpload);
+	
+			
+			try {
+				if (mediaPlayer == null){
+			        // it's ok, we can call this constructor
+					mediaPlayer = new MediaPlayer();  
+				}
+				mediaPlayer.setDataSource(recPath);
+				mediaPlayer.prepare();
+			
+				dynBtnPlay.setColorFilter(null);
+				dynBtnPause.setColorFilter(null);
+				dynBtnDelete.setColorFilter(null);
+				dynBtnUpload.setColorFilter(null);
+				dynBtnRename.setColorFilter(null);
+			
 			}
-			mediaPlayer.setDataSource(recPath);
-			mediaPlayer.prepare();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			Log.e("TANGA2",e1.getLocalizedMessage());
-			Toast.makeText(getApplicationContext(), e1.getLocalizedMessage(), Toast.LENGTH_LONG);
-		}
+			catch (IOException e1) {
+				// TODO Auto-generated catch block
+				Toast.makeText(getApplicationContext(), "Cannot locate file",
+						   Toast.LENGTH_LONG).show();
+				 tc_recDuratBack.setText("00:00");
+				 mediaPlayer = null;
+				 dynBtnPlay.setColorFilter(Color.argb(150, 155, 155, 155));
+				 dynBtnPause.setColorFilter(Color.argb(150, 155, 155, 155));
+				 dynBtnUpload.setColorFilter(Color.argb(150, 155, 155, 155));
+				 dynBtnRename.setColorFilter(Color.argb(150, 155, 155, 155));
+			}
+			catch (IllegalStateException e1) {
+				// TODO Auto-generated catch block
+				Toast.makeText(getApplicationContext(), e1.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+			}
+			catch (IllegalArgumentException e1) {
+				// TODO Auto-generated catch block
+				Toast.makeText(getApplicationContext(), e1.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+			}
 		
-	    mClickButton1 = (ImageButton)findViewById(R.id.btnPlay);
-		mClickButton1.setOnClickListener( new OnClickListener() {
+		
+		
+	   
+			dynBtnPlay.setOnClickListener( new OnClickListener() {
 			
 			 @Override
 	            public void onClick(View v) {
-				 mClickButton1.setColorFilter(Color.argb(150, 155, 155, 155));
+				 dynBtnPlay.setColorFilter(Color.argb(150, 155, 155, 155));
 	                // TODO Auto-generated method stub
-				 
-						try {
-							if (mediaPlayer !=null){
+				 		if (mediaPlayer !=null){
+								try {
+									seekBar.setMax(mediaPlayer.getDuration());
+									mediaPlayer.start();
 							
-							seekBar.setMax(mediaPlayer.getDuration());
-							mediaPlayer.start();
-							
-							seekUpdate();
-							}
+									seekUpdate();
+								}
+								catch (IllegalStateException e1) {
+									// TODO Auto-generated catch block
+									Toast.makeText(getApplicationContext(), e1.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+								}
+								catch (IllegalArgumentException e1) {
+									// TODO Auto-generated catch block
+									Toast.makeText(getApplicationContext(), e1.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+								}
+				 		}
+				 		dynBtnPlay.setColorFilter(null);
+				}
+			});
 		
-						} catch (IllegalStateException e) {
+			dynBtnDelete.setOnClickListener( new OnClickListener() {
+				 @Override
+		            public void onClick(View v) {
+		                // TODO Auto-generated method stub
+					
+					 try {
+						 if(mydb.deleteContact(rec_id)) {
+								 Toast.makeText(getApplicationContext(), "Recording Deleted", Toast.LENGTH_SHORT).show(); 
+							 }  
+							 else{
+								 Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show(); 
+							 }
+						 }
+					 catch (IllegalStateException e1) {
 							// TODO Auto-generated catch block
-							Toast.makeText(getApplicationContext(), "Unable to play file", Toast.LENGTH_LONG);
-							Log.e("TANGA",e.getLocalizedMessage());
-							//e.printStackTrace();
-						} 
-						
-				
-				 mClickButton1.setColorFilter(null);
-			 }
-		
-	   });
-		
-		ImageButton mClickButton2 = (ImageButton)findViewById(R.id.btnStop);
-		mClickButton2.setOnClickListener( new OnClickListener() {
+							//Toast.makeText(getApplicationContext(), e1.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+					 }	
+				 }       
+		   });
+			 
+			dynBtnPause.setOnClickListener( new OnClickListener() {
 			 @Override
 	            public void onClick(View v) {
 	                // TODO Auto-generated method stub
-				 mediaPlayer.pause();
+				 try {
+					 	if (mediaPlayer != null){
+					 		mediaPlayer.pause();
+					 	}
+					 }
+				 catch (IllegalStateException e1) {
+						// TODO Auto-generated catch block
+						//Toast.makeText(getApplicationContext(), e1.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+				}	
 			 }
-	            
-	   });
+		});
 		
-		ImageButton mClickButton5 = (ImageButton)findViewById(R.id.btnUpload);
-		mClickButton5.setOnClickListener( new OnClickListener() {
+	
+		dynBtnUpload.setOnClickListener( new OnClickListener() {
 
             @Override
             public void onClick(View v) {
+            	if (mediaPlayer != null){
                 // TODO Auto-generated method stub
-            	Log.e("OI","sdfsdf");
             	TextView tc_recId = (TextView)findViewById(R.id.recDetId);
         	 	TextView tc_recName = (TextView)findViewById(R.id.recDetName);
         		TextView tc_recStat = (TextView)findViewById(R.id.recDetStatDesc1);
@@ -217,6 +283,7 @@ public class FeedDetailActivity extends Activity{
      		
      			explicitIntent.putExtra("INTENT_UPLOAD_PATH",tc_recPath.getText().toString());
      			startActivity(explicitIntent);
+            	}
             }
         });
 		
@@ -228,8 +295,12 @@ public class FeedDetailActivity extends Activity{
 		//btnVolDown = (Button) findViewById(R.id.btnVolDown);
 		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		initialiseVolumeSeekBar();
+		
+		
 		try{
-		if (mediaPlayer !=null) seekUpdate();
+		if (mediaPlayer !=null){
+			seekUpdate();
+		}
 		
 		seekBar.setOnTouchListener(new OnTouchListener(){
 			public boolean onTouch(View v, MotionEvent event) {
@@ -239,7 +310,6 @@ public class FeedDetailActivity extends Activity{
 		});
 		}
 		catch(Exception e){
-			Log.e("TANGA5",e.getLocalizedMessage());
 			
 		}
 	}
@@ -281,7 +351,6 @@ public class FeedDetailActivity extends Activity{
 				}
 			}
 			catch(Exception e){
-				Log.e("TANGA3",e.getLocalizedMessage());
 				
 			}
 		}
@@ -291,19 +360,23 @@ public class FeedDetailActivity extends Activity{
 		@Override
 		public void run() {
 			try{
-			seekUpdate();
+				seekUpdate();
 			}
 			catch(Exception e){
-				Log.e("TANGA5",e.getLocalizedMessage());
-				
 			}
 		}
 	};
 		
 	private void seekUpdate(){
-		seekBar.setProgress(mediaPlayer.getCurrentPosition());
-		tc_recDurat.setText(du.convIntBaseToLength(mediaPlayer.getCurrentPosition() / 1000));
-		tc_recDuratBack.setText(du.convIntBaseToLength((mediaPlayer.getDuration()-mediaPlayer.getCurrentPosition())/1000));
-		seekHandler.postDelayed(run, 1000);
+		try{
+			if (mediaPlayer != null){
+				seekBar.setProgress(mediaPlayer.getCurrentPosition());
+				tc_recDurat.setText(du.convIntBaseToLength(mediaPlayer.getCurrentPosition() / 1000));
+				tc_recDuratBack.setText(du.convIntBaseToLength((mediaPlayer.getDuration()-mediaPlayer.getCurrentPosition())/1000));
+				seekHandler.postDelayed(run, 1000);
+			}
+		}
+		catch (Exception e){
+		}
 	}
 }
