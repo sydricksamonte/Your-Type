@@ -1,6 +1,7 @@
 package com.blinkedup.transcription;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,10 @@ public class FeedDetailActivity extends Activity{
 	Music musicSelected;
 	Handler seekHandler = new Handler();
 	String recPath;
+	String fileLoc;
+	String recName; 
+	String recFileType;
+	
 	Boolean isPlaying = false;
 	TextView tc_recDurat;
 	TextView tc_recDuratBack;
@@ -65,6 +70,7 @@ public class FeedDetailActivity extends Activity{
 	    super.onPause();
 	    if (mediaPlayer != null){
 	    mediaPlayer.stop();
+	    mediaPlayer.reset();
 	    mediaPlayer.release();
 	    }
 	}
@@ -94,7 +100,7 @@ public class FeedDetailActivity extends Activity{
 		rec_id = (String) intent.getSerializableExtra("INTENT_RECORDING_ID");
 		tc_recId.setText(rec_id);
 		
-		String recName = (String) intent.getSerializableExtra("INTENT_RECORDING_NAME");
+		recName = (String) intent.getSerializableExtra("INTENT_RECORDING_NAME");
 		tc_recName.setText(recName);
 		tc_recName.setGravity(Gravity.CENTER);
 
@@ -136,14 +142,14 @@ public class FeedDetailActivity extends Activity{
 		String recDateUploaded = (String) intent.getSerializableExtra("INTENT_DATE_UPLOADED");
 		tc_recDateUploaded.setText(recDateUploaded);
 		
-		String recFileType = (String) intent.getSerializableExtra("INTENT_FILE_TYPE");
+		recFileType = (String) intent.getSerializableExtra("INTENT_FILE_TYPE");
 		tc_recFileType.setText(recFileType);
 		
 		String recOrigin = (String) intent.getSerializableExtra("INTENT_ORIGIN");
 		tc_recOrigin.setText(recOrigin);
 		
 		recPath = (String) intent.getSerializableExtra("INTENT_PATH");
-		recPath = recPath + recName  + recFileType;
+		fileLoc = recPath + recName  + recFileType;
 		tc_recPath.setText(recPath + recName  + recFileType);
 		Log.e("SSS",recPath + recName  + recFileType);
 		dynBtnPlay = (ImageButton)findViewById(R.id.btnPlay);
@@ -158,7 +164,7 @@ public class FeedDetailActivity extends Activity{
 			        // it's ok, we can call this constructor
 					mediaPlayer = new MediaPlayer();  
 				}
-				mediaPlayer.setDataSource(recPath);
+				mediaPlayer.setDataSource(fileLoc);
 				mediaPlayer.prepare();
 			
 				dynBtnPlay.setColorFilter(null);
@@ -223,13 +229,33 @@ public class FeedDetailActivity extends Activity{
 		                // TODO Auto-generated method stub
 					
 					 try {
-						 if(mydb.deleteContact(rec_id)) {
-								 Toast.makeText(getApplicationContext(), "Recording Deleted", Toast.LENGTH_SHORT).show(); 
-							 }  
-							 else{
-								 Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show(); 
-							 }
-						 }
+						 File dir = getFilesDir();
+						 String fileName	= recName  + recFileType;
+							
+						 File file = new File(recPath,  fileName);
+						 boolean deleted = file.delete();
+						
+						 	if(mydb.deleteContact(rec_id)) {
+						 		
+						 		if (mediaPlayer != null){
+						 			if (deleted){
+						 				Toast.makeText(getApplicationContext(), "Recording Deleted", Toast.LENGTH_SHORT).show();
+						 				Intent explicitBackIntent = new Intent(FeedDetailActivity.this,
+						     	        		TabHostActivity.class);
+						 				startActivity(explicitBackIntent);
+						 			}  
+						 		}
+						 		else{
+						 			Toast.makeText(getApplicationContext(), "Recording Deleted", Toast.LENGTH_SHORT).show(); 
+						 			Intent explicitBackIntent = new Intent(FeedDetailActivity.this,
+					     	        		TabHostActivity.class);
+					 				startActivity(explicitBackIntent);
+						 		}
+						 	}
+							else{
+								Toast.makeText(getApplicationContext(), "Cannot locate recording profile", Toast.LENGTH_SHORT).show(); 
+							}
+					 }
 					 catch (IllegalStateException e1) {
 							// TODO Auto-generated catch block
 							//Toast.makeText(getApplicationContext(), e1.getLocalizedMessage(), Toast.LENGTH_LONG).show();
