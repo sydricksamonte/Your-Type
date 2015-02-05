@@ -88,8 +88,9 @@ public class AudioRecordingActivity extends Activity {
         // Initialize a Handler for the System to periodically call
         timerHandler = new Handler();
         
-        
+       
         tglPlayPause = (ToggleButton) findViewById(R.id.tglPlayPause);
+        
     	tglPlayPause.setOnCheckedChangeListener(new OnCheckedChangeListener(){
     		public void onCheckedChanged(CompoundButton buttonView,
     				boolean isChecked) {
@@ -119,7 +120,7 @@ public class AudioRecordingActivity extends Activity {
    				resetButtonClick(now);
    			}
    		});
-      /*  String strDate = dateFunc.getDate();
+        /*String strDate = dateFunc.getDate();
 		if(mydb.insertContact("Kksdf sjf sjopdf spodf psdpof sdf gsrg er", strDate, "", total, 0, 0, true, file_exts[currentFormat],"","C://sdfsdsfd/" )) {
          Toast.makeText(getApplicationContext(), "Recording Added", Toast.LENGTH_SHORT).show(); 
         }  
@@ -130,10 +131,6 @@ public class AudioRecordingActivity extends Activity {
         
     }
 	
-	
-	
-	
-    
 	// Method called when the start buttons pressed
 	 private void startButtonClick(long now)
 	 {
@@ -162,27 +159,14 @@ public class AudioRecordingActivity extends Activity {
 
 	 	// Stop the timer
 	     timerHandler.removeCallbacks(updateTimerTask);       
-
-	  
-	 	
-			// calculate the elapsed time since timer started and add to accumulated timer time
-	     // note that if the timer pops after we have started this method then startTime will 
-	     // 		 be greater than now resulting in any additional time being subtracted off
-			accumTime = accumTime + (now - startTime); 
-			// updated the display of the accumulated time
-			timerView.setText(formatTime(accumTime));   
-			        
-	     // indicate timer stopped
+	     accumTime = accumTime + (now - startTime); 
+	     timerView.setText(formatTime(accumTime));   
 	     timerRunning = false;
 	 }
 
 	 // Method called when the reset button pressed.    
 	 private void resetButtonClick(long now)
 	 {
-		 
-		
-		 
-	 	// Set the elapsed time to 0..
 	 	accumTime = 0;   	
 
 	 	// remove all laps
@@ -431,6 +415,7 @@ public class AudioRecordingActivity extends Activity {
 			recorder.release();
 
 			recorder = null;
+		 	tglPlayPause.setChecked(false);
 		}
 		rename();
 	}
