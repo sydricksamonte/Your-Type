@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuffXfermode;
@@ -34,12 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import com.pheelicks.utils.TunnelPlayerWorkaround;
-import com.pheelicks.visualizer.VisualizerView;
-import com.pheelicks.visualizer.renderer.BarGraphRenderer;
-import com.pheelicks.visualizer.renderer.CircleBarRenderer;
-import com.pheelicks.visualizer.renderer.CircleRenderer;
-import com.pheelicks.visualizer.renderer.LineRenderer;
+
 
 
 public class AudioRecordingActivity extends Activity {
@@ -65,9 +59,7 @@ public class AudioRecordingActivity extends Activity {
 	private boolean timerRunning = false;	// true if timer is running
 	ToggleButton tglPlayPause;				//toggle play pause button
 	
-	private MediaPlayer mPlayer;
-	private MediaPlayer mSilentPlayer;  /* to avoid tunnel player issue */
-	private VisualizerView mVisualizerView;
+
 	DateUtils dateFunc;
 	
 	
@@ -139,162 +131,7 @@ public class AudioRecordingActivity extends Activity {
     }
 	
 	
-	//Start Visualizer
 	
-	@Override
-	  protected void onResume()
-	  {
-	    super.onResume();
-	    initTunnelPlayerWorkaround();
-	    init();
-	  }
-
-	  @Override
-	  protected void onPause()
-	  {
-	    cleanUp();
-	    super.onPause();
-	  }
-
-	  @Override
-	  protected void onDestroy()
-	  {
-	    cleanUp();
-	    super.onDestroy();
-	  }
-
-	  private void init()
-	  {
-	  //  mPlayer = MediaPlayer.create(this, R.raw.test);
-	  //  mPlayer.setLooping(true);
-	   // mPlayer.start();
-		//  mPlayer.stop();
-		  
-		  recorder = new MediaRecorder();
-
-	    // We need to link the visualizer view to the media player so that
-	    // it displays something
-	    mVisualizerView = (VisualizerView) findViewById(R.id.visualizerView);
-	    mVisualizerView.link(recorder);
-
-	  }
-
-	  private void cleanUp()
-	  {
-	    if (recorder != null)
-	    {
-	      mVisualizerView.release();
-	      recorder.release();
-	      recorder = null;
-	    }
-	    
-	    if (mSilentPlayer != null)
-	    {
-	      mSilentPlayer.release();
-	      mSilentPlayer = null;
-	    }
-	  }
-	  
-	  private void initTunnelPlayerWorkaround() {
-	    if (TunnelPlayerWorkaround.isTunnelDecodeEnabled(this)) {
-	      mSilentPlayer = TunnelPlayerWorkaround.createSilentMediaPlayer(this);
-	    }
-	  }
-
-	  // Methods for adding renderers to visualizer
-	  private void addBarGraphRenderers()
-	  {
-	    Paint paint = new Paint();
-	    paint.setStrokeWidth(50f);
-	    paint.setAntiAlias(true);
-	    paint.setColor(Color.argb(200, 56, 138, 252));
-	    BarGraphRenderer barGraphRendererBottom = new BarGraphRenderer(16, paint, false);
-	    mVisualizerView.addRenderer(barGraphRendererBottom);
-
-	    Paint paint2 = new Paint();
-	    paint2.setStrokeWidth(12f);
-	    paint2.setAntiAlias(true);
-	    paint2.setColor(Color.argb(200, 181, 111, 233));
-	    BarGraphRenderer barGraphRendererTop = new BarGraphRenderer(4, paint2, true);
-	    mVisualizerView.addRenderer(barGraphRendererTop);
-	  }
-
-	  private void addCircleBarRenderer()
-	  {
-	    Paint paint = new Paint();
-	    paint.setStrokeWidth(8f);
-	    paint.setAntiAlias(true);
-	    paint.setXfermode(new PorterDuffXfermode(Mode.LIGHTEN));
-	    paint.setColor(Color.argb(255, 222, 92, 143));
-	    CircleBarRenderer circleBarRenderer = new CircleBarRenderer(paint, 32, true);
-	    mVisualizerView.addRenderer(circleBarRenderer);
-	  }
-
-	  private void addCircleRenderer()
-	  {
-	    Paint paint = new Paint();
-	    paint.setStrokeWidth(3f);
-	    paint.setAntiAlias(true);
-	    paint.setColor(Color.argb(255, 222, 92, 143));
-	    CircleRenderer circleRenderer = new CircleRenderer(paint, true);
-	    mVisualizerView.addRenderer(circleRenderer);
-	  }
-
-	  private void addLineRenderer()
-	  {
-	    Paint linePaint = new Paint();
-	    linePaint.setStrokeWidth(1f);
-	    linePaint.setAntiAlias(true);
-	    linePaint.setColor(Color.argb(88, 0, 128, 255));
-
-	    Paint lineFlashPaint = new Paint();
-	    lineFlashPaint.setStrokeWidth(5f);
-	    lineFlashPaint.setAntiAlias(true);
-	    lineFlashPaint.setColor(Color.argb(188, 255, 255, 255));
-	    LineRenderer lineRenderer = new LineRenderer(linePaint, lineFlashPaint, true);
-	    mVisualizerView.addRenderer(lineRenderer);
-	  }
-
-	  // Actions for buttons defined in xml
-	  public void startPressed(View view) throws IllegalStateException, IOException
-	  {
-	   
-		  recorder.prepare();
-		  recorder.start();
-	  }
-
-	  public void stopPressed(View view)
-	  {
-		  recorder.stop();
-	  }
-
-	  public void barPressed(View view)
-	  {
-	    addBarGraphRenderers();
-	  }
-
-	  public void circlePressed(View view)
-	  {
-	    addCircleRenderer();
-	  }
-
-	  public void circleBarPressed(View view)
-	  {
-	    addCircleBarRenderer();
-	  }
-
-	  public void linePressed(View view)
-	  {
-	    addLineRenderer();
-	  }
-
-	  public void clearPressed(View view)
-	  {
-	    mVisualizerView.clearRenderers();
-	  }
-	
-	
-	//End Visualizer
 	
     
 	// Method called when the start buttons pressed
@@ -511,8 +348,8 @@ public class AudioRecordingActivity extends Activity {
 
 		/* Alert Dialog Code Start*/ 	
     	AlertDialog.Builder alert = new AlertDialog.Builder(context);
-    	alert.setTitle("Alert Dialog With EditText"); //Set Alert dialog title here
-    	alert.setMessage("Enter Your Name Here"); //Message here
+    	alert.setTitle("Save Recording"); //Set Alert dialog title here
+    	alert.setMessage("File will be saved in Recordings tab."); //Message here
 
         // Set an EditText view to get user input 
         final EditText input = new EditText(context);
@@ -560,7 +397,7 @@ public class AudioRecordingActivity extends Activity {
     	AlertDialog alertDialog = alert.create();
     	alertDialog.show();
     	
-    	mVisualizerView.clearRenderers();
+
 
 	}
 	
@@ -568,10 +405,6 @@ public class AudioRecordingActivity extends Activity {
 		long now = System.currentTimeMillis();
 		startButtonClick(now);
 		recorder = new MediaRecorder();
-		
-		mVisualizerView.clearRenderers();
-		addCircleRenderer();
-		
 
 		recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 		recorder.setOutputFormat(output_formats[currentFormat]);

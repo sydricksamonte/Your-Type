@@ -13,11 +13,6 @@
      android:layout_weight="0.45"
      android:background="#000" >
 
-        <com.pheelicks.visualizer.VisualizerView
-            android:id="@+id/visualizerView"
-            android:layout_width="fill_parent"
-            android:layout_height="78dp" />
-
     </FrameLayout>
     
     
