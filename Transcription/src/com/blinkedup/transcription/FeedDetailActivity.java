@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -16,6 +18,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -26,6 +29,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -78,7 +82,7 @@ public class FeedDetailActivity extends Activity{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_feeddetail);
-		
+		 final Context context = this;
 		du = new DateUtils();
 		mydb = new RecordingDB(this);
 		
@@ -218,8 +222,9 @@ public class FeedDetailActivity extends Activity{
 									// TODO Auto-generated catch block
 									Toast.makeText(getApplicationContext(), e1.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 								}
+								dynBtnPlay.setColorFilter(null);
 				 		}
-				 		dynBtnPlay.setColorFilter(null);
+				 		
 				}
 			});
 		
@@ -235,7 +240,7 @@ public class FeedDetailActivity extends Activity{
 						 File file = new File(recPath,  fileName);
 						 boolean deleted = file.delete();
 						
-						 	if(mydb.deleteContact(rec_id)) {
+						 	if(mydb.deleteRecording(rec_id)) {
 						 		
 						 		if (mediaPlayer != null){
 						 			if (deleted){
@@ -261,6 +266,50 @@ public class FeedDetailActivity extends Activity{
 							//Toast.makeText(getApplicationContext(), e1.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 					 }	
 				 }       
+		   });
+			
+			dynBtnRename.setOnClickListener( new OnClickListener() {
+				 @Override
+		            public void onClick(View v) {
+		                // TODO Auto-generated method stub
+					if (mediaPlayer != null){
+						try {
+						 	AlertDialog.Builder alert = new AlertDialog.Builder(context);
+					    	alert.setTitle("Rename Recording"); //Set Alert dialog title here
+
+					        // Set an EditText view to get user input 
+					        final EditText input = new EditText(context);
+					        alert.setView(input);
+
+					    	alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					    		public void onClick(DialogInterface dialog, int whichButton) {
+					
+					    			String fileName	= recName  + recFileType;
+					    			File file = new File(recPath,  fileName);
+								
+					    			if (file != null && file.exists()) {
+					    				File to = new File(recPath + "/" + input.getEditableText().toString() + recFileType); 
+					    				if (file.renameTo(to)){
+					    					if(mydb.renameRecording(rec_id,input.getEditableText().toString() )) {
+					    						Toast.makeText(getApplicationContext(), "Renamed Successfully", Toast.LENGTH_SHORT).show(); 
+					    					}  
+					    					else{
+					    						Toast.makeText(getApplicationContext(), "Cannot Rename File", Toast.LENGTH_SHORT).show(); 
+					    					}
+					    				}
+					    				else{
+					    					Toast.makeText(getApplicationContext(), "Cannot Rename File", Toast.LENGTH_SHORT).show(); 
+					    				}
+					    			}
+					    		}
+					    	});
+						}
+						catch (IllegalStateException e1) {
+							Toast.makeText(getApplicationContext(), e1.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+						}	
+				    
+					}
+				 }
 		   });
 			 
 			dynBtnPause.setOnClickListener( new OnClickListener() {

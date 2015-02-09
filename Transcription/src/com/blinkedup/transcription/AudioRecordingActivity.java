@@ -361,7 +361,7 @@ public class AudioRecordingActivity extends Activity {
                
               // Log.w("asd!",file.getAbsolutePath().toString() + "/" + input.getEditableText().toString() +  file_exts[currentFormat]);
                
-               if(mydb.insertContact(input.getEditableText().toString(), strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
+               if(mydb.insertRecording(input.getEditableText().toString(), strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
                 Toast.makeText(getApplicationContext(), "Recording Added", Toast.LENGTH_SHORT).show(); 
                }  
                else{

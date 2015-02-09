@@ -100,7 +100,7 @@ public class RecordingDB extends SQLiteOpenHelper{
         		 mDB.execSQL(query_sql);
 	}
 	
-	public boolean insertContact(String name, String dateAdded, String dateUploaded, int duration, int status, int origin, boolean isActive, String fileType, String dateFinalized, String path) {
+	public boolean insertRecording(String name, String dateAdded, String dateUploaded, int duration, int status, int origin, boolean isActive, String fileType, String dateFinalized, String path) {
 		
 	    //  SQLiteDatabase db = this.getWritableDatabase();
 	      ContentValues contentValues = new ContentValues();
@@ -120,22 +120,28 @@ public class RecordingDB extends SQLiteOpenHelper{
 	      return true;
 	   }
 	
-		public boolean deleteContact(String id) {
+	public boolean deleteRecording(String id) {
 		
-	    //  SQLiteDatabase db = this.getWritableDatabase();
-			SQLiteDatabase db = this.getWritableDatabase();
-		    db.delete(DATABASE_TABLE, RECORDING_ID + "=" + id, null);
-		    return true;
-	   }
+		//  SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(DATABASE_TABLE, RECORDING_ID + "=" + id, null);
+		return true;
+	}
+		
+	public boolean renameRecording(String id, String name) {
+
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues cv = new ContentValues();
+		cv.put(RECORDING_NAME,name);
+
+		db.update(DATABASE_TABLE, cv, RECORDING_ID +"="+1, null);
+		return true;
+	}
 	
 	@Override
 	public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
 		// TODO Auto-generated method stub		
 	}
 
-	
-
-	
-	
-	
 }
