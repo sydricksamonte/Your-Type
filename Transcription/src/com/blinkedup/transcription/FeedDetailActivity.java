@@ -168,11 +168,11 @@ public class FeedDetailActivity extends Activity{
 				mediaPlayer.setDataSource(fileLoc);
 				mediaPlayer.prepare();
 			
-				dynBtnPlay.setColorFilter(null);
-				dynBtnPause.setColorFilter(null);
-				dynBtnDelete.setColorFilter(null);
-				dynBtnUpload.setColorFilter(null);
-				dynBtnRename.setColorFilter(null);
+				 dynBtnPlay.setEnabled(true);
+				 dynBtnPause.setEnabled(true);
+				 dynBtnDelete.setEnabled(true);
+				 dynBtnUpload.setEnabled(true);
+				 dynBtnRename.setEnabled(true);
 			
 			}
 			catch (IOException e1) {
@@ -181,10 +181,10 @@ public class FeedDetailActivity extends Activity{
 						   Toast.LENGTH_LONG).show();
 				 tc_recDuratBack.setText("00:00");
 				 mediaPlayer = null;
-				 dynBtnPlay.setColorFilter(Color.argb(150, 155, 155, 155));
-				 dynBtnPause.setColorFilter(Color.argb(150, 155, 155, 155));
-				 dynBtnUpload.setColorFilter(Color.argb(150, 155, 155, 155));
-				 dynBtnRename.setColorFilter(Color.argb(150, 155, 155, 155));
+				 dynBtnPlay.setEnabled(false);
+				 dynBtnPause.setEnabled(false);
+				 dynBtnUpload.setEnabled(false);
+				 dynBtnRename.setEnabled(false);
 			}
 			catch (IllegalStateException e1) {
 				// TODO Auto-generated catch block

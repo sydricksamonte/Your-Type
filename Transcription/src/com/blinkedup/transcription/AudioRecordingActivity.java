@@ -88,7 +88,16 @@ public class AudioRecordingActivity extends Activity {
         // Initialize a Handler for the System to periodically call
         timerHandler = new Handler();
         
-       
+        String strDate = dateFunc.getDate();
+        
+        // Log.w("asd!",file.getAbsolutePath().toString() + "/" + input.getEditableText().toString() +  file_exts[currentFormat]);
+         
+         if(mydb.insertRecording("lfjso ifdsjdfol sdf dsfghd f", strDate, "", total, 0, 0, true, "m4a","", "C://" )) {
+          Toast.makeText(getApplicationContext(), "Recording Added", Toast.LENGTH_SHORT).show(); 
+         }  
+         else{
+          Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show(); 
+         }
         tglPlayPause = (ToggleButton) findViewById(R.id.tglPlayPause);
         
     	tglPlayPause.setOnCheckedChangeListener(new OnCheckedChangeListener(){

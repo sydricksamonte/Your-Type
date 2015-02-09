@@ -204,8 +204,8 @@
            android:layout_height="55dp"
             android:scaleType="fitCenter"
             android:padding="2dp" 
-            android:background="@android:color/transparent"
-			android:src="@drawable/btn_play"
+            android:background="@drawable/btn_play_control"
+			
  		/>
             
 		<ImageButton
@@ -215,8 +215,7 @@
            android:layout_height="fill_parent"
             android:scaleType="fitCenter"
             android:padding="2dp" 
-             android:background="@android:color/transparent"
-			android:src="@drawable/btn_pause"
+            android:background="@drawable/btn_pause_control"
 			 />
             
    		<ImageButton
@@ -226,8 +225,7 @@
            android:layout_height="fill_parent"
             android:scaleType="fitCenter"
             android:padding="2dp" 
-             android:background="@android:color/transparent"
-			android:src="@drawable/btn_delete"
+			 android:background="@drawable/btn_delete_control"
 			/>
             
    		<ImageButton
@@ -237,8 +235,7 @@
            android:layout_height="fill_parent"
             android:scaleType="fitCenter"
             android:padding="2dp" 
-             android:background="@android:color/transparent"
-			android:src="@drawable/btn_rename"
+            android:background="@drawable/btn_rename_control"
 			 />
             
     	<ImageButton
@@ -248,8 +245,8 @@
            android:layout_height="fill_parent"
             android:scaleType="fitCenter"
             android:padding="2dp" 
-             android:background="@android:color/transparent"
-			android:src="@drawable/btn_upload" />
+            android:background="@drawable/btn_upload_control" 
+            />
             
 	 </LinearLayout>
    	
