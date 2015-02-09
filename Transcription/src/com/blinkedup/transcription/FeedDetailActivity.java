@@ -42,8 +42,8 @@ public class FeedDetailActivity extends Activity{
 	SeekBar seekBar;
 	SeekBar seekVolume;
 	
-	 private int maxVolume;
-	    private int curVolume;
+	private int maxVolume;
+	private int curVolume;
 	    
 	ToggleButton tglPlayPause;
 	
@@ -98,9 +98,7 @@ public class FeedDetailActivity extends Activity{
 	 	TextView tc_recOrigin = (TextView)findViewById(R.id.recDetOrigin);
 	  	TextView tc_recPath = (TextView)findViewById(R.id.recDetPath);
 	      
-	 
-	  	
-		Intent intent = getIntent();
+	  	Intent intent = getIntent();
 		rec_id = (String) intent.getSerializableExtra("INTENT_RECORDING_ID");
 		tc_recId.setText(rec_id);
 		
@@ -108,14 +106,13 @@ public class FeedDetailActivity extends Activity{
 		tc_recName.setText(recName);
 		tc_recName.setGravity(Gravity.CENTER);
 
-
-		
 		String recDateAdd = (String) intent.getSerializableExtra("INTENT_DATE_ADDED");
 		tc_recDateAdd.setText(recDateAdd);
 		
 		String recStat = (String) intent.getSerializableExtra("INTENT_STATUS");
 		String statDesc = "";
 		Drawable img;
+		
 		if (recStat.equals("1")){
 			statDesc = "Uploaded — Awaiting Process";
 			img = getResources().getDrawable( R.drawable.colors_orange );
@@ -234,7 +231,6 @@ public class FeedDetailActivity extends Activity{
 		                // TODO Auto-generated method stub
 					
 					 try {
-						 File dir = getFilesDir();
 						 String fileName	= recName  + recFileType;
 							
 						 File file = new File(recPath,  fileName);
@@ -394,24 +390,21 @@ public class FeedDetailActivity extends Activity{
         curVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         seekVolume.setMax(maxVolume);
         seekVolume.setProgress(curVolume);
-        seekVolume
-                .setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                    @Override
-                    public void onStopTrackingTouch(SeekBar arg0) {
-                    }
+        seekVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        	@Override
+        	public void onStopTrackingTouch(SeekBar arg0) {
+        	}
 
-                    @Override
-                    public void onStartTrackingTouch(SeekBar arg0) {
+        	@Override
+        	public void onStartTrackingTouch(SeekBar arg0) {
 
-                    }
+          	}
 
-                    @Override
-                    public void onProgressChanged(SeekBar arg0, int arg1,
-                            boolean arg2) {
-                        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
-                                arg1, 0);
-                    }
-                });
+          	@Override
+        	public void onProgressChanged(SeekBar arg0, int arg1,boolean arg2) {
+          		audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,arg1, 0);
+          	}
+      	});
     }
 		
 	private void seekChange(View v){
