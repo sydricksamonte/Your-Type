@@ -69,6 +69,8 @@ public class FeedDetailActivity extends Activity{
 	
 	String rec_id;
 	
+	TextView tc_recName;
+	
 	@Override
 	public void onPause() {
 	    super.onPause();
@@ -87,7 +89,7 @@ public class FeedDetailActivity extends Activity{
 		mydb = new RecordingDB(this);
 		
 		TextView tc_recId = (TextView)findViewById(R.id.recDetId);
-	 	TextView tc_recName = (TextView)findViewById(R.id.recDetName);
+	 	tc_recName = (TextView)findViewById(R.id.recDetName);
 		TextView tc_recStat = (TextView)findViewById(R.id.recDetStatDesc1);
 		TextView tc_recDateAdd = (TextView)findViewById(R.id.recDetDateAdd);
 	    tc_recDurat = (TextView)findViewById(R.id.recDetDurat);
@@ -268,26 +270,34 @@ public class FeedDetailActivity extends Activity{
 				 @Override
 		            public void onClick(View v) {
 		                // TODO Auto-generated method stub
-					if (mediaPlayer != null){
+					 
+					 String fileName	= recName  + recFileType;
+		    			final File file = new File(recPath,  fileName);
+		    			
+					if (file != null && file.exists()){
 						try {
 						 	AlertDialog.Builder alert = new AlertDialog.Builder(context);
 					    	alert.setTitle("Rename Recording"); //Set Alert dialog title here
-
+					    	alert.setMessage("Enter new recording name"); //Message here
 					        // Set an EditText view to get user input 
 					        final EditText input = new EditText(context);
 					        alert.setView(input);
+					        input.setText(recName);
 
-					    	alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					    	alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 					    		public void onClick(DialogInterface dialog, int whichButton) {
 					
-					    			String fileName	= recName  + recFileType;
-					    			File file = new File(recPath,  fileName);
-								
-					    			if (file != null && file.exists()) {
-					    				File to = new File(recPath + "/" + input.getEditableText().toString() + recFileType); 
+					    			File to = new File(recPath + "/" + mydb.StripText(input.getEditableText().toString()) + recFileType); 
+					    			if (input.getEditableText().toString().length() == 0){
+					    				Toast.makeText(getApplicationContext(), "Cannot Set Empty Text", Toast.LENGTH_SHORT).show(); 
+					    				
+					    			}
+					    			else if (mydb.countNameDuplicate(input.getEditableText().toString()) == 0){
 					    				if (file.renameTo(to)){
-					    					if(mydb.renameRecording(rec_id,input.getEditableText().toString() )) {
+					    					if(mydb.renameRecording(rec_id,mydb.StripText(input.getEditableText().toString()))) {
 					    						Toast.makeText(getApplicationContext(), "Renamed Successfully", Toast.LENGTH_SHORT).show(); 
+					    						tc_recName.setText(mydb.StripText(input.getEditableText().toString()));
+					    						recName = input.getEditableText().toString();
 					    					}  
 					    					else{
 					    						Toast.makeText(getApplicationContext(), "Cannot Rename File", Toast.LENGTH_SHORT).show(); 
@@ -297,8 +307,19 @@ public class FeedDetailActivity extends Activity{
 					    					Toast.makeText(getApplicationContext(), "Cannot Rename File", Toast.LENGTH_SHORT).show(); 
 					    				}
 					    			}
+					    			else{
+					    				Toast.makeText(getApplicationContext(), "File name already exists", Toast.LENGTH_SHORT).show(); 
+					    			}
 					    		}
 					    	});
+					    	alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+						    	  public void onClick(DialogInterface dialog, int whichButton) {
+						    	    // Canceled.
+						    		  dialog.cancel();
+						    	  }
+						    }); //End of alert.setNegativeButton
+						    	AlertDialog alertDialog = alert.create();
+						    	alertDialog.show();
 						}
 						catch (IllegalStateException e1) {
 							Toast.makeText(getApplicationContext(), e1.getLocalizedMessage(), Toast.LENGTH_LONG).show();
@@ -307,6 +328,7 @@ public class FeedDetailActivity extends Activity{
 					}
 				 }
 		   });
+			
 			 
 			dynBtnPause.setOnClickListener( new OnClickListener() {
 			 @Override

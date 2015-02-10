@@ -389,10 +389,7 @@ public class AudioRecordingActivity extends Activity {
     }); //End of alert.setNegativeButton
     	AlertDialog alertDialog = alert.create();
     	alertDialog.show();
-    	
-
-
-	}
+    }
 	
 	private void startRecording() {
 		long now = System.currentTimeMillis();

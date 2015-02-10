@@ -135,8 +135,23 @@ public class RecordingDB extends SQLiteOpenHelper{
 		ContentValues cv = new ContentValues();
 		cv.put(RECORDING_NAME,name);
 
-		db.update(DATABASE_TABLE, cv, RECORDING_ID +"="+1, null);
+		db.update(DATABASE_TABLE, cv, RECORDING_ID +"="+id, null);
 		return true;
+	}
+	
+	public int countNameDuplicate(String name) {
+		
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor dataCount = db.rawQuery("select "+ RECORDING_NAME +" from " + DATABASE_TABLE + " WHERE "+ RECORDING_NAME +" = '"+ name+ "'", null);
+		
+		return dataCount.getCount();
+    } 
+	
+	public String StripText(String name){
+		name = "["+name+"]";
+		name = name.replaceAll("[/:!@#$%^&*()<>+?\"{}\\[\\]=`~;]", "");
+	
+		return name;
 	}
 	
 	@Override
