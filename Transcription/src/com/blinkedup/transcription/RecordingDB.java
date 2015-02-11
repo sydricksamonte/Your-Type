@@ -144,8 +144,31 @@ public class RecordingDB extends SQLiteOpenHelper{
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor dataCount = db.rawQuery("select "+ RECORDING_NAME +" from " + DATABASE_TABLE + " WHERE "+ RECORDING_NAME +" = '"+ name+ "'", null);
 		
-		return dataCount.getCount();
-    } 
+		int count = dataCount.getCount();
+		
+		dataCount.close();
+		
+		return count;
+    
+	} 
+	
+	public int retrieveLastId() {
+		
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery("select "+ RECORDING_ID +" from " + DATABASE_TABLE + " ORDER BY "+ RECORDING_ID +" DESC LIMIT 1 ", null);
+		
+		int last = 0;
+		
+		try{
+			cursor.moveToFirst();
+			last = Integer.parseInt(cursor.getString(0));
+		}
+		catch (Exception e){
+			last = 0;
+		}
+		
+		return  last;
+	} 
 	
 	public String StripText(String name){
 		name = "["+name+"]";

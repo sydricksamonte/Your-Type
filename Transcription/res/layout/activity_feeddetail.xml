@@ -3,23 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-     android:gravity="center" 
-     android:padding="10dp" >
+	android:gravity="center" 
+  	android:padding="10dp" >
     
     <TextView 
         android:id="@+id/recDetId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"   
     	android:visibility="gone" />
-    
+
 	<TextView 
         android:id="@+id/recDetName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@android:style/TextAppearance.Medium" 
-         />
+        style="@android:style/TextAppearance.Medium"  />
          
-         <LinearLayout
+	<LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
@@ -47,7 +46,7 @@
     	
   	</LinearLayout>
   	
-         <TextView 
+  	<TextView 
         android:id="@+id/recDetStat"
        	android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,39 +54,36 @@
         android:layout_marginTop="25sp"
         android:visibility="gone"
        	
-         />
+   	/>
      
-	
-	
 	<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20sp" 
-         android:padding="27dp" >
+     	android:padding="27dp" >
 
-	<TextView 
-        android:id="@+id/recDetDuratBack"
-       	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"    
-        android:layout_marginTop="5sp"
-        style="@android:style/TextAppearance.Small"
+		<TextView 
+   			android:id="@+id/recDetDuratBack"
+   			android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignParentRight="true"    
+        	android:layout_marginTop="5sp"
+        	style="@android:style/TextAppearance.Small"
         />
         
         <SeekBar
             android:id="@+id/seekBar1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-         
-            android:layout_weight="1" />
+			android:layout_weight="1" />
             
-            	<TextView 
-        android:id="@+id/recDetDurat"
-       	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"    
-        android:layout_marginTop="5sp"
-        style="@android:style/TextAppearance.Small"
+    	<TextView 
+        	android:id="@+id/recDetDurat"
+       		android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignParentRight="true"    
+        	android:layout_marginTop="5sp"
+        	style="@android:style/TextAppearance.Small"
         />
     </LinearLayout>
 
@@ -107,17 +103,15 @@
 	<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="25dp" 
-      
-         >
+        android:padding="25dp">
 
-         <ImageView
-        android:id="@+id/imgDetVolDown"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/pic_volume_min" 
-        android:layout_weight="0.13" 
-       	android:padding="5dp"
+      	<ImageView
+      		android:id="@+id/imgDetVolDown"
+        	android:layout_width="40dp"
+        	android:layout_height="40dp"
+        	android:src="@drawable/pic_volume_min" 
+        	android:layout_weight="0.13" 
+       		android:padding="5dp"
             />
             
      	<SeekBar
@@ -130,14 +124,13 @@
    			android:thumb="@drawable/black_scrubber_control" />
 			
         <ImageView
-        android:id="@+id/imgVolUp"
-         android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/pic_volume" 
-        android:layout_weight="0.13" 
+        	android:id="@+id/imgVolUp"
+         	android:layout_width="40dp"
+        	android:layout_height="40dp"
+        	android:src="@drawable/pic_volume" 
+        	android:layout_weight="0.13" 
             android:padding="5dp"/>
-            
-    </LinearLayout>
+	</LinearLayout>
    
 	<TextView 
         android:id="@+id/recDetDateFin"
@@ -193,61 +186,58 @@
   		android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="5sp"
-         android:padding="15dp" 
-        
-         >
+  		android:padding="15dp" 
+	>
         
 		<ImageButton
-            android:id="@+id/btnPlay"
-           android:layout_width="fill_parent" 
-           android:layout_weight="0.33" 
-           android:layout_height="55dp"
+        	android:id="@+id/btnPlay"
+           	android:layout_width="fill_parent" 
+           	android:layout_weight="0.33" 
+           	android:layout_height="55dp"
             android:scaleType="fitCenter"
             android:padding="2dp" 
             android:background="@drawable/btn_play_control"
-			
- 		/>
+		/>
             
 		<ImageButton
             android:id="@+id/btnStop"
             android:layout_width="fill_parent" 
-           android:layout_weight="0.33" 
-           android:layout_height="fill_parent"
+           	android:layout_weight="0.33" 
+           	android:layout_height="fill_parent"
             android:scaleType="fitCenter"
             android:padding="2dp" 
             android:background="@drawable/btn_pause_control"
 			 />
             
    		<ImageButton
-            android:id="@+id/btnDelete"
-           android:layout_width="fill_parent" 
-           android:layout_weight="0.33" 
-           android:layout_height="fill_parent"
+         	android:id="@+id/btnDelete"
+       		android:layout_width="fill_parent" 
+           	android:layout_weight="0.33" 
+           	android:layout_height="fill_parent"
             android:scaleType="fitCenter"
             android:padding="2dp" 
-			 android:background="@drawable/btn_delete_control"
+			android:background="@drawable/btn_delete_control"
 			/>
             
    		<ImageButton
-            android:id="@+id/btnRename"
-          android:layout_width="fill_parent" 
-           android:layout_weight="0.33" 
-           android:layout_height="fill_parent"
+         	android:id="@+id/btnRename"
+          	android:layout_width="fill_parent" 
+           	android:layout_weight="0.33" 
+           	android:layout_height="fill_parent"
             android:scaleType="fitCenter"
             android:padding="2dp" 
             android:background="@drawable/btn_rename_control"
 			 />
-            
-    	<ImageButton
-            android:id="@+id/btnUpload"
+ 		<ImageButton
+        	android:id="@+id/btnUpload"
             android:layout_width="fill_parent" 
-           android:layout_weight="0.33" 
-           android:layout_height="fill_parent"
+           	android:layout_weight="0.33" 
+           	android:layout_height="fill_parent"
             android:scaleType="fitCenter"
             android:padding="2dp" 
             android:background="@drawable/btn_upload_control" 
             />
             
-	 </LinearLayout>
+	</LinearLayout>
    	
 </LinearLayout>

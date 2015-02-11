@@ -19,6 +19,8 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -59,12 +61,17 @@ public class AudioRecordingActivity extends Activity {
 	private boolean timerRunning = false;	// true if timer is running
 	ToggleButton tglPlayPause;				//toggle play pause button
 	
-
+	String strDefaultRecordingName;
 	DateUtils dateFunc;
-	
-	
 	RecordingDB mydb;
+	Boolean isEnabledToAnimateIn;
+	Boolean isEnabledToAnimateOut;
 	
+	View stopButton;
+	
+	private Animation animFadeIn;
+    private Animation animFadeOut;
+    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
@@ -77,11 +84,12 @@ public class AudioRecordingActivity extends Activity {
 
 		mydb = new RecordingDB(this);
 		dateFunc = new DateUtils();
-        
+		
      // Locate the view to the elapsed time on screen and initialize
         timerView = (TextView) findViewById(R.id.timerValue);
         timerView.setText(formatTime(0));
-        
+        animFadeIn = AnimationUtils.loadAnimation(this, R.anim.anim_fade_in);
+        animFadeOut = AnimationUtils.loadAnimation(this, R.anim.anim_fade_out);
         // Initialize an ArrayList to hold the laps
         laps = new Laps();
 
@@ -92,25 +100,34 @@ public class AudioRecordingActivity extends Activity {
         
         // Log.w("asd!",file.getAbsolutePath().toString() + "/" + input.getEditableText().toString() +  file_exts[currentFormat]);
          
-         if(mydb.insertRecording("lfjso ifdsjdfol sdf dsfghd f", strDate, "", total, 0, 0, true, "m4a","", "C://" )) {
-          Toast.makeText(getApplicationContext(), "Recording Added", Toast.LENGTH_SHORT).show(); 
-         }  
-         else{
-          Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show(); 
-         }
+   
         tglPlayPause = (ToggleButton) findViewById(R.id.tglPlayPause);
+        isEnabledToAnimateIn = true;
+        isEnabledToAnimateOut = false;
         
+        stopButton = findViewById(R.id.reset);
+        
+        stopButton.setVisibility(View.INVISIBLE);
     	tglPlayPause.setOnCheckedChangeListener(new OnCheckedChangeListener(){
     		public void onCheckedChanged(CompoundButton buttonView,
     				boolean isChecked) {
+    	
     			long now = System.currentTimeMillis();
     			
     			if (tglPlayPause !=null){
     				if (isChecked){
     					startRecording();
+    					
+    					if (isEnabledToAnimateIn == true){
+    						stopButton.startAnimation(animFadeIn);
+    						stopButton.setVisibility(View.VISIBLE);
+    						isEnabledToAnimateIn = false;
+    						isEnabledToAnimateOut = true;
+    					}
     				}
     				else{
     					stopButtonClick(now);
+    					
     				}
     			}
     		}
@@ -118,7 +135,7 @@ public class AudioRecordingActivity extends Activity {
     	});
         
      // Bind the method to be called when the reset button pressed        
-        View stopButton = findViewById(R.id.reset);
+       
         stopButton.setOnClickListener(new View.OnClickListener() {			
    			public void onClick(View v) {
    		        // get time button pressed
@@ -143,6 +160,7 @@ public class AudioRecordingActivity extends Activity {
 	// Method called when the start buttons pressed
 	 private void startButtonClick(long now)
 	 {
+		 strDefaultRecordingName = "New Recording "+ String.valueOf( mydb.retrieveLastId() + 1);
 		 // Remove any timers in progress
 	     timerHandler.removeCallbacks(updateTimerTask);
 	     
@@ -327,8 +345,8 @@ public class AudioRecordingActivity extends Activity {
 			file.mkdirs();
 		}
 
-		
-		return (file.getAbsolutePath() + "/" + "REC1" + file_exts[currentFormat]);	
+	
+		return (file.getAbsolutePath() + "/" +  strDefaultRecordingName + file_exts[currentFormat]);	
 
 	
 	}
@@ -348,43 +366,59 @@ public class AudioRecordingActivity extends Activity {
         final EditText input = new EditText(context);
         alert.setView(input);
 
+        String filepath = Environment.getExternalStorageDirectory().getPath();
+ 		final File file = new File(filepath, AUDIO_RECORDER_FOLDER);
+ 		final String strDate = dateFunc.getDate();
+ 		
     	alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
     	public void onClick(DialogInterface dialog, int whichButton) {
     	 //You will get as string input data in this variable.
     	 // here we convert the input to a string and show in a toast.
     		 		
-    	 String srt = input.getEditableText().toString();
-    	 Toast.makeText(context,srt,Toast.LENGTH_LONG).show();    
+    	String srt = input.getEditableText().toString();
     	 
-    	 String filepath = Environment.getExternalStorageDirectory().getPath();
- 		File file = new File(filepath, AUDIO_RECORDER_FOLDER);
+    //	Toast.makeText(context,srt,Toast.LENGTH_LONG).show();    
+    	 
      	//	File oldfile =new File(getFilename());
      	//  File newfile =new File(file.getAbsolutePath() + "/" + "im_new" + file_exts[currentFormat]);
      	 
      	  if (file != null && file.exists()) {
-               File from = new File(getFilename().toString());
-               File to = new File(file.getAbsolutePath().toString() + "/" + input.getEditableText().toString() + file_exts[currentFormat]); 
-               from.renameTo(to);
+     		 if (input.getEditableText().toString().length() == 0){
+ 				Toast.makeText(getApplicationContext(), "Cannot Set Empty Text", Toast.LENGTH_SHORT).show(); 
+     		 }
+     		 else if (mydb.countNameDuplicate(input.getEditableText().toString()) == 0){
+     			 File from = new File(getFilename().toString());
+     			 File to = new File(file.getAbsolutePath().toString() + "/" + input.getEditableText().toString() + file_exts[currentFormat]); 
+     			 from.renameTo(to);
                 
-               String strDate = dateFunc.getDate();
+     			
                
               // Log.w("asd!",file.getAbsolutePath().toString() + "/" + input.getEditableText().toString() +  file_exts[currentFormat]);
                
-               if(mydb.insertRecording(input.getEditableText().toString(), strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
-                Toast.makeText(getApplicationContext(), "Recording Added", Toast.LENGTH_SHORT).show(); 
-               }  
-               else{
-                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show(); 
-               }
-           }
-
-    	 
+     			 if(mydb.insertRecording(input.getEditableText().toString(), strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
+     				 Toast.makeText(getApplicationContext(), "Recording "+input.getEditableText().toString()+" has been saved", Toast.LENGTH_SHORT).show(); 
+     			 }  
+     			 else{
+     				 Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show(); 
+     			 }
+     		 } 
+     	  }
+     	  else{
+			Toast.makeText(getApplicationContext(), "File name already exists", Toast.LENGTH_SHORT).show(); 
+     	  }
     	} 
-    }); 
+  	}); 
     	alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
     	  public void onClick(DialogInterface dialog, int whichButton) {
     	    // Canceled.
     		  dialog.cancel();
+    		  	if(mydb.insertRecording(strDefaultRecordingName, strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
+    		  		 Toast.makeText(getApplicationContext(), "Recording saved as "+ strDefaultRecordingName, Toast.LENGTH_SHORT).show(); 
+  				}  
+  				else{
+  					Toast.makeText(getApplicationContext(), "Cannot write on database", Toast.LENGTH_SHORT).show(); 
+  			     	
+  				}
     	  }
     }); //End of alert.setNegativeButton
     	AlertDialog alertDialog = alert.create();
@@ -419,7 +453,14 @@ public class AudioRecordingActivity extends Activity {
 			recorder.stop();
 			recorder.reset();
 			recorder.release();
-
+			timerView.setText("0:00");
+			if (isEnabledToAnimateOut == true){
+				stopButton.startAnimation(animFadeOut);
+				stopButton.setVisibility(View.INVISIBLE);
+				isEnabledToAnimateIn = true;
+				isEnabledToAnimateOut = false;
+			}
+			
 			recorder = null;
 		 	tglPlayPause.setChecked(false);
 		}
