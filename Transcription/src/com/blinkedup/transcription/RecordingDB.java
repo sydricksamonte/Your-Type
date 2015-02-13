@@ -97,7 +97,7 @@ public class RecordingDB extends SQLiteOpenHelper{
         		RECORDING_ISACTIVE + " ," + RECORDING_FILE_TYPE + " ," +
         		RECORDING_DATE_FINALIZED + " ," + RECORDING_PATH + ") VALUES ("+name+", "+dateAdded+", "+dateUploaded+","+duration+", "+status+", "+origin+", "+isActive+", "+fileType+", "+dateFinalized+", "+path+");";
               
-        		 mDB.execSQL(query_sql);
+        		mDB.execSQL(query_sql);
 	}
 	
 	public boolean insertRecording(String name, String dateAdded, String dateUploaded, int duration, int status, int origin, boolean isActive, String fileType, String dateFinalized, String path) {
@@ -166,14 +166,21 @@ public class RecordingDB extends SQLiteOpenHelper{
 		catch (Exception e){
 			last = 0;
 		}
-		
+		cursor.close();
 		return  last;
 	} 
 	
 	public String StripText(String name){
-		name = "["+name+"]";
-		name = name.replaceAll("[/:!@#$%^&*()<>+?\"{}\\[\\]=`~;]", "");
-	
+		name = name.replace("'", "");
+			name = "["+name+"]";
+		try{
+			name = name.replaceAll("[\\/:!@#$%^&*()<>+?\\\\\"{}\\[\\]=`~;]", "");
+			
+		}
+		catch(Exception e){
+			
+		}
+		Log.e("aedasd",name);
 		return name;
 	}
 	

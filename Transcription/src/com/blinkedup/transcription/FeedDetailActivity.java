@@ -1,37 +1,30 @@
 package com.blinkedup.transcription;
 
-
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,16 +68,42 @@ public class FeedDetailActivity extends Activity{
 	public void onPause() {
 	    super.onPause();
 	    if (mediaPlayer != null){
-	    mediaPlayer.stop();
-	    mediaPlayer.reset();
-	    mediaPlayer.release();
+	    	try{
+	    		mediaPlayer.stop();
+	    		mediaPlayer.reset();
+	    		mediaPlayer.release();
+	    	}
+	    	catch(Exception e){
+	    		Log.e("NOTICE","Cannot call pause");
+	    	}
 	    }
 	}
-
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case android.R.id.home:
+	            // app icon in action bar clicked; goto parent activity.
+	            this.finish();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	@SuppressLint("NewApi")
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_feeddetail);
 		 final Context context = this;
+		 
+		if (android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.HONEYCOMB) {
+			 ActionBar actionBar = getActionBar();
+			 actionBar.setHomeButtonEnabled(true);
+			 actionBar.setDisplayHomeAsUpEnabled(true);
+		}
+		else{
+			 Log.e("NOTICE","Device cannot handle ActionBar");
+		}
+		
 		du = new DateUtils();
 		mydb = new RecordingDB(this);
 		
@@ -286,18 +305,19 @@ public class FeedDetailActivity extends Activity{
 
 					    	alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 					    		public void onClick(DialogInterface dialog, int whichButton) {
-					
-					    			File to = new File(recPath + "/" + mydb.StripText(input.getEditableText().toString()) + recFileType); 
+					    			final String stripText = mydb.StripText(input.getEditableText().toString());
+					    			File to = new File(recPath + "/" + stripText + recFileType); 
 					    			if (input.getEditableText().toString().length() == 0){
 					    				Toast.makeText(getApplicationContext(), "Cannot Set Empty Text", Toast.LENGTH_SHORT).show(); 
-					    				
 					    			}
-					    			else if (mydb.countNameDuplicate(input.getEditableText().toString()) == 0){
+					    			else if (mydb.countNameDuplicate(stripText) == 0){
+					    				try{
 					    				if (file.renameTo(to)){
-					    					if(mydb.renameRecording(rec_id,mydb.StripText(input.getEditableText().toString()))) {
+					    					
+					    					if(mydb.renameRecording(rec_id,stripText)) {
 					    						Toast.makeText(getApplicationContext(), "Renamed Successfully", Toast.LENGTH_SHORT).show(); 
-					    						tc_recName.setText(mydb.StripText(input.getEditableText().toString()));
-					    						recName = input.getEditableText().toString();
+					    						tc_recName.setText(stripText);
+					    						recName = stripText;
 					    					}  
 					    					else{
 					    						Toast.makeText(getApplicationContext(), "Cannot Rename File", Toast.LENGTH_SHORT).show(); 
@@ -305,6 +325,11 @@ public class FeedDetailActivity extends Activity{
 					    				}
 					    				else{
 					    					Toast.makeText(getApplicationContext(), "Cannot Rename File", Toast.LENGTH_SHORT).show(); 
+					    				}
+					    				}
+					    				catch (Exception e){
+					    					Toast.makeText(getApplicationContext(), "Cannot Rename File", Toast.LENGTH_SHORT).show(); 
+							    			
 					    				}
 					    			}
 					    			else{
