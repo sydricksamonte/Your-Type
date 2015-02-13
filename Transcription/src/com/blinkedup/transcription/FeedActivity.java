@@ -4,8 +4,10 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
+import android.content.ClipData.Item;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -46,139 +48,163 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 	Typeface tfRegular;
 	Typeface tfUltra;
 	Button showDetail; 
-	public MediaPlayer mediaPlayer;
+	boolean isEnteringUpdateActivity;
+    @Override
+    public void onResume(){
+        super.onResume();
+        
+       // populate();
+        if (isEnteringUpdateActivity == true){
+        	RePopulate();
+     		isEnteringUpdateActivity = false;
+     	}
+		/** Creating a loader for populating listview from sqlite database */
+		/** This statement, invokes the method onCreatedLoader() */
+    }
+
+    private void RePopulate() {
+    	getSupportLoaderManager().restartLoader(0, null, this);
+    	mAdapter.notifyDataSetChanged();
+    
+    }
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feed);
-        mediaPlayer = new MediaPlayer();
-       // tfRegular = Typeface.createFromAsset(getAssets(),"Avenir_Reg.ttf");
-       // tfUltra = Typeface.createFromAsset(getAssets(),"Avenir_Ultra.ttf");
-        Log.e("sasasa","sdfsd");
-        dateFunc = new DateUtils();
-        mListView = (ListView) findViewById(R.id.listview);  
-        //ListView listview = (ListView) findViewById(R.id.listview1);
-        mListView.setOnItemClickListener(this);
        
-        
-		mAdapter = new SimpleCursorAdapter(getBaseContext(),
-                R.layout.listview_item_feed,
-                null,
-                new String[] { RecordingDB.RECORDING_DATE_ADDED, RecordingDB.RECORDING_DATE_FINALIZED, RecordingDB.RECORDING_DATE_UPLOADED,
-			RecordingDB.RECORDING_DURATION, RecordingDB.RECORDING_FILE_TYPE, RecordingDB.RECORDING_ID,
-			RecordingDB.RECORDING_ISACTIVE, RecordingDB.RECORDING_NAME, RecordingDB.RECORDING_ORIGIN,
-			RecordingDB.RECORDING_STATUS, RecordingDB.RECORDING_STATUS, RecordingDB.RECORDING_PATH},
-                new int[] { R.id.recDateAdd , R.id.recDateFin, R.id.recDateUploaded, R.id.recDurat , R.id.recFileType, R.id.recId, R.id.recIsActive , R.id.recName, R.id.recOrigin, R.id.recStat, R.id.recStatDesc, R.id.recPath }, 0);		
-	
-		
-		mListView.setAdapter(mAdapter);		
-		mListView.setEmptyView(findViewById(R.id.empty_list_item));
-		
-		TextView noitem;
-		noitem = (TextView) findViewById(R.id.empty_list_item);
-		noitem.setTextColor(getResources().getColor(R.color.graylight2));
-		mAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() { 
-			@Override public boolean setViewValue(View view, Cursor cursor, int column) 
-			{ 
-			
-				if (column == 5) { 
-					TextView tv = (TextView) view;
-					if (tv.getId() ==  R.id.recStatDesc){
-						 
-						String statVal = cursor.getString(cursor.getColumnIndex("_status"));
-						String statDesc;
-						if (statVal.equals("1")){
-							statDesc = "Uploaded — Awaiting Process";
-							img = getResources().getDrawable( R.drawable.colors_orange );
-							img.setBounds( 0, 0, 12, 12 );
-							tv.setCompoundDrawables( img, null, null, null );
-						}
-						else if (statVal.equals("2")){
-							statDesc = "Transcription Done";
-							img = getResources().getDrawable( R.drawable.colors_green );
-							img.setBounds( 0, 0, 12, 12 );
-							tv.setCompoundDrawables( img, null, null, null );
-						}
-						else{
-							statDesc = "Waiting for Upload";
-							img = getResources().getDrawable( R.drawable.colors_gray );
-							img.setBounds( 0, 0, 12, 12 );
-							tv.setCompoundDrawables( img, null, null, null );
-						}
-						tv.setText(statDesc);
-						//tv.setTypeface(tfRegular);
-						
-						 return true; 
-					}
-					else{
-						return false; 
-					}
-				}
-				else if (column == 1) { 
-					TextView tvxx = (TextView) view;
-					//tvxx.setTypeface(tfRegular);
-					tvxx.setText(cursor.getString(cursor.getColumnIndex("_name")));
-					//	tvxx.setTypeface(tfRegular);
-					//	showDetail = (Button) findViewById(R.id.);
-					//	showDetail.setOnClickListener(new AddButtonClickHandler());
-					 return true;
-				}
-				else if (column == 2) {
-					TextView txv = (TextView) view;
-					
-					if (txv.getId() ==  R.id.recDateAdd){
-						dateFormatted = dateFunc.convertStringToDate(cursor.getString(cursor.getColumnIndex("_date_added")));
-						txv.setText(dateFormatted);
-						//txv.setTypeface(tfRegular);
-					}
-					return true;
-				}
-				else if (column == 4) {
-					TextView txv = (TextView) view;
-					
-					if (txv.getId() ==  R.id.recDurat){
-						strDuration = dateFunc.convIntToLength(cursor.getString(cursor.getColumnIndex("_duration")));
-						txv.setText(strDuration);
-						//txv.setTypeface(tfRegular);
-					}
-					return true;
-				}
-				else{
-					return false;
-				}
-			} 
-		}); 
-		
+        populateTable();
 		/** Creating a loader for populating listview from sqlite database */
 		/** This statement, invokes the method onCreatedLoader() */
 		getSupportLoaderManager().initLoader(0, null, this);
 		
+		
     }
 
-   
-    
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+    public void populateTable(){
+    	 setContentView(R.layout.activity_feed);
+  
+  
+          dateFunc = new DateUtils();
+          mListView = (ListView) findViewById(R.id.listview);  
+          //ListView listview = (ListView) findViewById(R.id.listview1);
+          mListView.setOnItemClickListener(this);
+         
+          
+  		mAdapter = new SimpleCursorAdapter(getBaseContext(),
+                  R.layout.listview_item_feed,
+                  null,
+                  new String[] { RecordingDB.RECORDING_DATE_ADDED, RecordingDB.RECORDING_DATE_FINALIZED, RecordingDB.RECORDING_DATE_UPLOADED,
+  			RecordingDB.RECORDING_DURATION, RecordingDB.RECORDING_FILE_TYPE, RecordingDB.RECORDING_ID,
+  			RecordingDB.RECORDING_ISACTIVE, RecordingDB.RECORDING_NAME, RecordingDB.RECORDING_ORIGIN,
+  			RecordingDB.RECORDING_STATUS, RecordingDB.RECORDING_STATUS, RecordingDB.RECORDING_PATH},
+                  new int[] { R.id.recDateAdd , R.id.recDateFin, R.id.recDateUploaded, R.id.recDurat , R.id.recFileType, R.id.recId, R.id.recIsActive , R.id.recName, R.id.recOrigin, R.id.recStat, R.id.recStatDesc, R.id.recPath }, 0);		
+  	
+  		
+  		mListView.setAdapter(mAdapter);		
+  		
+  		
+  		mAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() { 
+  			@Override public boolean setViewValue(View view, Cursor cursor, int column) 
+  			{ 	
+  				if (column == 5) { 
+  					TextView tv = (TextView) view;
+  					if (tv.getId() ==  R.id.recStatDesc){
+  						String statVal = cursor.getString(cursor.getColumnIndex("_status"));
+  						String statDesc;
+  						if (statVal.equals("1")){
+  							statDesc = "Uploaded — Awaiting Process";
+  							img = getResources().getDrawable( R.drawable.colors_orange );
+  							img.setBounds( 0, 0, 12, 12 );
+  							tv.setCompoundDrawables( img, null, null, null );
+  						}
+  						else if (statVal.equals("2")){
+  							statDesc = "Transcription Done";
+  							img = getResources().getDrawable( R.drawable.colors_green );
+  							img.setBounds( 0, 0, 12, 12 );
+  							tv.setCompoundDrawables( img, null, null, null );
+  						}
+  						else{
+  							statDesc = "Waiting for Upload";
+  							img = getResources().getDrawable( R.drawable.colors_gray );
+  							img.setBounds( 0, 0, 12, 12 );
+  							tv.setCompoundDrawables( img, null, null, null );
+  						}
+  						tv.setText(statDesc);
+  						//tv.setTypeface(tfRegular);
+  						
+  						 return true; 
+  					}
+  					else{
+  						return false; 
+  					}
+  				}
+  				else if (column == 1) { 
+  					TextView tvxx = (TextView) view;
+  					//tvxx.setTypeface(tfRegular);
+  					tvxx.setText(cursor.getString(cursor.getColumnIndex("_name")));
+  					//	tvxx.setTypeface(tfRegular);
+  					//	showDetail = (Button) findViewById(R.id.);
+  					//	showDetail.setOnClickListener(new AddButtonClickHandler());
+  					 return true;
+  				}
+  				else if (column == 2) {
+  					TextView txv = (TextView) view;
+  					
+  					if (txv.getId() ==  R.id.recDateAdd){
+  						dateFormatted = dateFunc.convertStringToDate(cursor.getString(cursor.getColumnIndex("_date_added")));
+  						txv.setText(dateFormatted);
+  						//txv.setTypeface(tfRegular);
+  					}
+  					return true;
+  				}
+  				else if (column == 4) {
+  					TextView txv = (TextView) view;
+  					
+  					if (txv.getId() ==  R.id.recDurat){
+  						strDuration = dateFunc.convIntToLength(cursor.getString(cursor.getColumnIndex("_duration")));
+  						txv.setText(strDuration);
+  						//txv.setTypeface(tfRegular);
+  					}
+  					return true;
+  				}
+  				else{
+  					return false;
+  				}
+  			} 
+  		}); 
+  	
+  		
     }
+    
+   
 
 	/** A callback method invoked by the loader when initLoader() is called */
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
-		Uri uri = Recording.CONTENT_URI;
+		Uri uri = Recording.CONTENT_URI;Log.e("3","3");
 		return new CursorLoader(this, uri, null, null, null, null);
+		
 	}
+	
 
 	/** A callback method, invoked after the requested content provider returned all the data */
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
 		mAdapter.swapCursor(arg1);
+		if (mAdapter != null){
+  			TextView noitem;
+  	  		noitem = (TextView) findViewById(R.id.empty_list_item);
+  	  		noitem.setTextColor(getResources().getColor(R.color.graylight2));
+  	  		
+  	  		mListView.setEmptyView(findViewById(R.id.empty_list_item));
+  		
+  		}
 	}
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> arg0) {
 		mAdapter.swapCursor(null);
+		Log.e("2","2");
 	}
 	/////
 	public class AddButtonClickHandler implements OnClickListener {
@@ -194,7 +220,7 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 	}
 	 public void onItemClick(AdapterView<?> l, View v, int position, long id) {
 	        //Log.i("HelloListView", "You clicked Item: " + id + " at position:" + position);
-	        
+		
 	        TextView tc_recId = (TextView)v.findViewById(R.id.recId);
 	        TextView tc_recName = (TextView)v.findViewById(R.id.recName);
 	        TextView tc_recStat = (TextView)v.findViewById(R.id.recStat);
@@ -223,6 +249,17 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 			explicitIntent.putExtra("INTENT_PATH",tc_recPath.getText().toString());
 			
 			startActivity(explicitIntent);
+			isEnteringUpdateActivity = true;
+			
+			
 	    }
+	 
+	 	protected void onPause() {
+         super.onPause();
+
+         	if (isEnteringUpdateActivity == true){	
+         	}
+	 	}
+	 
 	
 }
