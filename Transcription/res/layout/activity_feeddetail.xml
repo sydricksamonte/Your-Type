@@ -187,57 +187,92 @@
         android:orientation="horizontal"
         android:layout_marginTop="5sp"
   		android:padding="15dp" 
-	>
+  		android:gravity="center"	
+  		>
+        
+        <View 
+        	android:layout_width="0dip" 
+        	android:layout_height="1dp" 
+        	android:layout_weight="0.2" /> 
         
 		<ImageButton
         	android:id="@+id/btnPlay"
-           	android:layout_width="fill_parent" 
-           	android:layout_weight="0.33" 
-           	android:layout_height="55dp"
-            android:scaleType="fitCenter"
-            android:padding="2dp" 
+       		android:layout_width="wrap_content"
+         	android:layout_height="wrap_content"
+         	android:layout_weight="0"
+         	android:adjustViewBounds="true"
+     		android:scaleType="centerInside"
             android:background="@drawable/btn_play_control"
 		/>
-            
+        
+        <View 
+        	android:layout_width="0dip" 
+        	android:layout_height="1dp" 
+        	android:layout_weight="0.2" /> 
+        
 		<ImageButton
             android:id="@+id/btnStop"
-            android:layout_width="fill_parent" 
-           	android:layout_weight="0.33" 
-           	android:layout_height="fill_parent"
-            android:scaleType="fitCenter"
-            android:padding="2dp" 
+          	android:layout_width="wrap_content"
+         	android:layout_height="wrap_content"
+         	android:layout_weight="0"
+        	
+        	android:adjustViewBounds="true"
+     		android:scaleType="centerInside"
             android:background="@drawable/btn_pause_control"
-			 />
+		/>
             
+        <View 
+        	android:layout_width="0dip" 
+        	android:layout_height="1dp" 
+        	android:layout_weight="0.2" /> 
+        
    		<ImageButton
          	android:id="@+id/btnDelete"
-       		android:layout_width="fill_parent" 
-           	android:layout_weight="0.33" 
-           	android:layout_height="fill_parent"
-            android:scaleType="fitCenter"
-            android:padding="2dp" 
+       		android:layout_width="wrap_content"
+         	android:layout_height="wrap_content"
+         	android:layout_weight="0"
+         
+         	android:adjustViewBounds="true"
+     		android:scaleType="centerInside"
 			android:background="@drawable/btn_delete_control"
 			/>
-            
+         
+        <View 
+        	android:layout_width="0dip" 
+        	android:layout_height="1dp" 
+        	android:layout_weight="0.2" /> 
+        
    		<ImageButton
          	android:id="@+id/btnRename"
-          	android:layout_width="fill_parent" 
-           	android:layout_weight="0.33" 
-           	android:layout_height="fill_parent"
-            android:scaleType="fitCenter"
-            android:padding="2dp" 
+       		android:layout_width="wrap_content"
+         	android:layout_height="wrap_content"
+         	android:layout_weight="0"
+         	
+      		android:adjustViewBounds="true"
+     		android:scaleType="centerInside"
             android:background="@drawable/btn_rename_control"
-			 />
+			/>
+ 		
+ 		<View 
+        	android:layout_width="0dip" 
+        	android:layout_height="1dp" 
+        	android:layout_weight="0.2" /> 
+        
  		<ImageButton
         	android:id="@+id/btnUpload"
-            android:layout_width="fill_parent" 
-           	android:layout_weight="0.33" 
-           	android:layout_height="fill_parent"
-            android:scaleType="fitCenter"
-            android:padding="2dp" 
+        	android:layout_width="wrap_content"
+         	android:layout_height="wrap_content"
+         	android:layout_weight="0"
+       
+         	android:adjustViewBounds="true"
+     		android:scaleType="centerInside"
             android:background="@drawable/btn_upload_control" 
             />
             
+      	<View 
+        	android:layout_width="0dip" 
+        	android:layout_height="1dp" 
+        	android:layout_weight="0.2" /> 
 	</LinearLayout>
    	
 </LinearLayout>
