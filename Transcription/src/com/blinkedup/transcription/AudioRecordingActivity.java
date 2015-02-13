@@ -146,14 +146,14 @@ public class AudioRecordingActivity extends Activity {
    				resetButtonClick(now);
    			}
    		});
-        /*String strDate = dateFunc.getDate();
-		if(mydb.insertContact("Kksdf sjf sjopdf spodf psdpof sdf gsrg er", strDate, "", total, 0, 0, true, file_exts[currentFormat],"","C://sdfsdsfd/" )) {
+        //////////
+		/*if(mydb.insertRecording("Kksdf sjf sjopdf spodf psdpof sdf gsrg er", strDate, "", total, 0, 0, true, file_exts[currentFormat],"","C://sdfsdsfd/" )) {
          Toast.makeText(getApplicationContext(), "Recording Added", Toast.LENGTH_SHORT).show(); 
         }  
         else{
          Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show(); 
-        }
-        */
+        }*/
+        //////////
         
     }
 	
@@ -365,7 +365,7 @@ public class AudioRecordingActivity extends Activity {
         // Set an EditText view to get user input 
         final EditText input = new EditText(context);
         alert.setView(input);
-
+        input.setText(strDefaultRecordingName);
         String filepath = Environment.getExternalStorageDirectory().getPath();
  		final File file = new File(filepath, AUDIO_RECORDER_FOLDER);
  		final String strDate = dateFunc.getDate();
@@ -378,34 +378,34 @@ public class AudioRecordingActivity extends Activity {
     	String srt = input.getEditableText().toString();
     	 
     //	Toast.makeText(context,srt,Toast.LENGTH_LONG).show();    
-    	 
-     	//	File oldfile =new File(getFilename());
-     	//  File newfile =new File(file.getAbsolutePath() + "/" + "im_new" + file_exts[currentFormat]);
-     	 
+    	final String stripText = mydb.StripText(input.getEditableText().toString());
      	  if (file != null && file.exists()) {
-     		 if (input.getEditableText().toString().length() == 0){
- 				Toast.makeText(getApplicationContext(), "Cannot Set Empty Text", Toast.LENGTH_SHORT).show(); 
+     		 if (stripText.length() == 0){
+ 				Toast.makeText(getApplicationContext(), "Cannot Set Empty Text, Saved as "+strDefaultRecordingName, Toast.LENGTH_SHORT).show(); 
+ 				
      		 }
-     		 else if (mydb.countNameDuplicate(input.getEditableText().toString()) == 0){
+     		 else if (mydb.countNameDuplicate(stripText) == 0){
      			 File from = new File(getFilename().toString());
-     			 File to = new File(file.getAbsolutePath().toString() + "/" + input.getEditableText().toString() + file_exts[currentFormat]); 
+     			 File to = new File(file.getAbsolutePath().toString() + "/" + stripText + file_exts[currentFormat]); 
      			 from.renameTo(to);
                 
-     			
-               
-              // Log.w("asd!",file.getAbsolutePath().toString() + "/" + input.getEditableText().toString() +  file_exts[currentFormat]);
-               
-     			 if(mydb.insertRecording(input.getEditableText().toString(), strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
-     				 Toast.makeText(getApplicationContext(), "Recording "+input.getEditableText().toString()+" has been saved", Toast.LENGTH_SHORT).show(); 
+     			 if(mydb.insertRecording(stripText, strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
+     				 Toast.makeText(getApplicationContext(), "Recording "+stripText+" has been saved", Toast.LENGTH_SHORT).show(); 
      			 }  
      			 else{
-     				 Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show(); 
-     			 }
+     				if(mydb.insertRecording(strDefaultRecordingName, strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
+     					Toast.makeText(getApplicationContext(), "Error renaming record, has been saved as "+strDefaultRecordingName, Toast.LENGTH_SHORT).show(); 
+     					}  
+     				else{
+     					Toast.makeText(getApplicationContext(), "Cannot write on database", Toast.LENGTH_SHORT).show(); 
+     			     	
+     				}
+     			}
      		 } 
      	  }
      	  else{
-			Toast.makeText(getApplicationContext(), "File name already exists", Toast.LENGTH_SHORT).show(); 
-     	  }
+				Toast.makeText(getApplicationContext(), "Cannot write on database", Toast.LENGTH_SHORT).show(); 
+		  }
     	} 
   	}); 
     	alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
