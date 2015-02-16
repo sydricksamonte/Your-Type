@@ -8,6 +8,8 @@
     android:background="@drawable/ldpi_normal"
     tools:context=".MainActivity" >
 
+   
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,6 +18,8 @@
         android:radius="50dp"
         android:alpha="0.7"
         android:orientation="vertical" >
+        
+
         
     <EditText android:id="@+id/etUsername" 
         android:layout_width="match_parent" 
@@ -88,7 +92,8 @@
     <ListView
         android:id="@+id/lstAllUsers"
         android:layout_width="match_parent"
-        android:layout_height="162dp">
+        android:layout_height="162dp"
+        android:visibility="gone" >
     </ListView>
 
 </LinearLayout>
