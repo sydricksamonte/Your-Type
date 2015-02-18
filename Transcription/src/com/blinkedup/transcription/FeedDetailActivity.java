@@ -134,23 +134,35 @@ public class FeedDetailActivity extends Activity{
 		String statDesc = "";
 		Drawable img;
 		
+		dynBtnPlay = (ImageButton)findViewById(R.id.btnPlay);
+		dynBtnPause = (ImageButton)findViewById(R.id.btnStop);
+		dynBtnDelete = (ImageButton)findViewById(R.id.btnDelete);
+		dynBtnRename = (ImageButton)findViewById(R.id.btnRename);
+		dynBtnUpload = (ImageButton)findViewById(R.id.btnUpload);
+		
 		if (recStat.equals("1")){
 			statDesc = "Uploaded — Awaiting Process";
 			img = getResources().getDrawable( R.drawable.colors_orange );
 			img.setBounds( 0, 0, 12, 12 );
 			tc_recStat.setCompoundDrawables( img, null, null, null );
+			dynBtnUpload.setEnabled(false);
+			dynBtnRename.setEnabled(false);
 		}
 		else if (recStat.equals("2")){
 			statDesc = "Transcription Done";
 			img = getResources().getDrawable( R.drawable.colors_green );
 			img.setBounds( 0, 0, 12, 12 );
 			tc_recStat.setCompoundDrawables( img, null, null, null );
+			dynBtnUpload.setEnabled(false);
+			dynBtnRename.setEnabled(true);
 		}
 		else{
 			statDesc = "Waiting for Upload";
 			img = getResources().getDrawable( R.drawable.colors_gray );
 			img.setBounds( 0, 0, 12, 12 );
 			tc_recStat.setCompoundDrawables( img, null, null, null );
+			dynBtnUpload.setEnabled(true);
+			dynBtnRename.setEnabled(true);
 		}
 		tc_recStat.setText(statDesc);
 		
@@ -172,16 +184,9 @@ public class FeedDetailActivity extends Activity{
 		
 		recPath = (String) intent.getSerializableExtra("INTENT_PATH");
 		fileLoc = recPath + recName  + recFileType;
-		tc_recPath.setText(recPath + recName  + recFileType);
-		Log.e("SSS",recPath + recName  + recFileType);
-		dynBtnPlay = (ImageButton)findViewById(R.id.btnPlay);
-		dynBtnPause = (ImageButton)findViewById(R.id.btnStop);
-		dynBtnDelete = (ImageButton)findViewById(R.id.btnDelete);
-		dynBtnRename = (ImageButton)findViewById(R.id.btnRename);
-		dynBtnUpload = (ImageButton)findViewById(R.id.btnUpload);
+		tc_recPath.setText(recPath);
 	
-			
-			try {
+		try {
 				if (mediaPlayer == null){
 			        // it's ok, we can call this constructor
 					mediaPlayer = new MediaPlayer();  
@@ -192,9 +197,7 @@ public class FeedDetailActivity extends Activity{
 				 dynBtnPlay.setEnabled(true);
 				 dynBtnPause.setEnabled(true);
 				 dynBtnDelete.setEnabled(true);
-				 dynBtnUpload.setEnabled(true);
-				 dynBtnRename.setEnabled(true);
-			
+
 			}
 			catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -215,10 +218,7 @@ public class FeedDetailActivity extends Activity{
 				// TODO Auto-generated catch block
 				Toast.makeText(getApplicationContext(), e1.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 			}
-		
-		
-		
-	   
+	
 			dynBtnPlay.setOnClickListener( new OnClickListener() {
 			
 			 @Override
@@ -361,7 +361,9 @@ public class FeedDetailActivity extends Activity{
 	                // TODO Auto-generated method stub
 				 try {
 					 	if (mediaPlayer != null){
+					 		if (mediaPlayer.isPlaying()){
 					 		mediaPlayer.pause();
+					 		}
 					 	}
 					 }
 				 catch (IllegalStateException e1) {

@@ -30,6 +30,13 @@
     	android:minLines="4" 
     	android:maxLines="6" 
      />
+    <Button
+        android:id="@+id/btnUpload"
+        android:layout_marginTop="5dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Upload Recording"
+ />
     
 	
 </LinearLayout>
