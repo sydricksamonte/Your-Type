@@ -120,11 +120,22 @@ public class RecordingDB extends SQLiteOpenHelper{
 	      return true;
 	   }
 	
-	public boolean deleteRecording(String id) {
+	/*public boolean deleteRecordingPermanently(String id) {
 		
 		//  SQLiteDatabase db = this.getWritableDatabase();
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(DATABASE_TABLE, RECORDING_ID + "=" + id, null);
+		return true;
+	}*/
+	
+	public boolean deleteRecording(String id) {
+	
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues cv = new ContentValues();
+		cv.put(RECORDING_ISACTIVE,0);
+
+		db.update(DATABASE_TABLE, cv, RECORDING_ID +"="+id, null);
 		return true;
 	}
 		
@@ -134,6 +145,18 @@ public class RecordingDB extends SQLiteOpenHelper{
 
 		ContentValues cv = new ContentValues();
 		cv.put(RECORDING_NAME,name);
+
+		db.update(DATABASE_TABLE, cv, RECORDING_ID +"="+id, null);
+		return true;
+	}
+	
+	public boolean updateRecordingUploadDate(String id, String date) {
+
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues cv = new ContentValues();
+		cv.put(RECORDING_DATE_UPLOADED,date);
+		cv.put(RECORDING_STATUS, 1);
 
 		db.update(DATABASE_TABLE, cv, RECORDING_ID +"="+id, null);
 		return true;
