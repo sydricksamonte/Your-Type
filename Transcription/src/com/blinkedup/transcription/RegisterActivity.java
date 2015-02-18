@@ -27,7 +27,9 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.SignUpCallback;
 
 public class RegisterActivity extends Activity {
 
@@ -40,6 +42,7 @@ public class RegisterActivity extends Activity {
 	ParseObject parseObj;
 	ParseQuery<ParseObject> pqueryObj;
 	List<String> data;
+	ParseLoader pl;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,8 +53,9 @@ public class RegisterActivity extends Activity {
 		btnSave = (Button) findViewById(R.id.btnSave);
 		btnSave.setOnClickListener(new MyButtonEventHandler());
 		data = new ArrayList<String>();
-		                                           //Application ID							   ClientID
-		Parse.initialize(getApplicationContext(), "g9n6hw4p142ALoDaR6JQJmnYfdPkXL7Dyh1qKGo8", "JWe06Y7DDEIWgq8wKcK9w5jiPvsamJTwatTyediO");
+		     
+		pl = new ParseLoader();
+		pl.initParse(this);
 	}
 	
 	public boolean isOnline(){
@@ -72,8 +76,8 @@ public class RegisterActivity extends Activity {
 			confirmDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					if (!isOnline()) { Toast.makeText(getApplicationContext(), "No internet.", 3).show(); return; }; 
-					pqueryObj = ParseQuery.getQuery("tbl_Users");
-					pqueryObj.whereEqualTo("Username", name);
+					pqueryObj = ParseQuery.getQuery("_User");
+					pqueryObj.whereEqualTo("username", name);
 					pqueryObj.getFirstInBackground(new GetCallback<ParseObject>(){
 						public void done(ParseObject arg0, ParseException arg1) {
 							arg0.deleteInBackground(new DeleteCallback() {
@@ -95,21 +99,29 @@ public class RegisterActivity extends Activity {
 
 		public void onClick(View v) {
 				if (v.getId() == R.id.btnSave){
-					parseObj = new ParseObject("tbl_Users");
-					String username = etUsername.getText().toString();
-					String password = etPassword.getText().toString();
-					parseObj.put("Username", username);
-					parseObj.put("Password", password);
-					parseObj.saveInBackground(new SaveCallback(){
-						public void done(ParseException arg0) {
-							Toast.makeText(getApplicationContext(), "Record successfully saved.", 3).show();
-						}
-					});
-					etUsername.setText("");
-					etPassword.setText("");
+					ParseUser user = new ParseUser();
+					user.setUsername(etUsername.getText().toString());
+					user.setPassword(etPassword.getText().toString());
+					user.setEmail(etUsername.getText().toString());
+					 
+					// other fields can be set just like with ParseObject
+					user.put("phone", "650-253-0000");
+					
+					user.signUpInBackground(new SignUpCallback() {
+						  public void done(ParseException e) {
+						    if (e == null) {
+						    	Toast.makeText(getApplicationContext(), "Record successfully saved.", 3).show();
+						    	etUsername.setText("");
+								etPassword.setText("");
+						    } else {
+						    	Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), 3).show();
+						    }
+						  }
+						});
+					
 				}
 				else if (v.getId() == R.id.btnLoad){
-					pqueryObj = ParseQuery.getQuery("tbl_Users");
+					pqueryObj = ParseQuery.getQuery("_User");
 					pqueryObj.findInBackground(new FindCallback<ParseObject>() {
 						public void done(List<ParseObject> arg0, ParseException arg1) {
 							// TODO Auto-generated method stub
@@ -117,19 +129,19 @@ public class RegisterActivity extends Activity {
 							adapter.clear();
 							for(int i = 0; i < arg0.size(); i++){
 								Object obj = arg0.get(i);
-								String name = ((ParseObject) obj).getString("Username");
+								String name = ((ParseObject) obj).getString("username");
 								adapter.add(name);
 							}
 						}
 					});
 				}
 				else if (v.getId() == R.id.btnLogin){
-					pqueryObj = ParseQuery.getQuery("tbl_Users");
-					pqueryObj.whereEqualTo("Username", etUsername.getText().toString());
+					pqueryObj = ParseQuery.getQuery("_User");
+					pqueryObj.whereEqualTo("username", etUsername.getText().toString());
 					pqueryObj.getFirstInBackground(new GetCallback<ParseObject>() {
 						public void done(ParseObject arg0, ParseException arg1) {
 							if (arg1 == null){
-								if (arg0.getString("Username").toString().equals(etUsername.getText().toString()))
+								if (arg0.getString("username").toString().equals(etUsername.getText().toString()))
 									Toast.makeText(getApplicationContext(), "Welcome " + etUsername.getText().toString(), 3).show();
 							}
 							else

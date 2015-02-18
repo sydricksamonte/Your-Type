@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -42,6 +44,7 @@ public class MainActivity extends Activity {
 	ParseObject parseObj;
 	ParseQuery<ParseObject> pqueryObj;
 	List<String> data;
+	ParseLoader pl;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,10 +65,11 @@ public class MainActivity extends Activity {
 		btnLoad.setOnClickListener(new MyButtonEventHandler());
 		btnlogout.setOnClickListener(new MyButtonEventHandler());
 		btnLogin.setOnClickListener(new MyButtonEventHandler());
-		data = new ArrayList<String>();
-		                                           //Application ID							   ClientID
-		Parse.initialize(getApplicationContext(), "g9n6hw4p142ALoDaR6JQJmnYfdPkXL7Dyh1qKGo8", "JWe06Y7DDEIWgq8wKcK9w5jiPvsamJTwatTyediO");
-	
+		data = new ArrayList<String>();                                             //Application ID							   ClientID
+		  
+		pl = new ParseLoader();
+		pl.initParse(this);
+		
 		btnSave.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -98,8 +102,8 @@ public class MainActivity extends Activity {
 			confirmDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					if (!isOnline()) { Toast.makeText(getApplicationContext(), "No internet.", 3).show(); return; }; 
-					pqueryObj = ParseQuery.getQuery("tbl_Users");
-					pqueryObj.whereEqualTo("Username", name);
+					pqueryObj = ParseQuery.getQuery("_User");
+					pqueryObj.whereEqualTo("username", name);
 					pqueryObj.getFirstInBackground(new GetCallback<ParseObject>(){
 						public void done(ParseObject arg0, ParseException arg1) {
 							arg0.deleteInBackground(new DeleteCallback() {
@@ -122,7 +126,8 @@ public class MainActivity extends Activity {
 
 		public void onClick(View v) {
 				if (v.getId() == R.id.btnLoad){
-					pqueryObj = ParseQuery.getQuery("tbl_Users");
+					if (ParseUser.getCurrentUser() != null){
+					pqueryObj = ParseQuery.getQuery("_User");
 					pqueryObj.findInBackground(new FindCallback<ParseObject>() {
 						public void done(List<ParseObject> arg0, ParseException arg1) {
 							
@@ -131,30 +136,27 @@ public class MainActivity extends Activity {
 							adapter.clear();
 							for(int i = 0; i < arg0.size(); i++){
 								Object obj = arg0.get(i);
-								String name = ((ParseObject) obj).getString("Username");
+								String name = ((ParseObject) obj).getString("username");
 								adapter.add(name);
 							}
 						}
 					});
+					}
 				}
 				else if (v.getId() == R.id.btnLogin){
-					pqueryObj = ParseQuery.getQuery("tbl_Users");
-					pqueryObj.whereEqualTo("Username", etUsername.getText().toString());
-					pqueryObj.getFirstInBackground(new GetCallback<ParseObject>() {
-						public void done(ParseObject arg0, ParseException arg1) {
-							if (arg1 == null){
-								if (arg0.getString("Username").toString().equals(etUsername.getText().toString()))
-											
-									Toast.makeText(getApplicationContext(), "Welcome " + etUsername.getText().toString(), 3).show();
-									
-									Intent myIntent = new Intent(MainActivity.this, Welcome.class);
-									myIntent.putExtra("NAME", etUsername.getText().toString());
-									startActivity(myIntent);
-							}
-							else
-								Toast.makeText(getApplicationContext(), "Incorrect username ", 3).show();
-						}
-					});
+					ParseUser.logInInBackground( etUsername.getText().toString(), etPassword.getText().toString(), new LogInCallback() {
+						  public void done(ParseUser user, ParseException e) {
+						    if (user != null) {
+						    	Toast.makeText(getApplicationContext(), "Welcome " + etUsername.getText().toString(), 3).show();
+								
+								Intent myIntent = new Intent(MainActivity.this, Welcome.class);
+								myIntent.putExtra("NAME", etUsername.getText().toString());
+								startActivity(myIntent);
+						    } else {
+						    	Toast.makeText(getApplicationContext(), "Sign-in failed. Incorrect log-in details", 3).show();
+						    }
+						  }
+						});
 				}
 				
 				else if (v.getId() == R.id.btnlogout){
