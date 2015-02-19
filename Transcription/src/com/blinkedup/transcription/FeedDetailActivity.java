@@ -25,6 +25,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -114,23 +115,40 @@ public class FeedDetailActivity extends Activity{
 	    tc_recDurat = (TextView)findViewById(R.id.recDetDurat);
 	    tc_recDuratBack = (TextView)findViewById(R.id.recDetDuratBack);
 		TextView tc_recDateFin = (TextView)findViewById(R.id.recDetDateFin);
-	 	TextView tc_recDateUploaded = (TextView)findViewById(R.id.recDetDateUploaded);
 		TextView tc_recFileType = (TextView)findViewById(R.id.recDetFileType);
 	 	TextView tc_recOrigin = (TextView)findViewById(R.id.recDetOrigin);
 	  	TextView tc_recPath = (TextView)findViewById(R.id.recDetPath);
-	      
+	  	TextView tc_recDateUpload = (TextView)findViewById(R.id.recDetDateUploaded);
+	  	TextView tc_recDateFinal = (TextView)findViewById(R.id.recDetDateFinal);
+	  	
+	  	TextView tc_recIndicDetDateUpload = (TextView)findViewById(R.id.recIndicDetDateUpload);
+	  	TextView tc_recIndicDetDateFinal = (TextView)findViewById(R.id.recIndicDetDateFinal);
+
+	  	LinearLayout ll_dateUplo = (LinearLayout)findViewById(R.id.lnDateUpload);
+	  	LinearLayout ll_dateFin = (LinearLayout)findViewById(R.id.lnDateFinal);
+	  	
 	  	Intent intent = getIntent();
 		rec_id = (String) intent.getSerializableExtra("INTENT_RECORDING_ID");
 		tc_recId.setText(rec_id);
 		
 		recName = (String) intent.getSerializableExtra("INTENT_RECORDING_NAME");
-		tc_recName.setText(recName);
+		String cutString = "";
+		if (recName.length() > 80){
+			 cutString = recName.substring(0, 80) +"...";
+		}
+		else{
+			 cutString = recName;
+		}
+		tc_recName.setText(cutString);
 		tc_recName.setGravity(Gravity.CENTER);
 
 		String recDateAdd = (String) intent.getSerializableExtra("INTENT_DATE_ADDED");
 		tc_recDateAdd.setText(recDateAdd);
 		
 		String recStat = (String) intent.getSerializableExtra("INTENT_STATUS");
+		String recDateUpload = (String) intent.getSerializableExtra("INTENT_DATE_UPLOADED");
+		String recDateFinal = ""; 
+		
 		String statDesc = "";
 		Drawable img;
 		
@@ -147,6 +165,15 @@ public class FeedDetailActivity extends Activity{
 			tc_recStat.setCompoundDrawables( img, null, null, null );
 			dynBtnUpload.setEnabled(false);
 			dynBtnRename.setEnabled(false);
+			
+			ll_dateUplo.setVisibility(View.VISIBLE);
+			ll_dateFin.setVisibility(View.INVISIBLE);	
+			tc_recDateUpload.setVisibility(View.VISIBLE);
+			tc_recIndicDetDateUpload.setVisibility(View.VISIBLE);
+			
+			String dateFormatted = du.convertStringToDate(recDateUpload);
+				
+			tc_recDateUpload.setText(dateFormatted);
 		}
 		else if (recStat.equals("2")){
 			statDesc = "Transcription Done";
@@ -155,12 +182,26 @@ public class FeedDetailActivity extends Activity{
 			tc_recStat.setCompoundDrawables( img, null, null, null );
 			dynBtnUpload.setEnabled(false);
 			dynBtnRename.setEnabled(true);
+			
+			//ll_dateUplo.setVisibility(View.INVISIBLE);
+			ll_dateFin.setVisibility(View.VISIBLE);	
+			tc_recIndicDetDateFinal.setVisibility(View.VISIBLE);
+			tc_recDateFinal.setVisibility(View.VISIBLE);		
+		  			
+			recDateFinal = (String) intent.getSerializableExtra("INTENT_DATE_FINALIZED");
+			String dateFormatted = du.convertStringToDate(recDateFinal);	
+			//tc_recDateUpload.setText(dateFormatted);
+			//dateFormatted = du.convertStringToDate(recDateFinal);
+			tc_recDateFinal.setText(dateFormatted);
+	
 		}
 		else{
 			statDesc = "Waiting for Upload";
 			img = getResources().getDrawable( R.drawable.colors_gray );
 			img.setBounds( 0, 0, 12, 12 );
 			tc_recStat.setCompoundDrawables( img, null, null, null );
+			ll_dateUplo.setVisibility(View.INVISIBLE);
+			ll_dateFin.setVisibility(View.INVISIBLE);
 			dynBtnUpload.setEnabled(true);
 			dynBtnRename.setEnabled(true);
 		}
@@ -173,8 +214,6 @@ public class FeedDetailActivity extends Activity{
 		String recDateFin = (String) intent.getSerializableExtra("INTENT_DATE_FINALIZED");
 		tc_recDateFin.setText(recDateFin);
 		
-		String recDateUploaded = (String) intent.getSerializableExtra("INTENT_DATE_UPLOADED");
-		tc_recDateUploaded.setText(recDateUploaded);
 		
 		recFileType = (String) intent.getSerializableExtra("INTENT_FILE_TYPE");
 		tc_recFileType.setText(recFileType);
@@ -388,10 +427,12 @@ public class FeedDetailActivity extends Activity{
         		TextView tc_recFileType = (TextView)findViewById(R.id.recDetFileType);
         	 	TextView tc_recOrigin = (TextView)findViewById(R.id.recDetOrigin);
         	  	TextView tc_recPath = (TextView)findViewById(R.id.recDetPath);
+        	  	
+        	  	
         	      
         	  	Intent explicitIntent = new Intent(FeedDetailActivity.this,
      	        		UploadActivity.class);
-     	      
+        	
      	        explicitIntent.putExtra("INTENT_UPLOAD_RECORDING_ID",tc_recId.getText().toString());
      			explicitIntent.putExtra("INTENT_UPLOAD_RECORDING_NAME",tc_recName.getText().toString());
      			explicitIntent.putExtra("INTENT_UPLOAD_DATE_ADDED",tc_recDateAdd.getText().toString());
@@ -400,7 +441,8 @@ public class FeedDetailActivity extends Activity{
      			explicitIntent.putExtra("INTENT_UPLOAD_STATUS",tc_recStat.getText().toString());
      			explicitIntent.putExtra("INTENT_UPLOAD_ORIGIN",tc_recOrigin.getText().toString());
      			explicitIntent.putExtra("INTENT_UPLOAD_FILE_TYPE",tc_recFileType.getText().toString());
-     		
+     			//explicitIntent.putExtra("INTENT_UPLOAD_DATE_UPLOAD",tc_recDateUpload.getText().toString());
+     			
      			explicitIntent.putExtra("INTENT_UPLOAD_PATH",tc_recPath.getText().toString());
      			startActivity(explicitIntent);
             	}

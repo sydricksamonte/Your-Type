@@ -157,7 +157,19 @@ public class RecordingDB extends SQLiteOpenHelper{
 		ContentValues cv = new ContentValues();
 		cv.put(RECORDING_DATE_UPLOADED,date);
 		cv.put(RECORDING_STATUS, 1);
+		
+		db.update(DATABASE_TABLE, cv, RECORDING_ID +"="+id, null);
+		return true;
+	}
+	
+	public boolean updateRecordingFinalize(String id, String date) {
 
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues cv = new ContentValues();
+		cv.put(RECORDING_DATE_FINALIZED,date);
+		cv.put(RECORDING_STATUS, 2);
+		
 		db.update(DATABASE_TABLE, cv, RECORDING_ID +"="+id, null);
 		return true;
 	}

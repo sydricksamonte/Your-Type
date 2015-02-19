@@ -93,12 +93,75 @@
        	android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"    
-        android:layout_marginTop="20sp"
+        android:layout_marginTop="15sp"
         android:layout_below="@id/seekBar1"
 	    android:drawableLeft="@drawable/stat_circle"
 		android:drawablePadding="3dip"
 		style="@android:style/TextAppearance.Small"
 	/>
+	
+	<LinearLayout
+	 	android:id="@+id/lnDateUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+         android:visibility="gone" >
+
+		<TextView 
+			android:id="@+id/recIndicDetDateUpload"
+        	android:text="Date Uploaded  "
+       		android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignParentLeft="true" 
+        	android:layout_marginTop="2sp"   
+        	android:textStyle="bold"
+        	style="@android:style/TextAppearance.Small"
+        	 android:visibility="gone"
+    	/>
+
+		<TextView 
+        	android:id="@+id/recDetDateUploaded"
+       		android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignParentLeft="true"    
+        	android:layout_marginTop="2sp"
+        	style="@android:style/TextAppearance.Small"
+        	 android:visibility="gone"
+    	/>
+    	
+  	</LinearLayout>
+  	<LinearLayout
+	 	android:id="@+id/lnDateFinal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" 
+        android:visibility="gone" >
+
+		<TextView 
+			android:id="@+id/recIndicDetDateFinal"
+        	android:text="Finalized On "
+       		android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignParentLeft="true" 
+        	android:layout_marginTop="2sp"   
+        	android:textStyle="bold"
+        	style="@android:style/TextAppearance.Small"
+        	 android:visibility="gone"
+    	/>
+
+		<TextView 
+        	android:id="@+id/recDetDateFinal"
+       		android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignParentLeft="true"    
+        	android:layout_marginTop="2sp"
+        	style="@android:style/TextAppearance.Small"
+        	 android:visibility="gone"
+    	/>
+    	
+  	</LinearLayout>
+  	
+  	
 
 	<LinearLayout
         android:layout_width="match_parent"
@@ -140,13 +203,7 @@
         android:layout_centerVertical="true"
       	android:visibility="gone" />
 
-	<TextView 
-        android:id="@+id/recDetDateUploaded"
-       	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"    
-        android:layout_centerVertical="true" 
-        android:visibility="gone"/>
+
 
 	<TextView 
         android:id="@+id/recDetFileType"
