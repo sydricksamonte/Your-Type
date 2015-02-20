@@ -61,7 +61,9 @@
         android:textSize="12sp"
         android:textColor="#666666"
         android:text="Register now and receive \ntranscripts in your email." 
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_marginBottom="20dp"
+           android:layout_marginTop="30dp" />
     
     <Button android:id="@+id/btnSave" 
         android:layout_marginTop="8dp"
@@ -72,6 +74,17 @@
         android:textColor="#666666"
         android:textSize="14sp" 
         android:text="Register" />
+    <TextView 
+        android:id="@+id/tvtabs" 
+        android:gravity="center"
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content" 
+        android:textSize="12sp"
+        android:textColor="#666666"
+        android:text="Click tabs if you do not wish to register." 
+        android:textAppearance="?android:attr/textAppearanceSmall"
+    
+           android:layout_marginTop="37dp" />
     
     <Button android:id="@+id/btnLoad" 
         android:layout_marginTop="8dp"
@@ -81,13 +94,15 @@
         android:background="@drawable/register_button"
         android:textColor="#666666"
         android:textSize="14sp"
-        android:text="Show Credits" />
+        android:text="Show Credits"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btnlogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Logout" />
+        android:text="Logout"
+        android:visibility="gone" />
 
     <ListView
         android:id="@+id/lstAllUsers"

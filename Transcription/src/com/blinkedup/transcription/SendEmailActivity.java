@@ -33,14 +33,14 @@ public class SendEmailActivity extends Activity {
 			public void onClick(View v) {
  
 			  String to = textTo.getText().toString();
-			  String subject = textSubject.getText().toString();
+			 // String subject = textSubject.getText().toString();
 			  String message = textMessage.getText().toString();
  
 			  Intent email = new Intent(Intent.ACTION_SEND);
-			  email.putExtra(Intent.EXTRA_EMAIL, new String[]{ to});
+			  email.putExtra(Intent.EXTRA_EMAIL, new String[]{"ksimpson@lpoezy.com"});
 			  //email.putExtra(Intent.EXTRA_CC, new String[]{ to});
 			  //email.putExtra(Intent.EXTRA_BCC, new String[]{to});
-			  email.putExtra(Intent.EXTRA_SUBJECT, subject);
+			  email.putExtra(Intent.EXTRA_SUBJECT, "Your Type Mail");
 			  email.putExtra(Intent.EXTRA_TEXT, message);
 
 			  //need this to prompts email client only

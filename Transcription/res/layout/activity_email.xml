@@ -13,13 +13,15 @@
         android:text="To : "
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#666666"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="gone" />
 
     <EditText
         android:id="@+id/editTextTo"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress" >
+        android:inputType="textEmailAddress"
+        android:visibility="gone" >
 
         <requestFocus />
     </EditText>
@@ -31,12 +33,14 @@
         android:text="Subject : "
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#666666"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="gone" />
 
     <EditText
         android:id="@+id/editTextSubject"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:visibility="gone" >
     </EditText>
 
     <TextView
