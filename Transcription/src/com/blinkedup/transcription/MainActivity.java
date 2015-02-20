@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.ActivityGroup;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,8 +33,8 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-public class MainActivity extends Activity {
+								// Use ActivityGroup so tabs will display when in another activity
+public class MainActivity extends ActivityGroup {
 
 	EditText etUsername, etPassword;
 	Button btnSave, btnLoad, btnLogin, btnlogout;
@@ -74,13 +75,22 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Intent myIntent = new Intent(MainActivity.this, RegisterActivity.class);
-				startActivity(myIntent);
-			}
-		});
-		
+				
+			//	Begin Implementation reference for tabs to display when in another activity
 
+					Intent activity3Intent = new Intent(v.getContext(), RegisterActivity.class);
+					StringBuffer urlString = new StringBuffer();
+					//Activity1 parentActivity = (Activity1)getParent();
+					replaceContentView("RegisterActivity", activity3Intent);
+					}			
+		});
 	}
+	
+	public void replaceContentView(String id, Intent newIntent) {
+		View view = getLocalActivityManager().startActivity(id,newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)) .getDecorView(); this.setContentView(view);
+		} 
+          //	End Implementation reference for tabs to display when in another activity
+	
 	
 	public boolean isOnline(){
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
