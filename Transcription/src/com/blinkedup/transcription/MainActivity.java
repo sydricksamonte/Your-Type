@@ -159,9 +159,17 @@ public class MainActivity extends ActivityGroup {
 						    if (user != null) {
 						    	Toast.makeText(getApplicationContext(), "Welcome " + etUsername.getText().toString(), 3).show();
 								
-								Intent myIntent = new Intent(MainActivity.this, Welcome.class);
-								myIntent.putExtra("NAME", etUsername.getText().toString());
-								startActivity(myIntent);
+						    	
+						    	//	Begin Implementation reference for tabs to display when in another activity
+
+								Intent activity3Intent = new Intent(MainActivity.this, Welcome.class);
+								activity3Intent.putExtra("NAME", etUsername.getText().toString());
+								StringBuffer urlString = new StringBuffer();
+								//Activity1 parentActivity = (Activity1)getParent();
+								replaceContentView("Welcome", activity3Intent);
+									
+						    	
+					
 						    } else {
 						    	Toast.makeText(getApplicationContext(), "Sign-in failed. Incorrect log-in details", 3).show();
 						    }
