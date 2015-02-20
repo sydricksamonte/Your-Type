@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.ActivityGroup;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,11 +34,11 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends ActivityGroup {
 	
 
 	EditText etUsername, etPassword;
-	Button btnSave,btnTerms;
+	Button btnSave,btnTerms,btnCancel;
 	ListView lstAllUsers;
 	
 	ArrayAdapter<String> adapter;
@@ -55,6 +56,8 @@ public class RegisterActivity extends Activity {
 		etPassword = (EditText) findViewById(R.id.etPassword);	
 		btnSave = (Button) findViewById(R.id.btnSave);
 		btnSave.setOnClickListener(new MyButtonEventHandler());
+		btnCancel = (Button) findViewById(R.id.btnCancel);
+		btnCancel.setOnClickListener(new MyButtonEventHandler());
 		btnTerms = (Button) findViewById(R.id.btnTerms);
 		btnTerms.setOnClickListener(new MyButtonEventHandler());
 		
@@ -129,6 +132,9 @@ public class RegisterActivity extends Activity {
 		}
 	}
 	
+	public void replaceContentView(String id, Intent newIntent) {
+		View view = getLocalActivityManager().startActivity(id,newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)) .getDecorView(); this.setContentView(view);
+		} 
 
 	private class MyButtonEventHandler implements OnClickListener{
 
@@ -190,12 +196,38 @@ public class RegisterActivity extends Activity {
 				else if (v.getId() == R.id.btnTerms){
 					
 					btnTerms.setOnClickListener(new OnClickListener(){
-
+						
 						@Override
 						public void onClick(View v) {
-							Intent myIntent = new Intent(RegisterActivity.this, TermsOfServiceActivity.class);
-							startActivity(myIntent);
-						}
+							
+						//	Begin Implementation reference for tabs to display when in another activity
+
+								Intent activity3Intent = new Intent(v.getContext(), TermsOfServiceActivity.class);
+								StringBuffer urlString = new StringBuffer();
+								//Activity1 parentActivity = (Activity1)getParent();
+								replaceContentView("TermsOfServiceActivity", activity3Intent);
+								}
+
+					});
+			
+				}
+				
+				else if (v.getId() == R.id.btnCancel){
+					
+					btnCancel.setOnClickListener(new OnClickListener(){
+						
+						@Override
+						public void onClick(View v) {
+							
+						//	Begin Implementation reference for tabs to display when in another activity
+
+								Intent activity3Intent = new Intent(v.getContext(), MainActivity.class);
+								StringBuffer urlString = new StringBuffer();
+								//Activity1 parentActivity = (Activity1)getParent();
+								replaceContentView("MainActivity", activity3Intent);
+								}
+
+					
 					});
 			
 				}
@@ -229,6 +261,8 @@ public class RegisterActivity extends Activity {
 						}
 					});
 				}
+				
+				
 		}
 	}
 
