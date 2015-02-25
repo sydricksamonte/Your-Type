@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:padding="25dp"
     android:background="@drawable/ldpi_normal"
-    tools:context=".MainActivity" >
+    tools:context=".InAppPurchase" >
 
    
     

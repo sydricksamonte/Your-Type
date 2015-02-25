@@ -6,22 +6,25 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
+
 
 
 import com.parse.ParseUser;
  
 public class Welcome extends Activity {
+	
+	
  
     // Declare Variable
-    Button logout;
+    Button logout, btnBuyCredits;
+   
  
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
 
-        
         // Get the view from .xml
         setContentView(R.layout.activity_welcome);
         
@@ -45,6 +48,7 @@ Intent intent = getIntent();
  
         // Locate Button in welcome.xml
         logout = (Button) findViewById(R.id.logout);
+        btnBuyCredits = (Button) findViewById(R.id.btnBuyCredits);
  
         // Logout Button Click Listener
         logout.setOnClickListener(new OnClickListener() {
@@ -59,5 +63,14 @@ Intent intent = getIntent();
             	finish();
             }
         });
+        
+        btnBuyCredits.setOnClickListener(new View.OnClickListener() {
+  	      @Override
+  	      public void onClick(View view) {
+  	        Intent intent = new Intent(Welcome.this, InAppPurchase.class);
+  	        startActivity(intent);
+  	      }
+
+  	    });
     }
 }

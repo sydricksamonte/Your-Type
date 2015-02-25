@@ -1,0 +1,72 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    tools:context=".InAppPurchase" >
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="88dp"
+        android:layout_toLeftOf="@+id/textView1"
+        android:background="#cccc99"
+        android:text="Gold"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/button1"
+        android:layout_marginRight="21dp"
+        android:padding="15dp"
+        android:text="2hrs. and 30 mins.\n of audio upload"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="16dp"
+        android:layout_toLeftOf="@+id/textView1"
+        android:background="#cccccc"
+        android:textColor="#FFFFFF"
+        android:text="Silver" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignTop="@+id/button2"
+        android:padding="15dp"
+        android:text="1hr. and 15 mins.\n of audio upload"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="20dp"
+        android:layout_toLeftOf="@+id/textView2"
+        android:background="#996600"
+        android:text="Bronze"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignTop="@+id/button3"
+        android:padding="15dp"
+        android:text="30 mins. of \n audio upload"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+</RelativeLayout>
