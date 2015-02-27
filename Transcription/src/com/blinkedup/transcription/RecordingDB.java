@@ -84,7 +84,7 @@ public class RecordingDB extends SQLiteOpenHelper{
 	public Cursor getAllCustomers(){
         return mDB.query(DATABASE_TABLE, new String[] { RECORDING_ID,  RECORDING_NAME , RECORDING_DATE_ADDED, RECORDING_DATE_UPLOADED
         		, RECORDING_DURATION, RECORDING_STATUS, RECORDING_ORIGIN, RECORDING_ISACTIVE, RECORDING_FILE_TYPE, RECORDING_DATE_FINALIZED,  RECORDING_PATH  } , 
-        		null, null, null, null, 
+        		RECORDING_ISACTIVE + "= '1'", null, null, null, 
         		RECORDING_DATE_ADDED + " desc ");
 	}
 

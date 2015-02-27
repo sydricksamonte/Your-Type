@@ -65,6 +65,8 @@ public class FeedDetailActivity extends Activity{
 	
 	TextView tc_recName;
 	
+	String recDurat;
+	String recDuratRaw;
 	@Override
 	public void onPause() {
 	    super.onPause();
@@ -207,8 +209,9 @@ public class FeedDetailActivity extends Activity{
 		}
 		tc_recStat.setText(statDesc);
 		
-		String recDurat = (String) intent.getSerializableExtra("INTENT_DURATION");
+		recDurat = (String) intent.getSerializableExtra("INTENT_DURATION");
 		tc_recDurat.setText(recDurat);
+		
 		
 		Toast.makeText(getApplicationContext(), "You selected", Toast.LENGTH_LONG);
 		String recDateFin = (String) intent.getSerializableExtra("INTENT_DATE_FINALIZED");
@@ -222,6 +225,8 @@ public class FeedDetailActivity extends Activity{
 		tc_recOrigin.setText(recOrigin);
 		
 		recPath = (String) intent.getSerializableExtra("INTENT_PATH");
+		recDuratRaw = (String) intent.getSerializableExtra("INTENT_DURATION_RAW");
+		Log.e("sdf",recDuratRaw+"c");
 		fileLoc = recPath + recName  + recFileType;
 		tc_recPath.setText(recPath);
 	
@@ -436,8 +441,8 @@ public class FeedDetailActivity extends Activity{
      	        explicitIntent.putExtra("INTENT_UPLOAD_RECORDING_ID",tc_recId.getText().toString());
      			explicitIntent.putExtra("INTENT_UPLOAD_RECORDING_NAME",tc_recName.getText().toString());
      			explicitIntent.putExtra("INTENT_UPLOAD_DATE_ADDED",tc_recDateAdd.getText().toString());
-     	
-     			explicitIntent.putExtra("INTENT_UPLOAD_DURATION",tc_recDurat.getText().toString());
+     			Log.e("dfsd",recDuratRaw);
+     			explicitIntent.putExtra("INTENT_UPLOAD_DURATION",recDuratRaw);
      			explicitIntent.putExtra("INTENT_UPLOAD_STATUS",tc_recStat.getText().toString());
      			explicitIntent.putExtra("INTENT_UPLOAD_ORIGIN",tc_recOrigin.getText().toString());
      			explicitIntent.putExtra("INTENT_UPLOAD_FILE_TYPE",tc_recFileType.getText().toString());

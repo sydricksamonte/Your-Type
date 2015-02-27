@@ -65,6 +65,8 @@
         style="@android:style/TextAppearance.Small"
         />
         
+        
+        
       <TextView 
         android:id="@+id/recDateFin"
        	android:layout_width="wrap_content"
@@ -116,7 +118,14 @@
         android:visibility="gone"
        />
    	
-   		
+   	<TextView 
+        android:id="@+id/recDuratRaw"
+  		android:layout_alignParentLeft="true"    
+        android:layout_centerVertical="true" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+      	android:visibility="gone" 
+   	/>		
      	 
     <!-- <TextView 
         android:id="@+id/name"
