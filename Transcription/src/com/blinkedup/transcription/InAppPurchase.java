@@ -2,98 +2,156 @@ package com.blinkedup.transcription;
 
 import java.util.ArrayList;
 
-import com.manish.inapppurchase.BillingHelper;
-import com.manish.inapppurchase.BillingService;
-
+import org.json.JSONException;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+import de.gaffga.utils.IabHelper;
+import de.gaffga.utils.IabHelper.OnConsumeFinishedListener;
+import de.gaffga.utils.IabHelper.OnIabPurchaseFinishedListener;
+import de.gaffga.utils.IabHelper.OnIabSetupFinishedListener;
+import de.gaffga.utils.IabHelper.QueryInventoryFinishedListener;
+import de.gaffga.utils.IabResult;
+import de.gaffga.utils.Inventory;
+import de.gaffga.utils.Purchase;
+import de.gaffga.utils.SkuDetails;
 
-public class InAppPurchase extends Activity implements OnClickListener {
-	Button btn1, btn2, btn3;
-	private Context mContext=this;
-	private static final String TAG = "Android BillingService";
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_in_app_purchase);
-		btn1 = (Button) findViewById(R.id.button1);
-		btn2 = (Button) findViewById(R.id.button2);
-		btn3 = (Button) findViewById(R.id.button3);
-		btn1.setOnClickListener(this);
-		btn2.setOnClickListener(this);
-		btn3.setOnClickListener(this);
-		
-		 startService(new Intent(mContext, BillingService.class));
-	        BillingHelper.setCompletedHandler(mTransactionHandler);
-	}
-	public Handler mTransactionHandler = new Handler(){
-		public void handleMessage(android.os.Message msg) {
-			Log.i(TAG, "Transaction complete");
-			Log.i(TAG, "Transaction status: "+BillingHelper.latestPurchase.purchaseState);
-			Log.i(TAG, "Item purchased is: "+BillingHelper.latestPurchase.productId);
-			
-			if(BillingHelper.latestPurchase.isPurchased()){
-				showItem();
-			}
-		};
-	
-};
-	@Override
-	public void onClick(View v) {
-		if (v == btn1) {
-			if(BillingHelper.isBillingSupported()){
-				BillingHelper.requestPurchase(mContext, "android.test.purchased"); 
-	        } else {
-	        	Log.i(TAG,"Can't purchase on this device");
-	        	btn1.setEnabled(false); // XXX press button before service started will disable when it shouldnt
-	        }
-			Toast.makeText(this, "Gold", Toast.LENGTH_SHORT).show();
-		}
-		if (v == btn2) {
-			if(BillingHelper.isBillingSupported()){
-				BillingHelper.requestPurchase(mContext, "android.test.purchased"); 
-	        } else {
-	        	Log.i(TAG,"Can't purchase on this device");
-	        	btn2.setEnabled(false); // XXX press button before service started will disable when it shouldnt
-	        }
-			Toast.makeText(this, "Silver", Toast.LENGTH_SHORT).show();
-		}
-		if (v == btn3) {
-			if(BillingHelper.isBillingSupported()){
-				BillingHelper.requestPurchase(mContext, "silver_02"); 
-				
-	        } else {
-	        	Log.i(TAG,"Can't purchase on this device");
-	        	btn3.setEnabled(false); // XXX press button before service started will disable when it shouldnt
-	        }
-			Toast.makeText(this, "Bronze", Toast.LENGTH_SHORT).show();
-		}
+public class InAppPurchase extends Activity {
 
-	}
+    protected static final String SKU = "android.test.purchased";
 
-	private void showItem() {
-		//purchaseableItem.setVisibility(View.VISIBLE);
+    private static final String PUBKEY = "0011223344";
 
-	}
+    protected static final int BUY_REQUEST_CODE = 12345;
+    
+    private IabHelper buyHelper;
 
-	@Override
-	protected void onPause() {
-		Log.i(TAG, "onPause())");
-		super.onPause();
-	}
-	
-	@Override
-	protected void onDestroy() {
-		BillingHelper.stopService();
-		super.onDestroy();
-	}
+    private Button butConsume;
+    private Button butBuy;
+    private Purchase purchase;
+    private Button butUpdate;
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.in_app_purchase);
+
+        butUpdate = (Button) findViewById(R.id.button_update);
+        
+        butBuy = (Button) findViewById(R.id.button_buy);
+        butBuy.setEnabled(false);
+        
+        butConsume = (Button) findViewById(R.id.button_consume);
+        butConsume.setEnabled(false);
+        
+        buyHelper = new IabHelper(this, PUBKEY);
+        
+        butUpdate.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                update();
+            }
+        });
+        
+        butConsume.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buyHelper.consumeAsync(purchase, new OnConsumeFinishedListener() {
+                    @Override
+                    public void onConsumeFinished(Purchase purchase, IabResult result) {
+                        if(result.isSuccess()) {
+                            Toast.makeText(InAppPurchase.this, "Purchase consumed!", Toast.LENGTH_SHORT).show();
+                            
+                            try {
+                                // Small HACK: Give the system some time to realize the consume... without the sleep here,
+                                // you have to press "Update" to see that the item can be bought again... 
+                                Thread.sleep(1000);
+                                update();
+                            } catch(Exception e) {
+                                // ignored
+                            }
+                            
+                        } else {
+                            Toast.makeText(InAppPurchase.this, "Error consuming: "+result.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+            }
+        });
+        
+        buyHelper.startSetup(new OnIabSetupFinishedListener() {
+            @Override
+            public void onIabSetupFinished(IabResult result) {
+                update();
+            }
+        });
+
+        butBuy.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buyHelper.launchPurchaseFlow(InAppPurchase.this, SKU, BUY_REQUEST_CODE, new OnIabPurchaseFinishedListener() {
+                    @Override
+                    public void onIabPurchaseFinished(IabResult result, Purchase info) {
+                        if(result.isSuccess()) {
+                            Toast.makeText(InAppPurchase.this, "Thanks for buying!", Toast.LENGTH_SHORT).show();
+                            update();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void update() {
+        ArrayList<String> moreSkus = new ArrayList<String>();
+        moreSkus.add(SKU);
+        buyHelper.queryInventoryAsync(true, moreSkus, new QueryInventoryFinishedListener() {
+            @Override
+            public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+                if(result.isSuccess()) {
+                    SkuDetails details = inv.getSkuDetails(SKU);
+                    String price = details.getPrice();
+                    
+                    TextView tvPrice = (TextView)InAppPurchase.this.findViewById(R.id.textview_price);
+                    tvPrice.setText(price);
+
+                    purchase = inv.getPurchase(SKU);
+                    
+                    if(purchase!=null) {
+                        butBuy.setEnabled(false);
+                        butConsume.setEnabled(true);
+                    } else {
+                        butBuy.setEnabled(true);
+                        butConsume.setEnabled(false);
+                    }
+                    
+                    Toast.makeText(InAppPurchase.this, "Successful got inventory!", Toast.LENGTH_SHORT).show();
+                    
+                } else {
+                    Toast.makeText(InAppPurchase.this, "Error getting inventory!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        buyHelper.handleActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        buyHelper.dispose();
+    }
 }
