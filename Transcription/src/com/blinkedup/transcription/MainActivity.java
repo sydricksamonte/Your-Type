@@ -4,14 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.ActivityGroup;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -21,7 +25,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
 
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
@@ -33,7 +39,10 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-public class MainActivity extends Activity {
+
+
+								// Use ActivityGroup so tabs will display when in another activity
+public class MainActivity extends ActivityGroup {
 
 	EditText etUsername, etPassword;
 	Button btnSave, btnLoad, btnLogin, btnlogout;
@@ -45,6 +54,9 @@ public class MainActivity extends Activity {
 	ParseQuery<ParseObject> pqueryObj;
 	List<String> data;
 	ParseLoader pl;
+	
+	ProgressDialog barProgressDialog;
+	Handler updateBarHandler;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,17 +82,31 @@ public class MainActivity extends Activity {
 		pl = new ParseLoader();
 		pl.initParse(this);
 		
+
+	 
+		
+	   
+	   
 		btnSave.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				Intent myIntent = new Intent(MainActivity.this, RegisterActivity.class);
-				startActivity(myIntent);
-			}
-		});
-		
+				
+			//	Begin Implementation reference for tabs to display when in another activity
 
+					Intent activity3Intent = new Intent(v.getContext(), RegisterActivity.class);
+					StringBuffer urlString = new StringBuffer();
+					//Activity1 parentActivity = (Activity1)getParent();
+					replaceContentView("RegisterActivity", activity3Intent);
+					}			
+		});
 	}
+	
+	public void replaceContentView(String id, Intent newIntent) {
+		View view = getLocalActivityManager().startActivity(id,newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)) .getDecorView(); this.setContentView(view);
+		} 
+          //	End Implementation reference for tabs to display when in another activity
+	
 	
 	public boolean isOnline(){
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -120,7 +146,7 @@ public class MainActivity extends Activity {
 		}
 	}
 	
-	
+
 
 	private class MyButtonEventHandler implements OnClickListener{
 
@@ -149,9 +175,17 @@ public class MainActivity extends Activity {
 						    if (user != null) {
 						    	Toast.makeText(getApplicationContext(), "Welcome " + etUsername.getText().toString(), 3).show();
 								
-								Intent myIntent = new Intent(MainActivity.this, Welcome.class);
-								myIntent.putExtra("NAME", etUsername.getText().toString());
-								startActivity(myIntent);
+						    	
+						    	//	Begin Implementation reference for tabs to display when in another activity
+
+								Intent activity3Intent = new Intent(MainActivity.this, Welcome.class);
+								activity3Intent.putExtra("NAME", etUsername.getText().toString());
+								StringBuffer urlString = new StringBuffer();
+								//Activity1 parentActivity = (Activity1)getParent();
+								replaceContentView("Welcome", activity3Intent);
+									
+						    	
+					
 						    } else {
 						    	Toast.makeText(getApplicationContext(), "Sign-in failed. Incorrect log-in details", 3).show();
 						    }

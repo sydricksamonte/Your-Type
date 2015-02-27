@@ -20,5 +20,8 @@
     </style>
     
 
+<style name="ButtonText">
+    <item name="android:shadowRadius">2</item>
+</style>
     
 </resources>

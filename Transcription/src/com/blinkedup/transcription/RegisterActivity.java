@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.ActivityGroup;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -31,10 +34,11 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends ActivityGroup {
+	
 
 	EditText etUsername, etPassword;
-	Button btnSave;
+	Button btnSave,btnTerms,btnCancel;
 	ListView lstAllUsers;
 	
 	ArrayAdapter<String> adapter;
@@ -52,10 +56,44 @@ public class RegisterActivity extends Activity {
 		etPassword = (EditText) findViewById(R.id.etPassword);	
 		btnSave = (Button) findViewById(R.id.btnSave);
 		btnSave.setOnClickListener(new MyButtonEventHandler());
+		btnCancel = (Button) findViewById(R.id.btnCancel);
+		btnCancel.setOnClickListener(new MyButtonEventHandler());
+		btnTerms = (Button) findViewById(R.id.btnTerms);
+		btnTerms.setOnClickListener(new MyButtonEventHandler());
+		
 		data = new ArrayList<String>();
 		     
 		pl = new ParseLoader();
 		pl.initParse(this);
+		
+		//Validate email
+		final EditText emailValidate = (EditText)findViewById(R.id.etUsername); 
+
+	//	final TextView textView = (TextView)findViewById(R.id.text); 
+
+		String email = emailValidate.getText().toString().trim();
+
+		String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+
+		// onClick of button perform this simplest code.
+		
+	
+		
+		if (email.matches(emailPattern))
+		{
+		Toast.makeText(getApplicationContext(),"valid email address",Toast.LENGTH_SHORT).show();
+		}
+		else 
+		{
+		Toast.makeText(getApplicationContext(),"Please enter a valid email address.", Toast.LENGTH_LONG).show();
+		
+	
+		}
+		
+		 
+		
+		
 	}
 	
 	public boolean isOnline(){
@@ -94,11 +132,45 @@ public class RegisterActivity extends Activity {
 		}
 	}
 	
+	public void replaceContentView(String id, Intent newIntent) {
+		View view = getLocalActivityManager().startActivity(id,newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)) .getDecorView(); this.setContentView(view);
+		} 
 
 	private class MyButtonEventHandler implements OnClickListener{
 
 		public void onClick(View v) {
 				if (v.getId() == R.id.btnSave){
+
+					    String pass1 = etUsername.getText().toString(); 
+					    String pass = etPassword.getText().toString(); 
+					    
+					    if(TextUtils.isEmpty(pass1) || pass1.length() < 7) 
+					    { 
+					    	etUsername.setError("Please enter a username."); 
+					        return; 
+					    } 
+					  
+					    
+					    else if(TextUtils.isEmpty(pass) || pass.length() < 7) 
+					    { 
+					    	etPassword.setError("You must have atleast 7 characters in your password"); 
+					        return; 
+					    } 
+					    
+					    else if((pass) == (pass1)) 
+					    { 
+					    	etPassword.setError("Password shoud not be the same with your email address"); 
+					      
+					    } 
+					    
+					   
+					    
+					    
+					    //continue processing
+
+			
+					
+					
 					ParseUser user = new ParseUser();
 					user.setUsername(etUsername.getText().toString());
 					user.setPassword(etPassword.getText().toString());
@@ -120,6 +192,46 @@ public class RegisterActivity extends Activity {
 						});
 					
 				}
+				
+				else if (v.getId() == R.id.btnTerms){
+					
+					btnTerms.setOnClickListener(new OnClickListener(){
+						
+						@Override
+						public void onClick(View v) {
+							
+						//	Begin Implementation reference for tabs to display when in another activity
+
+								Intent activity3Intent = new Intent(v.getContext(), TermsOfServiceActivity.class);
+								StringBuffer urlString = new StringBuffer();
+								//Activity1 parentActivity = (Activity1)getParent();
+								replaceContentView("TermsOfServiceActivity", activity3Intent);
+								}
+
+					});
+			
+				}
+				
+				else if (v.getId() == R.id.btnCancel){
+					
+					btnCancel.setOnClickListener(new OnClickListener(){
+						
+						@Override
+						public void onClick(View v) {
+							
+						//	Begin Implementation reference for tabs to display when in another activity
+
+								Intent activity3Intent = new Intent(v.getContext(), MainActivity.class);
+								StringBuffer urlString = new StringBuffer();
+								//Activity1 parentActivity = (Activity1)getParent();
+								replaceContentView("MainActivity", activity3Intent);
+								}
+
+					
+					});
+			
+				}
+				
 				else if (v.getId() == R.id.btnLoad){
 					pqueryObj = ParseQuery.getQuery("_User");
 					pqueryObj.findInBackground(new FindCallback<ParseObject>() {
@@ -149,6 +261,8 @@ public class RegisterActivity extends Activity {
 						}
 					});
 				}
+				
+				
 		}
 	}
 
