@@ -3,18 +3,28 @@ package com.blinkedup.transcription;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ActivityGroup;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -34,26 +44,47 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
-public class RegisterActivity extends ActivityGroup {
+public class RegisterActivity extends ActivityGroup   {
 	
 
-	EditText etUsername, etPassword;
+	EditText etUsername, etPassword, etRePassword;
 	Button btnSave,btnTerms,btnCancel;
 	ListView lstAllUsers;
-	
+	Write nw;
 	ArrayAdapter<String> adapter;
 	
 	ParseObject parseObj;
 	ParseQuery<ParseObject> pqueryObj;
 	List<String> data;
 	ParseLoader pl;
+	ProgressDialog myPd_ring;
+	RecordingDB mydb;
+	DateUtils dateFunc;
 	
+	@Override
+    public boolean onTouchEvent(MotionEvent event) {
+		try{
+			InputMethodManager imm = (InputMethodManager)getSystemService(Context.
+                                                        INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+			return true;
+		}
+		catch(Exception e){
+			return false;
+		}
+	}
+    
+	@SuppressLint("NewApi")
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
-		
+	
+		mydb = new RecordingDB(this);
+		dateFunc = new DateUtils();
+	      
 		etUsername = (EditText) findViewById(R.id.etUsername);
-		etPassword = (EditText) findViewById(R.id.etPassword);	
+		etPassword = (EditText) findViewById(R.id.etPassword);
+		etRePassword = (EditText) findViewById(R.id.etRePassword);
 		btnSave = (Button) findViewById(R.id.btnSave);
 		btnSave.setOnClickListener(new MyButtonEventHandler());
 		btnCancel = (Button) findViewById(R.id.btnCancel);
@@ -64,36 +95,19 @@ public class RegisterActivity extends ActivityGroup {
 		data = new ArrayList<String>();
 		     
 		pl = new ParseLoader();
+		nw = new Write();
 		pl.initParse(this);
 		
 		//Validate email
 		final EditText emailValidate = (EditText)findViewById(R.id.etUsername); 
 
-	//	final TextView textView = (TextView)findViewById(R.id.text); 
-
 		String email = emailValidate.getText().toString().trim();
-
 		String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
-
-		// onClick of button perform this simplest code.
-		
-	
-		
-		if (email.matches(emailPattern))
-		{
-		Toast.makeText(getApplicationContext(),"valid email address",Toast.LENGTH_SHORT).show();
-		}
-		else 
-		{
-		Toast.makeText(getApplicationContext(),"Please enter a valid email address.", Toast.LENGTH_LONG).show();
-		
-	
-		}
-		
-		 
-		
-		
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+	    StrictMode.setThreadPolicy(policy);
+	    
+	  
 	}
 	
 	public boolean isOnline(){
@@ -134,66 +148,113 @@ public class RegisterActivity extends ActivityGroup {
 	
 	public void replaceContentView(String id, Intent newIntent) {
 		View view = getLocalActivityManager().startActivity(id,newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)) .getDecorView(); this.setContentView(view);
-		} 
+	} 
 
 	private class MyButtonEventHandler implements OnClickListener{
-
 		public void onClick(View v) {
-				if (v.getId() == R.id.btnSave){
-
-					    String pass1 = etUsername.getText().toString(); 
-					    String pass = etPassword.getText().toString(); 
-					    
-					    if(TextUtils.isEmpty(pass1) || pass1.length() < 7) 
-					    { 
-					    	etUsername.setError("Please enter a username."); 
-					        return; 
-					    } 
-					  
-					    
-					    else if(TextUtils.isEmpty(pass) || pass.length() < 7) 
-					    { 
-					    	etPassword.setError("You must have atleast 7 characters in your password"); 
-					        return; 
-					    } 
-					    
-					    else if((pass) == (pass1)) 
-					    { 
-					    	etPassword.setError("Password shoud not be the same with your email address"); 
-					      
-					    } 
-					    
-					   
-					    
-					    
-					    //continue processing
-
-			
-					
-					
-					ParseUser user = new ParseUser();
-					user.setUsername(etUsername.getText().toString());
-					user.setPassword(etPassword.getText().toString());
-					user.setEmail(etUsername.getText().toString());
-					 
-					// other fields can be set just like with ParseObject
-					user.put("phone", "650-253-0000");
-					
-					user.signUpInBackground(new SignUpCallback() {
-						  public void done(ParseException e) {
-						    if (e == null) {
-						    	Toast.makeText(getApplicationContext(), "Record successfully saved.", 3).show();
-						    	etUsername.setText("");
-								etPassword.setText("");
-						    } else {
-						    	Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), 3).show();
-						    }
-						  }
-						});
-					
-				}
+			if (v.getId() == R.id.btnSave){
+				String pass1 = etUsername.getText().toString(); 
+				String pass = etPassword.getText().toString(); 
+				String rePass = etRePassword.getText().toString();	
 				
-				else if (v.getId() == R.id.btnTerms){
+				if(TextUtils.isEmpty(pass1) || pass1.length() < 7) { 
+					etUsername.setError("Please enter a valid email."); 
+					return; 
+				}
+				else if(TextUtils.isEmpty(pass) || pass.length() < 7) { 
+					etPassword.setError("You must have atleast 7 characters in your password"); 
+					return; 
+				} 
+				else if((pass) == (pass1)) { 
+					etPassword.setError("Password shoud not be the same with your email address"); 
+				} 
+				else if(!pass.equals(rePass)){ 
+					etPassword.setError("Password did not match"); 
+				} 
+				else{
+					myPd_ring = ProgressDialog.show(getParent(), "Please wait", "Verifying information", true);
+			        myPd_ring.setCancelable(false);
+			        new Thread(new Runnable() {  
+			              @Override
+			              public void run() {
+			                    // TODO Auto-generated method stub
+			                    try{
+			                    	if (Network.isNetworkAvailable(getParent())){
+			                    		runOnUiThread(new Runnable() {
+			                             @Override
+			                             public void run() {
+			                            	 btnSave.setEnabled(false);
+			                            	 ParseUser user = new ParseUser();
+			                            	 user.setUsername(etUsername.getText().toString());
+			                            	 user.setPassword(etPassword.getText().toString());
+			                            	 user.setEmail(etUsername.getText().toString());
+			        					 
+			                            	 user.signUpInBackground(new SignUpCallback() {
+			                            		 public void done(ParseException e) {
+			                            			 if (e == null) {
+			                            				 String payType = "FREE";
+			                            				 final int creditsLeft = 60;
+			                            				 
+			                            				 ParseObject AudioRec = new ParseObject("Credit");
+			                            				 AudioRec.put("payType", payType);
+			                            				 AudioRec.put("creditsLeft", creditsLeft);
+			                            				 AudioRec.put("isActive", true);
+			                            				 AudioRec.put("subsType", 2);
+			                            				 AudioRec.put("UserId", ParseUser.getCurrentUser());
+			                            				 {
+			                            					 AudioRec.saveInBackground(new SaveCallback() {
+			                            						 @Override
+			                            						 public void done(ParseException ex) {
+			                            							 if (ex == null){
+			                            								 String strDate = dateFunc.getDate();
+			                            								 mydb.insertUpdate(strDate,mydb.addToCredits(creditsLeft));
+			                            								 myPd_ring.dismiss();
+			                            								 
+			                            								 new AlertDialog.Builder(getParent())
+			                            									 .setTitle("Sign up complete")
+			                            									 .setMessage("Congratulations! You are just given free minute of transcription service. \n\nPlease verify your email to start recording.")
+			                            									 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			                            										 public void onClick(DialogInterface dialog, int which) {
+			                            											 Intent explicitBackIntent = new Intent(getParent(),TabHostActivity.class);
+			                            											 startActivity(explicitBackIntent);
+			                            											 btnSave.setEnabled(true);
+			                            										}
+			                            								}).setIcon(android.R.drawable.ic_dialog_alert).show();
+			                            							 }
+			                            							 else{
+			                            								 Log.e("",ex.getLocalizedMessage());
+			                            							 }
+			                            						 }
+			                            					}); 
+			                            				 }
+			                            			 } 
+			                            			 else {
+			                            				 myPd_ring.dismiss();
+			                            				 btnSave.setEnabled(true);
+			                            				 Toast.makeText(getParent().getBaseContext(), e.getLocalizedMessage(), 5).show();
+			                            				 Log.e("ERROR",e.getLocalizedMessage());
+			                            			 }
+			                            		 }
+			                            	 });
+			                             }
+			                             });
+			                    	}
+			                    	else{
+			                    		myPd_ring.dismiss();
+                        				btnSave.setEnabled(true);
+                        				Toast.makeText(getParent().getBaseContext(),"Cannot connect to the Internet", 8).show();
+                        			}
+			                    }
+			                    catch(Exception e){
+			                     	myPd_ring.dismiss();
+			                     	Toast.makeText(getParent().getBaseContext(), e.getLocalizedMessage(), 8).show();
+			                     	btnSave.setEnabled(true);
+			                    }
+			              }
+			        }).start();
+				}
+			}
+			else if (v.getId() == R.id.btnTerms){
 					
 					btnTerms.setOnClickListener(new OnClickListener(){
 						
@@ -207,46 +268,21 @@ public class RegisterActivity extends ActivityGroup {
 								//Activity1 parentActivity = (Activity1)getParent();
 								replaceContentView("TermsOfServiceActivity", activity3Intent);
 								}
-
 					});
-			
-				}
-				
-				else if (v.getId() == R.id.btnCancel){
-					
-					btnCancel.setOnClickListener(new OnClickListener(){
-						
+			}
+			else if (v.getId() == R.id.btnCancel){
+				btnCancel.setOnClickListener(new OnClickListener(){
 						@Override
 						public void onClick(View v) {
-							
-						//	Begin Implementation reference for tabs to display when in another activity
-
-								Intent activity3Intent = new Intent(v.getContext(), MainActivity.class);
-								StringBuffer urlString = new StringBuffer();
-								//Activity1 parentActivity = (Activity1)getParent();
-								replaceContentView("MainActivity", activity3Intent);
-								}
-
-					
-					});
-			
-				}
-				
-				else if (v.getId() == R.id.btnLoad){
-					pqueryObj = ParseQuery.getQuery("_User");
-					pqueryObj.findInBackground(new FindCallback<ParseObject>() {
-						public void done(List<ParseObject> arg0, ParseException arg1) {
-							// TODO Auto-generated method stub
-							Toast.makeText(getApplicationContext(), "We have " + arg0.size() + " records", 3).show();
-							adapter.clear();
-							for(int i = 0; i < arg0.size(); i++){
-								Object obj = arg0.get(i);
-								String name = ((ParseObject) obj).getString("username");
-								adapter.add(name);
-							}
+							Intent activity3Intent = new Intent(v.getContext(), MainActivity.class);
+								//StringBuffer urlString = new StringBuffer();
+									//Activity1 parentActivity = (Activity1)getParent();
+							replaceContentView("MainActivity", activity3Intent);
 						}
-					});
-				}
+				});
+			}
+				
+			/*
 				else if (v.getId() == R.id.btnLogin){
 					pqueryObj = ParseQuery.getQuery("_User");
 					pqueryObj.whereEqualTo("username", etUsername.getText().toString());
@@ -262,7 +298,7 @@ public class RegisterActivity extends ActivityGroup {
 					});
 				}
 				
-				
+			*/	
 		}
 	}
 
