@@ -10,12 +10,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".InAppPurchase" >
 
-  
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.4"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+       	android:orientation="vertical"
+        >
     
      <TextView
         android:id="@+id/timerValue"
         android:layout_width="fill_parent"
-        android:layout_height="75dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="37dp"
         android:gravity="center"
         android:text="Sign up with Your Type"
@@ -26,73 +33,101 @@
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="8"
-        android:hint="Enter E-mail"
+        android:hint="E-mail"
         android:gravity="center"
         android:inputType="textPersonName" >
-
-        <requestFocus />
+	<requestFocus />
     </EditText>
 
     <EditText
         android:id="@+id/etPassword"
+    	android:layout_below="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="8"
-        android:hint="Enter Password"
+        android:hint="Password"
         android:gravity="center"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         android:maxLines="70" />
     
-    <TextView
-        android:id="@+id/termsOfService"
-        android:layout_width="fill_parent"
+    <EditText
+        android:id="@+id/etRePassword"
+    	android:layout_below="@+id/etPassword"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:hint="Repeat Password"
         android:gravity="center"
-        android:text="By clicking register, you accept our"
-        android:textColor="#666"
-        android:textSize="15sp" />
-
-    <Button
-        android:id="@+id/btnTerms"
-        android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:background="@android:color/transparent"
-        android:text="Terms of service"
-         android:layout_marginBottom="16dp" />
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-
-        <Button
+        android:inputType="textPassword"
+        android:maxLines="70" />
+    
+     </LinearLayout>
+     
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        >
+		<Button
             android:id="@+id/btnCancel"
             style="@style/ButtonText"
             android:layout_width="wrap_content"
             android:layout_height="37dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight="0.48"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="7dp"
+            android:layout_weight="1"
             android:background="@drawable/cancel"
             android:text="Cancel"
             android:textColor="#FFFFFF"
-            android:textSize="14sp" 
-             android:layout_marginRight="4dip"/>
+            android:textSize="13sp" 
+          	android:layout_marginRight="4dip"/>
 
         <Button
             android:id="@+id/btnSave"
             android:layout_width="wrap_content"
+            style="@style/ButtonText"
             android:layout_height="37dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight="0.43"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="7dp"
+            android:layout_weight="1"
             android:background="@drawable/login_button"
-            android:text="Register"
+            android:text="Register" 
             android:textColor="#FFFFFF"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:layout_marginLeft="4dip"/>
+    
     </LinearLayout>
+    
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+  		android:orientation="vertical"
+        android:layout_weight="1"
+        android:gravity="bottom"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        >
+  		<TextView
+        	android:id="@+id/termsOfService"
+        	android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:gravity="center"
+        	style="@android:style/TextAppearance.Small" 
+        	android:text="By clicking register, you accept our"
+        	android:textColor="#666"
+        />
+
+    	<Button
+        	android:id="@+id/btnTerms"
+        	android:layout_width="wrap_content"
+        	android:layout_height="28dp"
+        	android:layout_gravity="center_vertical|center_horizontal"
+        	android:background="@android:color/transparent"
+        	android:text="Terms of service"
+      		style="@android:style/TextAppearance.Medium" 
+         />
+	</LinearLayout>
+    
+    
 
 </LinearLayout>
