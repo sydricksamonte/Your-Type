@@ -30,9 +30,17 @@ public class RecordingDB extends SQLiteOpenHelper{
     /** A constant, stores the the table name */
     private static final String DATABASE_TABLE = "Recordings";
     
+    public static final String UPDATE_ID = "_id";
+	public static final String UPDATE_DATE_UPDATE = "_date_updated";
+	public static final String UPDATE_REMAINING = "_remaining_sec";
+	public static final String UPDATE_ISACTIVE = "_isActive";
+	
+	  /** A constant, stores the the table name */
+    private static final String DATABASE_TABLE_2 = "Updates";
+    
     /** An instance variable for SQLiteDatabase */
     private SQLiteDatabase mDB;  
-    
+    DateUtils dateFunc;
 
     /** Constructor */
 	public RecordingDB(Context context) {
@@ -47,6 +55,7 @@ public class RecordingDB extends SQLiteOpenHelper{
 	* */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
+		
 		String DATABASE_CREATE = "create table " +  DATABASE_TABLE + "(" + RECORDING_ID + " integer PRIMARY KEY AUTOINCREMENT UNIQUE, "
 				+ RECORDING_NAME + " text," + RECORDING_DATE_ADDED + " date," +
 				RECORDING_DATE_UPLOADED + " date," +RECORDING_DURATION + " text," +
@@ -54,30 +63,26 @@ public class RecordingDB extends SQLiteOpenHelper{
 				RECORDING_ISACTIVE + " boolean," +RECORDING_FILE_TYPE + " text," +
 				RECORDING_DATE_FINALIZED + " date,"+ RECORDING_PATH + " text);";
 		
-		/*String sql = 	"create table "+ DATABASE_TABLE + " ( "
-						+ KEY_ROW_ID + " integer primary key autoincrement , "
-                		+ KEY_CODE + " text  , " 
-                		+ KEY_NAME + "  text  , "  
-                		+ KEY_PHONE + "  text  ) " ;
-		*/
 		db.execSQL(DATABASE_CREATE);
 		Log.e("HERE",DATABASE_CREATE);
-		//String sql = "insert into " + DATABASE_TABLE + " ( " + RECORDING_NAME + "," + RECORDING_STATUS + "," + RECORDING_ISACTIVE + " ) "
-			//	+ " values ( 'Testing Record', '1','1' )";
-		//db.execSQL(sql);
-		/*
-		sql = "insert into " + DATABASE_TABLE + " ( " + KEY_CODE + "," + KEY_NAME + "," + KEY_PHONE + " ) "
-				+ " values ( 'C02', 'Ajith','0123456789' )";
-		db.execSQL(sql);
 		
-		sql = "insert into " + DATABASE_TABLE + " ( " + KEY_CODE + "," + KEY_NAME + "," + KEY_PHONE + " ) "
-				+ " values ( 'C03', 'James','2013456789' )";
-		db.execSQL(sql);
+		String DATABASE_CREATE_2 = "create table " +  DATABASE_TABLE_2 + "(" + UPDATE_ID + " integer PRIMARY KEY AUTOINCREMENT UNIQUE, "
+				+ UPDATE_DATE_UPDATE + " date," + UPDATE_REMAINING + " integer," +
+				UPDATE_ISACTIVE + " boolean );";
 		
-		sql = "insert into " + DATABASE_TABLE + " ( " + KEY_CODE + "," + KEY_NAME + "," + KEY_PHONE + " ) "
-				+ " values ( 'C04', 'Mohammed' , '9012345678' )";
-		db.execSQL(sql);
-		*/
+		db.execSQL(DATABASE_CREATE_2);
+		
+		dateFunc = new DateUtils();
+		String strDate = dateFunc.getDate();
+		String DATABASE_INSERT_DEFAULT = "INSERT INTO " +  DATABASE_TABLE_2 + "(" 
+				+ UPDATE_DATE_UPDATE + " ," + UPDATE_REMAINING + " ," +
+				UPDATE_ISACTIVE + "  ) VALUES  ("+ "'"+strDate+"'" + "," + 0 + " ," +
+				1 + "  );";
+		
+		db.execSQL(DATABASE_INSERT_DEFAULT);
+		
+		Log.e("Updates Create",DATABASE_CREATE_2);
+		
 	}		
 	
 	/** Returns all the customers in the table */
@@ -203,7 +208,8 @@ public class RecordingDB extends SQLiteOpenHelper{
 		}
 		cursor.close();
 		return  last;
-	} 
+	}
+	
 	
 	public String StripText(String name){
 		name = name.replace("'", "");
@@ -217,6 +223,46 @@ public class RecordingDB extends SQLiteOpenHelper{
 		}
 		Log.e("aedasd",name);
 		return name;
+	}
+	
+	/** Returns all the customers in the table */
+	public Cursor getAllUpdate(){
+        return mDB.query(DATABASE_TABLE_2, new String[] { UPDATE_ID,  UPDATE_DATE_UPDATE , UPDATE_REMAINING, UPDATE_ISACTIVE
+        		 } , 
+        		UPDATE_ISACTIVE + "= '1'", null, null, null, 
+        		UPDATE_ID + " desc ");
+	}
+
+	public int addToCredits(int add) {
+		
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery("select SUM("+ UPDATE_REMAINING +") from " + DATABASE_TABLE_2 + " WHERE "+ UPDATE_ISACTIVE +" = '1' ", null);
+		
+		int last = 0;
+		
+		try{
+			cursor.moveToFirst();
+			last = Integer.parseInt(cursor.getString(0)) + add;
+		}
+		catch (Exception e){
+						
+			last = 0;
+		}
+		cursor.close();
+		return  last;
+	}
+	
+	public boolean insertUpdate(String date, int upRe) {
+		
+	    //  SQLiteDatabase db = this.getWritableDatabase();
+	      ContentValues contentValues = new ContentValues();
+
+	      contentValues.put(UPDATE_DATE_UPDATE, date);
+	      contentValues.put(UPDATE_REMAINING, upRe);
+	      contentValues.put(UPDATE_ISACTIVE, true);
+
+	      mDB.update(DATABASE_TABLE_2, contentValues, UPDATE_ID +"="+1, null);
+	      return true;
 	}
 	
 	@Override
