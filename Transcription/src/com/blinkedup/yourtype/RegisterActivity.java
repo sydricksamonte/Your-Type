@@ -274,20 +274,9 @@ public class RegisterActivity extends ActivityGroup   {
 				}
 			}
 			else if (v.getId() == R.id.btnTerms){
-					
-					btnTerms.setOnClickListener(new OnClickListener(){
-						
-						@Override
-						public void onClick(View v) {
-							
-						//	Begin Implementation reference for tabs to display when in another activity
-
-								Intent activity3Intent = new Intent(v.getContext(), TermsOfServiceActivity.class);
-								StringBuffer urlString = new StringBuffer();
-								//Activity1 parentActivity = (Activity1)getParent();
-								replaceContentView("TermsOfServiceActivity", activity3Intent);
-								}
-					});
+				Intent explicitIntent = new Intent(RegisterActivity.this,
+										TermsOfServiceActivity.class);
+				startActivity(explicitIntent);
 			}
 			else if (v.getId() == R.id.btnCancel){
 				//Intent activityIntentRegister = new Intent(RegisterActivity.this, MainActivity.class);
