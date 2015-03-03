@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.blinkedup.transcription"
+    package="com.blinkedup.yourtype"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -50,7 +50,7 @@
 
         <provider
             android:name=".Recording"
-            android:authorities="com.blinkedup.transcription.recording"
+            android:authorities="com.blinkedup.yourtype.recording"
             android:exported="false" />
 
         <activity
