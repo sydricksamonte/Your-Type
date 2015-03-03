@@ -47,6 +47,7 @@
         android:hint="Password"
         android:gravity="center"
         android:inputType="textPassword"
+        style="@android:style/TextAppearance.Small" 
         android:maxLines="70" />
     
     <EditText
@@ -55,6 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Repeat Password"
+        style="@android:style/TextAppearance.Small" 
         android:gravity="center"
         android:inputType="textPassword"
         android:maxLines="70" />
