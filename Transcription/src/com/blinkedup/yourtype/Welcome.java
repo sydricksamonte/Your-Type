@@ -1,6 +1,7 @@
 package com.blinkedup.yourtype;
 
 import android.app.Activity;
+import android.app.ActivityGroup;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +14,7 @@ import android.widget.TextView;
 
 import com.parse.ParseUser;
  
-public class Welcome extends Activity {
+public class Welcome extends ActivityGroup {
 	
 	
  
@@ -60,9 +61,23 @@ Intent intent = getIntent();
             	
             	ParseUser.logOut();
             	ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-            	finish();
+           // 	finish();
+       
+//      	  	Begin Implementation reference for tabs to display when in another activity
+
+				Intent activity3Intent = new Intent(Welcome.this, MainActivity.class);
+			
+				StringBuffer urlString = new StringBuffer();
+				//Activity1 parentActivity = (Activity1)getParent();
+				replaceContentView("MainActivity", activity3Intent);
+            	
             }
+            
+            
+            
         });
+        
+        
         
         btnBuyCredits.setOnClickListener(new View.OnClickListener() {
   	      @Override
@@ -73,4 +88,9 @@ Intent intent = getIntent();
 
   	    });
     }
+    
+    public void replaceContentView(String id, Intent newIntent) {
+		View view = getLocalActivityManager().startActivity(id,newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)) .getDecorView(); this.setContentView(view);
+	} 
+          //	End Implementation reference for tabs to display when in another activity
 }
