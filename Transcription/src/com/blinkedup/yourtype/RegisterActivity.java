@@ -12,11 +12,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
@@ -34,9 +34,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.parse.DeleteCallback;
-import com.parse.FindCallback;
 import com.parse.GetCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -61,6 +59,9 @@ public class RegisterActivity extends ActivityGroup   {
 	RecordingDB mydb;
 	DateUtils dateFunc;
 	
+	Handler mHandler;
+	AlertDialog aDial;
+	String localizedMessage;
 	@Override
     public boolean onTouchEvent(MotionEvent event) {
 		try{
@@ -126,6 +127,21 @@ public class RegisterActivity extends ActivityGroup   {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 	    StrictMode.setThreadPolicy(policy);
 	    
+	    mHandler = new Handler()
+		{
+		    public void handleMessage(Message msg)
+		    {
+		    	if (msg.what == 1){
+		    		Toast.makeText(RegisterActivity.this, localizedMessage, 5).show();
+		    	}
+		    	else if (msg.what == 2){
+		    		Toast.makeText(RegisterActivity.this,localizedMessage, 6).show();
+           		}
+		    	else if (msg.what == 3){
+		    		Toast.makeText(RegisterActivity.this,localizedMessage, 6).show();
+           		}
+		 	}
+		};
 	  
 	}
 	
@@ -191,14 +207,14 @@ public class RegisterActivity extends ActivityGroup   {
 					etPassword.setError("Password did not match"); 
 				} 
 				else{
-					myPd_ring = ProgressDialog.show(getParent(), "Please wait", "Verifying information", true);
+					myPd_ring = ProgressDialog.show(RegisterActivity.this, "Please wait", "Verifying information", true);
 			        myPd_ring.setCancelable(false);
 			        new Thread(new Runnable() {  
 			              @Override
 			              public void run() {
 			                    // TODO Auto-generated method stub
 			                    try{
-			                    	if (Network.isNetworkAvailable(getParent())){
+			                    	if (Network.isNetworkAvailable(RegisterActivity.this)){
 			                    		runOnUiThread(new Runnable() {
 			                             @Override
 			                             public void run() {
@@ -229,12 +245,12 @@ public class RegisterActivity extends ActivityGroup   {
 			                            								 mydb.insertUpdate(strDate,mydb.addToCredits(creditsLeft));
 			                            								 myPd_ring.dismiss();
 			                            								 
-			                            								 new AlertDialog.Builder(getParent())
+			                            								 new AlertDialog.Builder(RegisterActivity.this)
 			                            									 .setTitle("Sign up complete")
 			                            									 .setMessage("Congratulations! You are just given free minute of transcription service. \n\nPlease verify your email to start recording.")
 			                            									 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 			                            										 public void onClick(DialogInterface dialog, int which) {
-			                            											 Intent explicitBackIntent = new Intent(getParent(),TabHostActivity.class);
+			                            											 Intent explicitBackIntent = new Intent(RegisterActivity.this,TabHostActivity.class);
 			                            											 startActivity(explicitBackIntent);
 			                            											 btnSave.setEnabled(true);
 			                            										}
@@ -250,8 +266,9 @@ public class RegisterActivity extends ActivityGroup   {
 			                            			 else {
 			                            				 myPd_ring.dismiss();
 			                            				 btnSave.setEnabled(true);
-			                            				 Toast.makeText(getParent().getBaseContext(), e.getLocalizedMessage(), 5).show();
-			                            				 Log.e("ERROR",e.getLocalizedMessage());
+			                            				 mHandler.sendEmptyMessage(1);
+			                            				 localizedMessage = e.getLocalizedMessage();
+			                            				 
 			                            			 }
 			                            		 }
 			                            	 });
@@ -261,12 +278,15 @@ public class RegisterActivity extends ActivityGroup   {
 			                    	else{
 			                    		myPd_ring.dismiss();
                         				btnSave.setEnabled(true);
-                        				Toast.makeText(getParent().getBaseContext(),"Cannot connect to the Internet", 8).show();
+                        				mHandler.sendEmptyMessage(2);
+                       				 	localizedMessage = "Cannot connect to the Internet";
+                        				
                         			}
 			                    }
 			                    catch(Exception e){
 			                     	myPd_ring.dismiss();
-			                     	Toast.makeText(getParent().getBaseContext(), e.getLocalizedMessage(), 8).show();
+			                     	mHandler.sendEmptyMessage(3);
+                   				 	localizedMessage = e.getLocalizedMessage();
 			                     	btnSave.setEnabled(true);
 			                    }
 			              }
