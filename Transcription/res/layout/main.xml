@@ -6,16 +6,15 @@
     android:orientation="vertical"
     android:padding="20dip" >
 
- <FrameLayout
-     android:layout_width="fill_parent"
-     android:layout_height="0dp"
-     android:layout_margin="10dp"
-     android:layout_weight="0.45"
-     android:background="#000" >
-
-    </FrameLayout>
-    
-    
+    <TextView
+        android:id="@+id/notes"
+        android:layout_width="fill_parent"
+        android:layout_height="135dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="Please speak clearly when recording. You can also format your work through instructions like, &apos;New paragraph&apos;, &apos;Heading is&apos;. Maximum file size per recording should not exceed 10MB."
+        android:textColor="#FFFFFF"
+        android:textSize="15sp" />
 
     <ToggleButton
         android:id="@+id/tglPlayPause"
@@ -25,13 +24,13 @@
         android:background="@drawable/circle_toggle_btn"
         android:gravity="center_vertical|center_horizontal"
         android:textColor="#fff"
-        android:textOff=">"
-        android:textOn="||" />
+        android:textOff=""
+        android:textOn="" />
 
     <TextView
         android:id="@+id/timerValue"
         android:layout_width="fill_parent"
-        android:layout_height="75dp"
+        android:layout_height="50dp"
         android:layout_marginBottom="37dp"
         android:gravity="center"
         android:text="timerVal"
@@ -40,13 +39,11 @@
 
     <Button
         android:id="@+id/reset"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="86dp"
+        android:layout_height="60dp"
         android:layout_gravity="center"
-        android:gravity="center"
         android:background="@drawable/button_white_control"
-         />
-   
+        android:gravity="center" />
 
     <LinearLayout
         android:layout_width="fill_parent"

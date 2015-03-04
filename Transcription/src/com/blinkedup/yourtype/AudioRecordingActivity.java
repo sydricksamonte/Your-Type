@@ -126,7 +126,10 @@ public class AudioRecordingActivity extends Activity {
     					}
     				}
     				else{
-    					stopButtonClick(now);
+    					 // get time button pressed
+    	   				stopButtonClick(now);		
+    	   				stopRecording();
+    	   				resetButtonClick(now);
     					
     				}
     			}
