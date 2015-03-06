@@ -9,10 +9,10 @@
     <TextView
         android:id="@+id/notes"
         android:layout_width="fill_parent"
-        android:layout_height="135dp"
-        android:layout_marginBottom="20dp"
+        android:layout_height="92dp"
+        android:layout_marginBottom="30dp"
         android:gravity="center"
-        android:text="Please speak clearly when recording. You can also format your work through instructions like, &apos;New paragraph&apos;, &apos;Heading is&apos;. Maximum file size per recording should not exceed 10MB."
+        android:text="Please speak clearly when recording. You can also format your work through instructions like, &apos;New paragraph&apos;, &apos;Heading is&apos;."
         android:textColor="#FFFFFF"
         android:textSize="15sp" />
 
@@ -31,11 +31,12 @@
         android:id="@+id/timerValue"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
-        android:layout_marginBottom="37dp"
+        android:layout_marginBottom="25dp"
         android:gravity="center"
         android:text="timerVal"
         android:textColor="#FFFFFF"
         android:textSize="30sp" />
+    
 
     <Button
         android:id="@+id/reset"
@@ -43,7 +44,48 @@
         android:layout_height="60dp"
         android:layout_gravity="center"
         android:background="@drawable/button_white_control"
-        android:gravity="center" />
+        android:gravity="center"
+        android:layout_marginBottom="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#000"
+            android:textSize="0sp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="5dp" />
+        
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#fff"
+            android:textSize="12sp"
+            />
+
+    </LinearLayout>
+    
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
+        android:indeterminate="false"
+        android:max="3600"
+        android:minHeight="50dp"
+        android:minWidth="200dp"
+        android:progress="1"
+        android:progressDrawable="@drawable/progress_background" />
 
     <LinearLayout
         android:layout_width="fill_parent"
