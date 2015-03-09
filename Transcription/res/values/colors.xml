@@ -56,4 +56,7 @@
 <color name="violetlight">#BCA9F5</color>
 <color name="violetpinklight">#E2A9F3</color>
 <color name="pinklight">#F5A9D0</color>
+<color name="flatGold">#F5AB35</color>
+<color name="flatSilver">#ABB7B7</color>
+<color name="flatBronze">#CD853F</color>
 </resources>
