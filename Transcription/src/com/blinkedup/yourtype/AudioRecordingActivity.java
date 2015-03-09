@@ -2,11 +2,15 @@ package com.blinkedup.yourtype;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import android.app.Activity;
+import android.app.ActivityGroup;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuffXfermode;
@@ -18,12 +22,14 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -34,7 +40,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
-
 
 
 
@@ -61,6 +66,12 @@ public class AudioRecordingActivity extends Activity {
 	private boolean timerRunning = false;	// true if timer is running
 	ToggleButton tglPlayPause;				//toggle play pause button
 	
+	 private long fileSize = 0;
+	 private int progressBarStatus = 0;
+	 private int progressStatusRemaining = 3360;
+	 private int conversion;
+	 private Handler progressBarHandler = new Handler();
+	
 	String strDefaultRecordingName;
 	DateUtils dateFunc;
 	RecordingDB mydb;
@@ -71,6 +82,17 @@ public class AudioRecordingActivity extends Activity {
 	
 	private Animation animFadeIn;
     private Animation animFadeOut;
+    
+    //progress bar
+    private ProgressBar progressBar1;
+    private ProgressBar progressBar;
+	private int progressStatus = 0;
+	private int maxTime = 3360;
+	private TextView textView1;
+	private TextView textView2;
+	private TextView textView3;
+	private Handler handler = new Handler();
+	static boolean runThread = true;
     
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -116,7 +138,9 @@ public class AudioRecordingActivity extends Activity {
     			
     			if (tglPlayPause !=null){
     				if (isChecked){
+    					
     					startRecording();
+    					timerprogress();
     					
     					if (isEnabledToAnimateIn == true){
     						stopButton.startAnimation(animFadeIn);
@@ -126,7 +150,15 @@ public class AudioRecordingActivity extends Activity {
     					}
     				}
     				else{
-    					stopButtonClick(now);
+    					 // get time button pressed
+
+    					
+    		            
+    	   				stopButtonClick(now);		
+    	   				stopRecording();
+    	   				resetButtonClick(now);
+    	   			
+    	   		
     					
     				}
     			}
@@ -140,10 +172,11 @@ public class AudioRecordingActivity extends Activity {
    			public void onClick(View v) {
    		        // get time button pressed
    				long now = System.currentTimeMillis();
-   				
+
    				stopButtonClick(now);		
    				stopRecording();
    				resetButtonClick(now);
+   			
    			}
    		});
         //////////
@@ -155,7 +188,84 @@ public class AudioRecordingActivity extends Activity {
         }*/
         //////////
         
-    }
+        
+        
+        
+	}
+	
+
+
+	
+	private void timerprogress() {
+		//start of progress bar
+		progressBar1 = (ProgressBar) findViewById(R.id.progressBar1);
+    	progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+		textView1 = (TextView) findViewById(R.id.textView1);
+		textView3 = (TextView) findViewById(R.id.textView3);
+		// Start long running operation in a background thread
+		maxTime = 3360;
+
+	
+		new Thread(new Runnable() {
+
+            public void run() {
+                long timerEnd = System.currentTimeMillis() + maxTime * 1000;
+
+                while (timerEnd >  System.currentTimeMillis()) {
+
+                	progressStatus = maxTime - (int) (timerEnd - System.currentTimeMillis() ) / 1000;
+                	
+                	progressStatusRemaining = maxTime - progressStatus;
+                    conversion = progressStatusRemaining/60;
+                	
+                    // Update the progress bar
+
+                    handler.post(new Runnable() {
+                        public void run() {                     
+                        	progressBar1.setProgress(progressStatusRemaining);  
+                        	progressBar.setProgress(progressStatus);  
+                        	textView1.setText(progressStatusRemaining+"");
+                        	textView3.setText(conversion+" minutes remaining time.");
+                       
+                         if (conversion==1)
+                              {
+                           	   Toast.makeText(getApplicationContext(), "Please save your recording now. You only have 1 minute left.", Toast.LENGTH_SHORT).show(); 
+                              } 	
+                        	
+                   	   else if (conversion==0)
+                       {
+                    	   long now = System.currentTimeMillis();
+                    	
+        	   				stopButtonClick(now);		
+        	   				stopRecording();
+        	   				resetButtonClick(now); 
+                       }
+                     
+                        }                   
+                    });
+
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                	
+                        Log.w("App","Progress thread cannot sleep");
+                       
+                    }
+                }
+            
+            }
+        }).start(); 
+		
+
+		
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
 	
 	// Method called when the start buttons pressed
 	 private void startButtonClick(long now)
@@ -352,6 +462,7 @@ public class AudioRecordingActivity extends Activity {
 	}
 	
 	
+	
 	private void rename() {
 		 String srt = "";
 		// this context will use when we work with Alert Dialog
@@ -376,6 +487,9 @@ public class AudioRecordingActivity extends Activity {
     	 // here we convert the input to a string and show in a toast.
     		 		
     	String srt = input.getEditableText().toString();
+    	
+    	Intent in = new Intent(AudioRecordingActivity.this, TabHostActivity.class);
+        startActivity(in);
     	 
     //	Toast.makeText(context,srt,Toast.LENGTH_LONG).show();    
     	final String stripText = mydb.StripText(input.getEditableText().toString());
@@ -423,9 +537,18 @@ public class AudioRecordingActivity extends Activity {
     }); //End of alert.setNegativeButton
     	AlertDialog alertDialog = alert.create();
     	alertDialog.show();
+    	
+
+    
+    	
     }
 	
+	
+	
 	private void startRecording() {
+		
+
+		
 		long now = System.currentTimeMillis();
 		startButtonClick(now);
 		recorder = new MediaRecorder();
@@ -441,6 +564,7 @@ public class AudioRecordingActivity extends Activity {
 		try {
 			recorder.prepare();
 			recorder.start();
+		
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -465,6 +589,7 @@ public class AudioRecordingActivity extends Activity {
 		 	tglPlayPause.setChecked(false);
 		}
 		rename();
+	
 	}
 	
 	private void displayFormatDialog() {
@@ -485,6 +610,10 @@ public class AudioRecordingActivity extends Activity {
 							}
 						}).show();
 	}
+	
+	
+
+
 
 	private MediaRecorder.OnErrorListener errorListener = new MediaRecorder.OnErrorListener() {
 		@Override

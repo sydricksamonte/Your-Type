@@ -14,6 +14,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -57,6 +58,9 @@ public class MainActivity extends ActivityGroup {
 	
 	ProgressDialog barProgressDialog;
 	Handler updateBarHandler;
+	ProgressDialog myPd_ring;
+	AlertDialog aDial;
+	Handler mHandler;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -92,6 +96,39 @@ public class MainActivity extends ActivityGroup {
 				startActivity(explicitIntent);
 				}			
 		});
+		
+		
+		// message to progress bar
+		mHandler = new Handler()
+		{
+		    public void handleMessage(Message msg)
+		    {
+		    	aDial =  new AlertDialog.Builder(MainActivity.this)
+          		 .setTitle("")
+          		 .setMessage("")
+          		 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+          			 public void onClick(DialogInterface dialog, int which) {
+          				MainActivity.this.finish();
+          			}
+          		 }).setIcon(android.R.drawable.ic_dialog_alert).create();
+		    	
+		    	if (msg.what == 1){
+		    		aDial.setTitle("No connection");
+           			aDial.setMessage("Cannot connect to the Internet");
+           			aDial.show();
+		    	}
+		    	else if (msg.what == 2){
+		    		aDial.setTitle("Error in connection");
+           			aDial.setMessage("Cannot connect to server. /n/nPlease try again later.");
+           			aDial.show();
+		    	}
+		    	else if (msg.what == 3){
+		    		aDial.setTitle("Error");
+           			aDial.setMessage("Network error encountered");
+           			aDial.show();
+           		}
+		    }
+		};
 	}
 	
 	
@@ -158,6 +195,22 @@ public class MainActivity extends ActivityGroup {
 					}
 				}
 				else if (v.getId() == R.id.btnLogin){
+					
+					//start activity progress
+					
+					myPd_ring = ProgressDialog.show(MainActivity.this, "Please wait", "Logging in..", true);
+			        myPd_ring.setCancelable(false);
+					 new Thread(new Runnable() {  
+				            @Override
+				            public void run() {
+				                  // TODO Auto-generated method stub
+				                  try{
+				                  	if (Network.isNetworkAvailable(MainActivity.this)){
+				                  		MainActivity.this.runOnUiThread(new Runnable() {
+				                           @Override
+				                           public void run() {
+				                        	 
+
 					ParseUser.logInInBackground( etUsername.getText().toString(), etPassword.getText().toString(), new LogInCallback() {
 						  public void done(ParseUser user, ParseException e) {
 						    if (user != null) {
@@ -179,6 +232,29 @@ public class MainActivity extends ActivityGroup {
 						    }
 						  }
 						});
+					
+				
+					//continuation for progress bar
+				                       	    }
+				                           
+							                  		});
+				                  		myPd_ring.dismiss();
+							                  	}
+							                  	else
+							                  	{
+							                  		myPd_ring.dismiss();
+							                  		mHandler.sendEmptyMessage(1);
+							                  	}
+							                  }
+							                  catch(Exception e){
+							                	  myPd_ring.dismiss();
+							                	  mHandler.sendEmptyMessage(3);
+							                  }
+							            }
+								 }).start();
+								 
+								//end activity progress
+					
 				}
 				
 				else if (v.getId() == R.id.btnlogout){
