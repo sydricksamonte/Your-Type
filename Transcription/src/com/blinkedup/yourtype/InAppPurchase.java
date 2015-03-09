@@ -87,21 +87,7 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
 		pl.initParse(this);
 		
 		
-		mHandler = new Handler()
-		{
-		    public void handleMessage(Message msg)
-		    {
-		    	if (msg.what == 1){
-		    		log.pushToLog(2, "TRANSACTION DISMISSED ON ");
-		    	}
-		    	else if (msg.what == 2){
-		    		
-           		}
-		    	else if (msg.what == 3){
-		    		 
-           		}
-		 	}
-		};
+	
 		
 		btnGold.setOnClickListener( new OnClickListener() {
 			
@@ -136,17 +122,59 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
 			
 			 @Override
 	            public void onClick(View v) {
-					
-				}
-			});
+				 if (ParseUser.getCurrentUser() != null){
+					 myPd_ring = new ProgressDialog(InAppPurchase.this);
+					 myPd_ring.setTitle("Please wait");
+					 myPd_ring.setMessage("Accessing Store...");
+					 myPd_ring.setCancelable(false);
+					 myPd_ring.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+						 @Override
+						 public void onClick(DialogInterface dialog, int which) {
+							 dialog.dismiss();
+						 }
+					 });
+					 myPd_ring.show();
+				 
+					 PRODUCT_SKU = "com.blinkedup.yourtype.silver";
+					 btnGold.setEnabled(false);
+					 buyProduct();
+					 return;
+				 }
+				 else{
+					 Toast.makeText(InAppPurchase.this, "Please log-in first", Toast.LENGTH_SHORT).show();
+					 btnGold.setEnabled(true);
+				 }
+			 }
+		});
 		
 		btnBronze.setOnClickListener( new OnClickListener() {
 			
 			 @Override
 	            public void onClick(View v) {
-					
-				}
-			});
+				 if (ParseUser.getCurrentUser() != null){
+					 myPd_ring = new ProgressDialog(InAppPurchase.this);
+					 myPd_ring.setTitle("Please wait");
+					 myPd_ring.setMessage("Accessing Store...");
+					 myPd_ring.setCancelable(false);
+					 myPd_ring.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+						 @Override
+						 public void onClick(DialogInterface dialog, int which) {
+							 dialog.dismiss();
+						 }
+					 });
+					 myPd_ring.show();
+				 
+					 PRODUCT_SKU = "com.blinkedup.yourtype.bronze";
+					 btnGold.setEnabled(false);
+					 buyProduct();
+					 return;
+				 }
+				 else{
+					 Toast.makeText(InAppPurchase.this, "Please log-in first", Toast.LENGTH_SHORT).show();
+					 btnGold.setEnabled(true);
+				 }
+			 }
+		});
 /*
 		// get display metrics
 		DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -206,6 +234,7 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
 		}
 
 	// create child text view
+	
 	private TextView createTextView(int id, String text, float textSize, int margin)
 		{
 		TextView textView = new TextView(this);
@@ -310,6 +339,7 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
     public void inAppBillingItemAlreadyOwned()
     	{
     	myPd_ring.dismiss();
+    	 btnGold.setEnabled(true);
     	Log.e("ERROR","Product is already owned.\nPurchase was not initiated.");
     	return;
     	}
@@ -318,6 +348,7 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
     public void inAppBillingCanceled()
     	{
     	myPd_ring.dismiss();
+    	 btnGold.setEnabled(true);
     	Log.e("ERROR","Purchase was canceled by user");
     	log.pushToLog(2, "TRANSACTION DISMISSED ON "+PRODUCT_SKU);
     	return;
@@ -327,6 +358,7 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
     public void inAppBillingConsumeSuccsess()
     	{
     	myPd_ring.dismiss();
+    	 btnGold.setEnabled(true);
     	Log.e("ERROR","In App consume product successful");
     	return;
     	}
@@ -335,6 +367,7 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
     public void inAppBillingItemNotOwned()
     	{
     	myPd_ring.dismiss();
+    	 btnGold.setEnabled(true);
     	Log.e("ERROR","Product is not owned.\nConsume failed.");
     	return;
     	}
