@@ -42,9 +42,20 @@ public class CustomAdapter extends ParseQueryAdapter<ParseObject> {
 	//		todoImage.loadInBackground();
 	//	}
 
-		// Add the title view
+		// Add the Reference Id
 		TextView titleTextView = (TextView) v.findViewById(R.id.text1);
-		titleTextView.setText(object.getString("payType"));
+		titleTextView.setText(object.getObjectId());
+		
+		// Add the Credits left
+		
+				TextView titleTextView2 = (TextView) v.findViewById(R.id.text2);
+				
+				titleTextView2.setText(object.getInt("creditsLeft"));
+	
+		
+		// Add the title view
+				TextView titleTextView3 = (TextView) v.findViewById(R.id.text3);
+				titleTextView3.setText(object.getString("payType"));
 
 		// Add a reminder of how long this item has been outstanding
 		TextView timestampView = (TextView) v.findViewById(R.id.timestamp);
