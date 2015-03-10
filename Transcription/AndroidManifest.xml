@@ -33,11 +33,12 @@
         <activity android:name=".ContactActivity" />
         <activity android:name=".Welcome" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".FeedActivity"
-        		android:theme="@style/MyNoActionBarShadowTheme" />
-    	<activity android:name=".TabHostActivity"
-    	android:theme="@style/MyNoActionBarShadowTheme" 
-    	  />
+        <activity
+            android:name=".FeedActivity"
+            android:theme="@style/MyNoActionBarShadowTheme" />
+        <activity
+            android:name=".TabHostActivity"
+            android:theme="@style/MyNoActionBarShadowTheme" />
         <activity android:name=".AboutActivity" />
         <activity android:name=".SendEmailActivity" />
         <activity android:name=".FeedDetailActivity" />
@@ -61,8 +62,10 @@
             android:name=".TermsOfServiceActivity"
             android:label="@string/title_activity_terms_of_service" >
         </activity>
-    
-         
+        <activity
+            android:name=".ShowDetailActivity"
+            android:label="@string/title_activity_show_detail" >
+        </activity>
     </application>
 
 </manifest>

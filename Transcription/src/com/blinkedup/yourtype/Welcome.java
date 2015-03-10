@@ -19,7 +19,7 @@ public class Welcome extends ActivityGroup {
 	
  
     // Declare Variable
-    Button logout, btnBuyCredits;
+    Button logout, btnBuyCredits, showCredits;
    
  
     @Override
@@ -50,6 +50,7 @@ Intent intent = getIntent();
         // Locate Button in welcome.xml
         logout = (Button) findViewById(R.id.logout);
         btnBuyCredits = (Button) findViewById(R.id.btnBuyCredits);
+        showCredits = (Button) findViewById(R.id.credits);
  
         // Logout Button Click Listener
         logout.setOnClickListener(new OnClickListener() {
@@ -87,6 +88,17 @@ Intent intent = getIntent();
   	      }
 
   	    });
+        
+        showCredits.setOnClickListener(new View.OnClickListener() {
+    	      @Override
+    	      public void onClick(View view) {
+    	        Intent intent = new Intent(Welcome.this, ShowDetailActivity.class);
+    	        startActivity(intent);
+    	      }
+
+    	    });
+        
+        
     }
     
     public void replaceContentView(String id, Intent newIntent) {
