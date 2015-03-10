@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.blinkedup.yourtype"
-    android:versionCode="5"
+    android:versionCode="6"
     android:versionName="1.0" >
 
     <uses-sdk
@@ -33,8 +33,11 @@
         <activity android:name=".ContactActivity" />
         <activity android:name=".Welcome" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".FeedActivity" />
-        <activity android:name=".TabHostActivity" />
+        <activity android:name=".FeedActivity"
+        		android:theme="@style/MyNoActionBarShadowTheme" />
+    	<activity android:name=".TabHostActivity"
+    	android:theme="@style/MyNoActionBarShadowTheme" 
+    	  />
         <activity android:name=".AboutActivity" />
         <activity android:name=".SendEmailActivity" />
         <activity android:name=".FeedDetailActivity" />

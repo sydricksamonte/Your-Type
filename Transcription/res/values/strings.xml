@@ -16,6 +16,7 @@
 
     <color name="white">#000000</color>
     <color name="blue">#6cd1f7</color>
+    <color name="picton">#22b8f0</color>
 
     <string name="title_activity_terms_of_service">Your Type</string>
 

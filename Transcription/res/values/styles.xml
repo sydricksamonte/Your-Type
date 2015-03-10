@@ -6,14 +6,7 @@
     -->
     <style name="AppBaseTheme" parent="android:Theme.Light">
 
-
-
-
-
-
-
-
-        <!--
+ <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
@@ -25,11 +18,17 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
 <item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item>
 
+  </style>
+  
+    <style name="WindowTitleBackground">     
+        <item name="android:background">@color/picton</item>
+      
     </style>
     
-    <style name="WindowTitleBackground">     
-        <item name="android:background">@color/blue</item>
-    </style>
+    <style name="MyNoActionBarShadowTheme" parent="AppTheme">
+ <item name="android:windowContentOverlay">@null</item>
+    
+</style>
     
 
 

@@ -62,7 +62,7 @@ public class TabHostActivity extends TabActivity {
 	     //loop through the TabWidget's child Views (the tabs) and set their height value.
 	     for (int i = 0; i < tabHost.getTabWidget().getTabCount(); i++) {
 	          tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = (int) (heightValue * this.getResources().getDisplayMetrics().density);
-	          tabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.parseColor("#202020"));
+	          tabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.parseColor("#10171e"));
 	          tabHost.getTabWidget().setDividerDrawable(null);
 	     }
 	     
