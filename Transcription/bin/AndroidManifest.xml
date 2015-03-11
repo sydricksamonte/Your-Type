@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.blinkedup.yourtype"
-    android:versionCode="1"
+    android:versionCode="6"
     android:versionName="1.0" >
 
     <uses-sdk
@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
         android:allowBackup="true"
@@ -33,12 +33,17 @@
         <activity android:name=".ContactActivity" />
         <activity android:name=".Welcome" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".FeedActivity" />
-        <activity android:name=".TabHostActivity" />
+        <activity
+            android:name=".FeedActivity"
+            android:theme="@style/MyNoActionBarShadowTheme" />
+        <activity
+            android:name=".TabHostActivity"
+            android:theme="@style/MyNoActionBarShadowTheme" />
         <activity android:name=".AboutActivity" />
         <activity android:name=".SendEmailActivity" />
         <activity android:name=".FeedDetailActivity" />
         <activity android:name=".UploadActivity" />
+        <activity android:name=".InAppPurchase" />
         <activity
             android:name=".RecordingsActivity"
             android:label="@string/title_activity_recordings" >
@@ -56,6 +61,10 @@
         <activity
             android:name=".TermsOfServiceActivity"
             android:label="@string/title_activity_terms_of_service" >
+        </activity>
+        <activity
+            android:name=".ShowDetailActivity"
+            android:label="@string/title_activity_show_detail" >
         </activity>
     </application>
 
