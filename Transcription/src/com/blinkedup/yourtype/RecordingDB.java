@@ -86,11 +86,19 @@ public class RecordingDB extends SQLiteOpenHelper{
 	}		
 	
 	/** Returns all the customers in the table */
-	public Cursor getAllCustomers(){
-        return mDB.query(DATABASE_TABLE, new String[] { RECORDING_ID,  RECORDING_NAME , RECORDING_DATE_ADDED, RECORDING_DATE_UPLOADED
+	public Cursor getAllCustomers(String key){
+		if (key == ""){
+			return mDB.query(DATABASE_TABLE, new String[] { RECORDING_ID,  RECORDING_NAME , RECORDING_DATE_ADDED, RECORDING_DATE_UPLOADED
         		, RECORDING_DURATION, RECORDING_STATUS, RECORDING_ORIGIN, RECORDING_ISACTIVE, RECORDING_FILE_TYPE, RECORDING_DATE_FINALIZED,  RECORDING_PATH  } , 
         		RECORDING_ISACTIVE + "= '1'", null, null, null, 
         		RECORDING_DATE_ADDED + " desc ");
+		}
+		else{
+			return mDB.query(DATABASE_TABLE, new String[] { RECORDING_ID,  RECORDING_NAME , RECORDING_DATE_ADDED, RECORDING_DATE_UPLOADED
+	        		, RECORDING_DURATION, RECORDING_STATUS, RECORDING_ORIGIN, RECORDING_ISACTIVE, RECORDING_FILE_TYPE, RECORDING_DATE_FINALIZED,  RECORDING_PATH  } , 
+	        		RECORDING_ISACTIVE + "= '1' AND " + RECORDING_STATUS + " = "+"'"+ key +"'"+ "", null, null, null, 
+	        		RECORDING_DATE_ADDED + " desc ");
+		}
 	}
 
 	public void addRecording(String name, String dateAdded, String dateUploaded, int duration, int status, int origin, boolean isActive, String fileType, String dateFinalized, String path) {

@@ -8,103 +8,100 @@
         android:layout_width="fill_parent"
   		android:layout_height="45dp"
         android:orientation="horizontal"
-  		android:background="@drawable/border_maker"
-	>
+  		android:background="@drawable/border_maker">
     
      	<LinearLayout
-        android:layout_width="match_parent"
-  		android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical|center_horizontal"
-  		android:gravity="center">
+        	android:layout_width="match_parent"
+  			android:layout_height="wrap_content"
+        	android:orientation="horizontal"
+        	android:layout_gravity="center_vertical|center_horizontal"
+  			android:gravity="center">
   		
-     	     <View 
-        	android:layout_width="0dip" 
-        	android:layout_height="1dp" 
-        	android:layout_weight=".3" /> 
+     		<View 
+        		android:layout_width="0dip" 
+        		android:layout_height="1dp" 
+        		android:layout_weight=".3" /> 
         	
-     	     <ImageButton
-         	android:id="@+id/btnRefresh"
-       		android:layout_width="38dip"
-         	android:layout_height="38dip"
-        	android:background="@drawable/btn_refresh"
-			android:layout_gravity="center_vertical|center_horizontal"
-			/>
+     		<ImageButton
+         		android:id="@+id/btnRefresh"
+       			android:layout_width="38dip"
+         		android:layout_height="38dip"
+        		android:background="@drawable/btn_refresh"
+				android:layout_gravity="center_vertical|center_horizontal"/>
      	     
-          <View 
-        	android:layout_width="0dip" 
-        	android:layout_height="1dp" 
-        	android:layout_weight="4" /> 
+          	<View 
+        		android:layout_width="0dip" 
+        		android:layout_height="1dp" 
+        		android:layout_weight="4" /> 
         	 
     		<ImageButton
-            android:id="@+id/btnSortAll"
-      		android:layout_width="38dip"
-        	android:layout_height="38dip"
-        	android:background="@drawable/btn_a"
-			android:layout_gravity="center_vertical|center_horizontal"
-        	/>
-	 	  <View 
-        	android:layout_width="0dip" 
-        	android:layout_height="1dp" 
-        	android:layout_weight=".5" /> 
+            	android:id="@+id/btnSortAll"
+      			android:layout_width="38dip"
+        		android:layout_height="38dip"
+        		android:background="@drawable/btn_a"
+				android:layout_gravity="center_vertical|center_horizontal"/>
+	 	  	
+	 	  	<View 
+        		android:layout_width="0dip" 
+        		android:layout_height="1dp" 
+        		android:layout_weight=".5" /> 
+	 	 	
 	 	 	<ImageButton
-            android:id="@+id/btnSortWaiting"
-      		android:layout_width="38dip"
-        	android:layout_height="38dip"
-        	android:layout_gravity="center_vertical|center_horizontal"
-            android:background="@drawable/btn_u"
-			
-        	/>
-	 	 <View 
-        	android:layout_width="0dip" 
-        	android:layout_height="1dp" 
-        	android:layout_weight=".5" /> 
+            	android:id="@+id/btnSortWaiting"
+      			android:layout_width="38dip"
+        		android:layout_height="38dip"
+        		android:layout_gravity="center_vertical|center_horizontal"
+            	android:background="@drawable/btn_w"/>
+	 		
+	 		<View 
+        		android:layout_width="0dip" 
+        		android:layout_height="1dp" 
+        		android:layout_weight=".5" /> 
+	 		
 	 		<ImageButton
-            android:id="@+id/btnSortUp"
-      		android:layout_width="38dip"
-        	android:layout_height="38dip"
-        	android:layout_gravity="center_vertical|center_horizontal"
-            android:background="@drawable/btn_w"
-			
-        	/>
-	 		 <View 
-        	android:layout_width="0dip" 
-        	android:layout_height="1dp" 
-        	android:layout_weight=".5" /> 
+            	android:id="@+id/btnSortUp"
+      			android:layout_width="38dip"
+        		android:layout_height="38dip"
+        		android:layout_gravity="center_vertical|center_horizontal"
+            	android:background="@drawable/btn_u"/>
+	 		
+	 		<View 
+        		android:layout_width="0dip" 
+        		android:layout_height="1dp" 
+        		android:layout_weight=".5" /> 
 	 	
 	 		<ImageButton
-            android:id="@+id/btnSortFin"
-      		android:layout_width="38dip"
-        	android:layout_height="38dip"
-        	android:layout_gravity="center_vertical|center_horizontal"
-           android:background="@drawable/btn_d"
-			
-        	/>
-	 		 <View 
-        	android:layout_width="0dip" 
-        	android:layout_height="1dp" 
-        	android:layout_weight="4" /> 
+            	android:id="@+id/btnSortDone"
+      			android:layout_width="38dip"
+        		android:layout_height="38dip"
+        		android:layout_gravity="center_vertical|center_horizontal"
+          		android:background="@drawable/btn_d"/>
+	 		
+	 		<View 
+        		android:layout_width="0dip" 
+        		android:layout_height="1dp" 
+        		android:layout_weight="4" />
+	 		  
         	<ImageButton
-         	android:id="@+id/btnRefresh1"
-       		android:layout_width="38dip"
-         	android:layout_height="38dip"
-        	android:background="@drawable/btn_question"
-			android:layout_gravity="center_vertical|center_horizontal"
-			/>
-        	 <View 
-        	android:layout_width="0dip" 
-        	android:layout_height="1dp" 
-        	android:layout_weight=".4" /> 
-	 	</LinearLayout>
-     
-     	
-    </LinearLayout>
-	
-    <ListView 
-	android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/listview"
-    tools:context=".FeedActivity"  />
+         		android:id="@+id/btnButtonQuestion"
+       			android:layout_width="38dip"
+         		android:layout_height="38dip"
+        		android:background="@drawable/btn_question"
+				android:layout_gravity="center_vertical|center_horizontal"/>
+        	
+        	<View 
+        		android:layout_width="0dip" 
+        		android:layout_height="1dp" 
+        		android:layout_weight=".4" /> 
+		
+		</LinearLayout>
+	</LinearLayout>
+
+	<ListView 
+		android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:id="@+id/listview"
+    	tools:context=".FeedActivity"  />
 
     <TextView
         android:id="@+id/empty_list_item"

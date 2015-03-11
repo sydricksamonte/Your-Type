@@ -46,7 +46,7 @@ public class Recording extends ContentProvider{
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {	
 		
 		if(uriMatcher.match(uri)==RECORDINGS){
-			return mCustomerDB.getAllCustomers();
+			return mCustomerDB.getAllCustomers(selectionArgs[0]);
 		}else{			
 			return null;
 		}

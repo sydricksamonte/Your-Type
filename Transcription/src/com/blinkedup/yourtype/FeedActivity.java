@@ -33,9 +33,11 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cursor>, OnItemClickListener {
 	
@@ -50,6 +52,15 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 	Button showDetail; 
 	String recDuratRaw;
 	
+	ImageButton btnAll;
+	ImageButton btnUp;
+	ImageButton btnWaiting;
+	ImageButton btnDone;
+	ImageButton btnRefresh;
+	ImageButton btnQuestion;
+	
+	String sortKey;
+	String[] arrArg =  {""};
 	boolean isEnteringUpdateActivity;
     @Override
     public void onResume(){
@@ -73,11 +84,63 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       
+        arrArg[0] = "";
         populateTable();
 		/** Creating a loader for populating listview from sqlite database */
 		/** This statement, invokes the method onCreatedLoader() */
 		getSupportLoaderManager().initLoader(0, null, this);
+		
+		btnAll = (ImageButton)findViewById(R.id.btnSortAll);
+		
+		btnAll.setOnClickListener( new OnClickListener() {
+			@Override
+	            public void onClick(View v) {
+				 arrArg[0] = "";
+				 RePopulate();
+				}
+			});
+		
+		btnWaiting = (ImageButton)findViewById(R.id.btnSortWaiting);
+		btnWaiting.setOnClickListener( new OnClickListener() {
+			@Override
+	            public void onClick(View v) {
+					arrArg[0] = "0";
+					RePopulate();
+				}
+			});
+		btnUp = (ImageButton)findViewById(R.id.btnSortUp);
+		btnUp.setOnClickListener( new OnClickListener() {
+			@Override
+	            public void onClick(View v) {
+				 arrArg[0] = "1";
+				 RePopulate();
+				}
+			});
+		
+		btnDone = (ImageButton)findViewById(R.id.btnSortDone);
+		btnDone.setOnClickListener( new OnClickListener() {
+			@Override
+	            public void onClick(View v) {
+				 arrArg[0] = "2";
+				 RePopulate();
+				}
+			});
+		
+		btnRefresh = (ImageButton)findViewById(R.id.btnRefresh);
+		btnRefresh.setOnClickListener( new OnClickListener() {
+			@Override
+	            public void onClick(View v) {
+				
+				}
+			});
+		
+		btnQuestion = (ImageButton)findViewById(R.id.btnButtonQuestion);
+		btnQuestion.setOnClickListener( new OnClickListener() {
+			@Override
+	            public void onClick(View v) {
+				
+				}
+			});
 		
 		
     }
@@ -90,9 +153,9 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
           mListView = (ListView) findViewById(R.id.listview);  
           //ListView listview = (ListView) findViewById(R.id.listview1);
           mListView.setOnItemClickListener(this);
-         
           
-  		mAdapter = new SimpleCursorAdapter(getBaseContext(),
+          
+          mAdapter = new SimpleCursorAdapter(getBaseContext(),
                   R.layout.listview_item_feed,
                   null,
                   new String[] { RecordingDB.RECORDING_DATE_ADDED, RecordingDB.RECORDING_DATE_FINALIZED, RecordingDB.RECORDING_DATE_UPLOADED,
@@ -113,21 +176,24 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
   					if (tv.getId() ==  R.id.recStatDesc){
   						String statVal = cursor.getString(cursor.getColumnIndex("_status"));
   						String statDesc;
-  						if (statVal.equals("1")){
-  							statDesc = "Uploaded — Awaiting Process";
-  							img = getResources().getDrawable( R.drawable.colors_orange );
-  							img.setBounds( 0, 0, 12, 12 );
-  							tv.setCompoundDrawables( img, null, null, null );
-  						}
-  						else if (statVal.equals("2")){
-  							statDesc = "Transcription Done";
-  							img = getResources().getDrawable( R.drawable.colors_green );
-  							img.setBounds( 0, 0, 12, 12 );
-  							tv.setCompoundDrawables( img, null, null, null );
-  						}
-  						else{
+  						if (statVal.equals("0")){
   							statDesc = "Waiting for Upload";
   							img = getResources().getDrawable( R.drawable.colors_gray );
+  							
+  							img.setBounds( 0, 0, 12, 12 );
+  							tv.setCompoundDrawables( img, null, null, null );
+  						}
+  						else if (statVal.equals("1")){
+  							statDesc = "Uploaded";
+  							img = getResources().getDrawable( R.drawable.colors_orange );
+  							
+  							img.setBounds( 0, 0, 12, 12 );
+  							tv.setCompoundDrawables( img, null, null, null );
+  						}
+  						
+  						else{
+  							statDesc = "Done - Sent to your Email";
+  							img = getResources().getDrawable( R.drawable.colors_green );
   							img.setBounds( 0, 0, 12, 12 );
   							tv.setCompoundDrawables( img, null, null, null );
   						}
@@ -189,7 +255,8 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 		Uri uri = Recording.CONTENT_URI;
 		//Log.e("3","3");
-		return new CursorLoader(this, uri, null, null, null, null);
+		
+		return new CursorLoader(this, uri, null, null, arrArg, null);
 		
 	}
 	
