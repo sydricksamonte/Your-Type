@@ -3,8 +3,12 @@ package com.blinkedup.yourtype;
 
 import java.util.List;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -18,7 +22,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 import com.parse.ParseUser;
 
-public class ShowDetailActivity extends Activity {
+@SuppressLint("NewApi") public class ShowDetailActivity extends Activity {
 
 	private ParseQueryAdapter<ParseObject> mainAdapter;
 	private CustomAdapter urgentTodosAdapter;
@@ -28,11 +32,33 @@ public class ShowDetailActivity extends Activity {
 	ParseQuery<ParseObject> pqueryObj;
 	List<String> data;
 	ParseLoader pl;
+	
+	// app icon in action bar clicked; goto parent activity.
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case android.R.id.home:
+	            
+	            this.finish();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_show_detail);
+		
+		//back button 
+				if (android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.HONEYCOMB) {
+					 ActionBar actionBar = getActionBar();
+					 actionBar.setHomeButtonEnabled(true);
+					 actionBar.setDisplayHomeAsUpEnabled(true);
+				}
+				else{
+					 Log.e("NOTICE","Device cannot handle ActionBar");
+				}
 		
 		
 		// Initialize main Parse loader id
