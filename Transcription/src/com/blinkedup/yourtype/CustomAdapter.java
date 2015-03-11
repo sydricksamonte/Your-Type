@@ -47,10 +47,10 @@ public class CustomAdapter extends ParseQueryAdapter<ParseObject> {
 		titleTextView.setText(object.getObjectId());
 		
 		// Add the Credits left
-		
-				TextView titleTextView2 = (TextView) v.findViewById(R.id.text2);
-				
-				titleTextView2.setText(object.getInt("creditsLeft"));
+		  
+	    TextView titleTextView2 = (TextView) v.findViewById(R.id.text2);
+	    int creditsLeft = object.getInt("creditsLeft");
+	    titleTextView2.setText(creditsLeft +"");
 	
 		
 		// Add the title view
