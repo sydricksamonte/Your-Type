@@ -9,10 +9,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
+import com.parse.ParseUser;
 
 public class ShowDetailActivity extends Activity {
 
@@ -49,6 +53,7 @@ public class ShowDetailActivity extends Activity {
 		listView.setAdapter(mainAdapter);
 		mainAdapter.loadObjects();
 		
+
 		if (listView.getAdapter() == mainAdapter) {
 			listView.setAdapter(urgentTodosAdapter);
 			urgentTodosAdapter.loadObjects();

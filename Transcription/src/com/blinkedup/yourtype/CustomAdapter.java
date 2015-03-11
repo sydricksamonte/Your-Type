@@ -10,18 +10,26 @@ import com.parse.ParseImageView;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
+import com.parse.ParseUser;
 
 public class CustomAdapter extends ParseQueryAdapter<ParseObject> {
 
 	public CustomAdapter(Context context) {
 		// Use the QueryFactory to construct a PQA that will only show
-		// Todos marked as high-pri
+		// Todos marked as isActive
 		super(context, new ParseQueryAdapter.QueryFactory<ParseObject>() {
 			public ParseQuery create() {
 				ParseQuery query = new ParseQuery("Credit");
+				
+				//Check User login
+				ParseUser currentUser = ParseUser.getCurrentUser();
+				
 				query.whereEqualTo("isActive", true);
+				query.whereEqualTo("UserId", currentUser);
 				return query;
 			}
+			
+			
 		});
 	}
 
