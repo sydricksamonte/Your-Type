@@ -19,6 +19,6 @@
     <color name="picton">#22b8f0</color>
 
     <string name="title_activity_terms_of_service">Your Type</string>
-    <string name="title_activity_show_detail">ShowDetailActivity</string>
+    <string name="title_activity_show_detail">Your Type</string>
 
 </resources>
