@@ -48,7 +48,7 @@
         android:id="@+id/timeLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Seconds Left"
+        android:text="Minutes Left"
         android:textStyle="bold"
         android:textColor="#000"
         android:layout_toRightOf="@id/text2"
