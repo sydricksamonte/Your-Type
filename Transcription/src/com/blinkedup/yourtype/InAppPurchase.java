@@ -51,6 +51,7 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
 
 	// product code
 	private String	PRODUCT_SKU = "gold_01";
+	String payType = "";
 
 	// google assigned application public key
 	// NOTE: You must replace this key with your own key
@@ -68,6 +69,7 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
 	Button btnBronze;
 	
 	Handler mHandler;
+	int creditsLeft = 0;
 	
 	@SuppressLint("HandlerLeak")
 	@Override
@@ -291,10 +293,21 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
 	}
 
     @Override
-    public void inAppBillingBuySuccsess()
-    	{
-    	String payType = "GOLD";
-		 final int creditsLeft = 7200;
+    public void inAppBillingBuySuccsess(){
+    	
+    	
+    	if ( PRODUCT_SKU == "gold_01"){
+    		payType = "GOLD";
+    		creditsLeft = 9000;
+    	}
+    	else if ( PRODUCT_SKU == "com.blinkedup.yourtype.silver"){
+    		payType = "SILVER";
+    		creditsLeft = 4500;
+    	}
+    	else if ( PRODUCT_SKU == "com.blinkedup.yourtype.bronze"){
+    		payType = "BRONZE";
+    		creditsLeft = 1800;
+    	}
 		 
 		 ParseObject AudioRec = new ParseObject("Credit");
 		 AudioRec.put("payType", payType);
@@ -312,8 +325,8 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
 						 myPd_ring.dismiss();
 						 
 						 new AlertDialog.Builder(InAppPurchase.this)
-							 .setTitle("Sign up complete")
-							 .setMessage("Congratulations! You are just given free minute of transcription service. \n\nPlease verify your email to start recording.")
+							 .setTitle("Purchase complete")
+							 .setMessage("Transaction complete. "+ payType + " has been transfered to your account")
 							 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 								 public void onClick(DialogInterface dialog, int which) {
 									 Intent explicitBackIntent = new Intent(InAppPurchase.this,TabHostActivity.class);
@@ -339,7 +352,7 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
     public void inAppBillingItemAlreadyOwned()
     	{
     	myPd_ring.dismiss();
-    	 btnGold.setEnabled(true);
+    	enableButtons();
     	Log.e("ERROR","Product is already owned.\nPurchase was not initiated.");
     	return;
     	}
@@ -348,7 +361,7 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
     public void inAppBillingCanceled()
     	{
     	myPd_ring.dismiss();
-    	 btnGold.setEnabled(true);
+    	enableButtons();
     	Log.e("ERROR","Purchase was canceled by user");
     	log.pushToLog(2, "TRANSACTION DISMISSED ON "+PRODUCT_SKU);
     	return;
@@ -358,8 +371,9 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
     public void inAppBillingConsumeSuccsess()
     	{
     	myPd_ring.dismiss();
-    	 btnGold.setEnabled(true);
+    	
     	Log.e("ERROR","In App consume product successful");
+    	enableButtons();
     	return;
     	}
 
@@ -369,6 +383,7 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
     	myPd_ring.dismiss();
     	 btnGold.setEnabled(true);
     	Log.e("ERROR","Product is not owned.\nConsume failed.");
+    	enableButtons();
     	return;
     	}
 
@@ -378,7 +393,8 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
     	myPd_ring.dismiss();
     	Log.e("ERROR","FAILED: " + errorMessage);
     	log.pushToLog(2, "TRANSACTION FAILURE ON "+ PRODUCT_SKU);
-    	
+    	Toast.makeText(getApplicationContext(), "Transaction canceled due to failure. \n"+errorMessage, Toast.LENGTH_SHORT).show(); 
+    	enableButtons();
     	return;
     	}
 
@@ -419,5 +435,16 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
     	return;
     	}
 
+    private void enableButtons(){
+    	 btnGold.setEnabled(true);
+    	 btnSilver.setEnabled(true);
+    	 btnBronze.setEnabled(true);
+    }
+    
+    private void disableButtons(){
+    	 btnGold.setEnabled(false);
+    	 btnSilver.setEnabled(false);
+    	 btnBronze.setEnabled(false);
+    }
 	
-}
+	}
