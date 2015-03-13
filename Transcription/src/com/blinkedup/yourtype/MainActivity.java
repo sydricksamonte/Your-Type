@@ -112,19 +112,17 @@ public class MainActivity extends ActivityGroup {
 		logout.setVisibility(View.GONE);
 		
 		
-		
-		
+		LoginsessionCache();
 		
 		
 		logout.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(), "You are logged out.", 3).show();
 				ParseUser.logOut();
-            	ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-				Intent activity3Intent = new Intent(MainActivity.this, MainActivity.class);
-			
-				StringBuffer urlString = new StringBuffer();
-				replaceContentView("MainActivity", activity3Intent);
+            //	ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+				Intent in = new Intent(MainActivity.this, TabHostActivity.class);
+		        startActivity(in);
 				}			
 		});
 		
@@ -261,74 +259,136 @@ public class MainActivity extends ActivityGroup {
 				}
 				else if (v.getId() == R.id.btnLogin){
 					
-					//start activity progress
-					
-					myPd_ring = ProgressDialog.show(MainActivity.this, "Please wait", "Logging in..", true);
-			        myPd_ring.setCancelable(false);
-					 new Thread(new Runnable() {  
-				            @Override
-				            public void run() {
-				                  // TODO Auto-generated method stub
-				                  try{
-				                  	if (Network.isNetworkAvailable(MainActivity.this)){
-				                  		MainActivity.this.runOnUiThread(new Runnable() {
-				                           @Override
-				                           public void run() {
-				                        	 
-
-					ParseUser.logInInBackground( etUsername.getText().toString(), etPassword.getText().toString(), new LogInCallback() {
-						  public void done(ParseUser user, ParseException e) {
-						    if (user != null) {
-						    	Toast.makeText(getApplicationContext(), "Welcome " + etUsername.getText().toString(), 3).show();
-								
-						    	
-						    	VisibilityDisplay();
-						    
-						    	
-					
-						    } else {
-						    	Toast.makeText(getApplicationContext(), "Sign-in failed. Incorrect log-in details", 3).show();
-						    }
-						  }
-						});
-					
-				
-					//continuation for progress bar
-				                       	    }
-				                           
-							                  		});
-				                  		myPd_ring.dismiss();
-							                  	}
-							                  	else
-							                  	{
-							                  		myPd_ring.dismiss();
-							                  		mHandler.sendEmptyMessage(1);
-							                  	}
-							                  }
-							                  catch(Exception e){
-							                	  myPd_ring.dismiss();
-							                	  mHandler.sendEmptyMessage(3);
-							                  }
-							            }
-								 }).start();
-								 
-								//end activity progress
+					Loginsession();
 					
 				}
 				
-				else if (v.getId() == R.id.btnlogout){
-				
-					ParseUser.logOut();
-					Toast.makeText(getApplicationContext(), "You are logged out ", 3).show();
-					//ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-				}
+			
 		}
 		
 		
 	}
 	
-	
+	public void Loginsession(){
+		
+		//start activity progress
+		
+		myPd_ring = ProgressDialog.show(MainActivity.this, "Please wait", "Logging in..", true);
+        myPd_ring.setCancelable(false);
+		 new Thread(new Runnable() {  
+	            @Override
+	            public void run() {
+	                  // TODO Auto-generated method stub
+	                  try{
+	                  	if (Network.isNetworkAvailable(MainActivity.this)){
+	                  		MainActivity.this.runOnUiThread(new Runnable() {
+	                           @Override
+	                           public void run() {
+	                        	 
 
+		ParseUser.logInInBackground( etUsername.getText().toString(), etPassword.getText().toString(), new LogInCallback() {
+			  public void done(ParseUser user, ParseException e) {
+			    if (user != null) {
+			    	Toast.makeText(getApplicationContext(), "Welcome " + etUsername.getText().toString(), 3).show();
+			    	
+			    	Log.e("Userlogin", user.getUsername()+"");
+			    	
+			    	VisibilityDisplay();
+			    	
+			    	
+			    
+			    	
+		
+			    } else {
+			    	Toast.makeText(getApplicationContext(), "Sign-in failed. Incorrect log-in details", 3).show();
+			    }
+			  }
+			});
+		
+	
+		//continuation for progress bar
+	                       	    }
+	                           
+				                  		});
+	                  		myPd_ring.dismiss();
+				                  	}
+				                  	else
+				                  	{
+				                  		myPd_ring.dismiss();
+				                  		mHandler.sendEmptyMessage(1);
+				                  	}
+				                  }
+				                  catch(Exception e){
+				                	  myPd_ring.dismiss();
+				                	  mHandler.sendEmptyMessage(3);
+				                  }
+				            }
+					 }).start();
+					 
+					//end activity progress
+		
+	}
+	
+	
+	public void LoginsessionCache(){
+		
+		//start activity progress
+		
+		myPd_ring = ProgressDialog.show(MainActivity.this, "", "", true);
+        myPd_ring.setCancelable(false);
+		 new Thread(new Runnable() {  
+	            @Override
+	            public void run() {
+	                  // TODO Auto-generated method stub
+	                  try{
+	                  	if (Network.isNetworkAvailable(MainActivity.this)){
+	                  		MainActivity.this.runOnUiThread(new Runnable() {
+	                           @Override
+	                           public void run() {
+	                        	 
+
+		ParseUser.logInInBackground( etUsername.getText().toString(), etPassword.getText().toString(), new LogInCallback() {
+			  public void done(ParseUser user, ParseException e) {
+			    if (user != null) {
+			    //	Toast.makeText(getApplicationContext(), "Welcome " + etUsername.getText().toString(), 3).show();
+			    	
+			    	Log.e("Userlogin", user.getUsername()+"");
+			    	
+			    	VisibilityDisplay();
+			    	
+			    	
+			    
+			    	
+		
+			    } else {
+			    	//Toast.makeText(getApplicationContext(), "Sign-in failed. Incorrect log-in details", 3).show();
+			    }
+			  }
+			});
+		
+	
+		//continuation for progress bar
+	                       	    }
+	                           
+				                  		});
+	                  		myPd_ring.dismiss();
+				                  	}
+				                  	else
+				                  	{
+				                  		myPd_ring.dismiss();
+				                  		mHandler.sendEmptyMessage(1);
+				                  	}
+				                  }
+				                  catch(Exception e){
+				                	  myPd_ring.dismiss();
+				                	  mHandler.sendEmptyMessage(3);
+				                  }
+				            }
+					 }).start();
+					 
+					//end activity progress
+		
+	}
 	
 	
 	public void VisibilityDisplay(){
