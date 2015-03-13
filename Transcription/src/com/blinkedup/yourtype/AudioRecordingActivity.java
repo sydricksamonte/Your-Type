@@ -227,12 +227,9 @@ public class AudioRecordingActivity extends Activity {
                         	textView1.setText(progressStatusRemaining+"");
                         	textView3.setText(conversion+" minutes remaining time.");
                        
-                         if (conversion==1)
-                              {
-                           	   Toast.makeText(getApplicationContext(), "Please save your recording now. You only have 1 minute left.", Toast.LENGTH_SHORT).show(); 
-                              } 	
+                     	
                         	
-                   	   else if (conversion==0)
+                   	   if (conversion==0)
                        {
                     	   long now = System.currentTimeMillis();
                     	
