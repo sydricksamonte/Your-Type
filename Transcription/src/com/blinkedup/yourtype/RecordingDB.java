@@ -1,5 +1,7 @@
 package com.blinkedup.yourtype;
 
+import java.util.Date;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -37,6 +39,14 @@ public class RecordingDB extends SQLiteOpenHelper{
 	
 	  /** A constant, stores the the table name */
     private static final String DATABASE_TABLE_2 = "Updates";
+    
+   
+    public static final String INSTALL_ID = "_id";
+	public static final String INSTALL_CODE = "_installCode";
+	public static final String INSTALL_IMPORT_UPDATE = "_install_import_update";
+	
+	  /** A constant, stores the the table name */
+    private static final String DATABASE_TABLE_3 = "Installs";
     
     /** An instance variable for SQLiteDatabase */
     private SQLiteDatabase mDB;  
@@ -83,7 +93,16 @@ public class RecordingDB extends SQLiteOpenHelper{
 		
 		Log.e("Updates Create",DATABASE_CREATE_2);
 		
+		String DATABASE_CREATE_3 = "create table " +  DATABASE_TABLE_3 + "(" + INSTALL_ID + " integer PRIMARY KEY AUTOINCREMENT UNIQUE, "
+				+ INSTALL_CODE + " text," +INSTALL_IMPORT_UPDATE+ " date );";
+		
+		db.execSQL(DATABASE_CREATE_3);
+		String DATABASE_INSERT_DEFAULT_3 = "INSERT INTO " +  DATABASE_TABLE_3 + "(" 
+				+ INSTALL_CODE +  " ," + INSTALL_IMPORT_UPDATE +  "  ) VALUES  ("+ "'" + dateFunc.convertedToInstall() + "'" + "," + "'" + dateFunc.getDate() + "'"+" );";
+		
+		db.execSQL(DATABASE_INSERT_DEFAULT_3);
 	}		
+	
 	
 	/** Returns all the customers in the table */
 	public Cursor getAllCustomers(String key){
@@ -162,6 +181,17 @@ public class RecordingDB extends SQLiteOpenHelper{
 		db.update(DATABASE_TABLE, cv, RECORDING_ID +"="+id, null);
 		return true;
 	}
+	public void updateImportDate(String date) {
+
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues cv = new ContentValues();
+		cv.put(INSTALL_IMPORT_UPDATE,date);
+		cv.put(INSTALL_CODE, 1);
+		
+		db.update(DATABASE_TABLE_3, cv, INSTALL_CODE +"="+1, null);
+		return ;
+	}
 	
 	public boolean updateRecordingUploadDate(String id, String date) {
 
@@ -176,7 +206,7 @@ public class RecordingDB extends SQLiteOpenHelper{
 	}
 	
 	public boolean updateRecordingFinalize(String id, String date) {
-
+		Log.e("sfsd",id);
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues cv = new ContentValues();
@@ -188,25 +218,19 @@ public class RecordingDB extends SQLiteOpenHelper{
 	}
 	
 	public int countNameDuplicate(String name) {
-		
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor dataCount = db.rawQuery("select "+ RECORDING_NAME +" from " + DATABASE_TABLE + " WHERE "+ RECORDING_NAME +" = '"+ name+ "'", null);
-		
+
 		int count = dataCount.getCount();
-		
 		dataCount.close();
-		
 		return count;
-    
 	} 
 	
 	public int retrieveLastId() {
-		
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery("select "+ RECORDING_ID +" from " + DATABASE_TABLE + " ORDER BY "+ RECORDING_ID +" DESC LIMIT 1 ", null);
 		
 		int last = 0;
-		
 		try{
 			cursor.moveToFirst();
 			last = Integer.parseInt(cursor.getString(0));
@@ -218,6 +242,40 @@ public class RecordingDB extends SQLiteOpenHelper{
 		return  last;
 	}
 	
+	public String getInstallCode() {
+		String last;
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery("select "+ INSTALL_CODE +" from " + DATABASE_TABLE_3 + " DESC LIMIT 1 ", null);
+
+		try{
+			cursor.moveToFirst();
+			last = cursor.getString(0);
+		}
+		catch (Exception e){
+			last = "";
+		}
+		cursor.close();
+		return  last;
+	}
+	
+	public Date getLastImportDate() {
+		String last;
+		Date newDate = new Date();
+		
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery("select "+ INSTALL_IMPORT_UPDATE  +" from " + DATABASE_TABLE_3 + " DESC LIMIT 1 ", null);
+
+		try{
+			cursor.moveToFirst();
+			last = cursor.getString(0);
+			dateFunc = new DateUtils();
+			newDate = dateFunc.convertStringToRawDate(last);
+		}
+		catch (Exception e){
+		}
+		cursor.close();
+		return  newDate;
+	}
 	
 	public String StripText(String name){
 		name = name.replace("'", "");

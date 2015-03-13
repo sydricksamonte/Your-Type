@@ -1,13 +1,27 @@
 package com.blinkedup.yourtype;
 
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.io.FilenameUtils;
+
+import com.parse.FindCallback;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import android.app.AlertDialog;
 import android.content.ClipData.Item;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -18,9 +32,11 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
+import android.media.AudioFormat;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
@@ -52,6 +68,8 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 	Button showDetail; 
 	String recDuratRaw;
 	
+	ParseLoader pl;
+	
 	ImageButton btnAll;
 	ImageButton btnUp;
 	ImageButton btnWaiting;
@@ -59,6 +77,9 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 	ImageButton btnRefresh;
 	ImageButton btnQuestion;
 	
+	public final String AUDIO_RECORDER_FOLDER = "YourType";
+	RecordingDB myDb;
+	boolean isRefreshed;
 	String sortKey;
 	String[] arrArg =  {""};
 	boolean isEnteringUpdateActivity;
@@ -84,8 +105,14 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pl = new ParseLoader();
+		pl.initParse(this);
+		
         arrArg[0] = "";
         populateTable();
+        isRefreshed = false;
+        myDb = new RecordingDB(this);
+        
 		/** Creating a loader for populating listview from sqlite database */
 		/** This statement, invokes the method onCreatedLoader() */
 		getSupportLoaderManager().initLoader(0, null, this);
@@ -123,6 +150,7 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 	            public void onClick(View v) {
 				 arrArg[0] = "2";
 				 RePopulate();
+				
 				}
 			});
 		
@@ -130,7 +158,13 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 		btnRefresh.setOnClickListener( new OnClickListener() {
 			@Override
 	            public void onClick(View v) {
-				
+					checkParse();
+					 try {
+							ImportFiles();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 				}
 			});
 		
@@ -141,10 +175,160 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 				
 				}
 			});
+    }
+   
+    private void ImportFiles() throws IOException{
+    	makeImportFolder();
+    	
+    	Date curDate = new Date();
+		Date lastDateUpdate = myDb.getLastImportDate();
+		Date fileDate = new Date();
+    	
+		String strDate = dateFunc.getDate();
 		
+		String filepath = Environment.getExternalStorageDirectory().getPath();
+		Log.e("FILE!",filepath);
+		Log.e("FILE! u",lastDateUpdate.toString());
+		
+		File yourFile;
+		MediaPlayer mp = new MediaPlayer();
+		FileInputStream fs;
+		FileDescriptor fd;
+		
+		String fileEx = "";
+		
+    	File yourDir = new File(filepath + "/" + AUDIO_RECORDER_FOLDER ,"IMPORTS");
+    	int fileSucc = 0;
+    	int fileFail = 0;
+    	String errorName ="";
+    	long fileSize = 0;
+    	
+    	for (File f : yourDir.listFiles()) {
+    	    if (f.isFile()){
+    	    	Date lastModDate = new Date(f.lastModified());
+    	    	if (lastDateUpdate.after(lastModDate)) {
+    	    		Log.e("FILE!","File last modified @ : "+ lastModDate.toString());
+    	    		fileEx = FilenameUtils.getExtension(f.getAbsolutePath().toString());
+    	    		fileSize = f.length();
+    	    		
+    	    		Log.e("INSx",fileEx+"");
+    	    		if (fileSize <= 9500000){
+    	    		// insertRecording(String name, String dateAdded, String dateUploaded, int duration, int status, int origin, boolean isActive, String fileType, String dateFinalized, String path) {
+    	    			if ((fileEx.equals("mp3"))||(fileEx.equals("mp4") )||(fileEx.equals("3gp") )||(fileEx.equals("aac") )||(fileEx.equals("m4a"))){	
+    	    				fs = new FileInputStream(f);
+    	    				fd = fs.getFD();
+    	    				mp.setDataSource(fd);
+    	    				mp.prepare(); 
+    	    				int length = mp.getDuration();
+    	    				int lengthInSec = Math.round(length/1000);
+    	    				mp.release();
+    	    		
+    	    				Log.e("INS",lastDateUpdate.toString());
+    	    				Log.e("INS",lastModDate.toString());
+    	    				Log.e("INS",f.getName());
+    	    				Log.e("INS",strDate);
+    	    				Log.e("INScc",length+"");
+    	    				Log.e("INS",f.getAbsolutePath().toString());
+    	    				Log.e("INSC",yourDir.getAbsolutePath().toString());
+    	    				
+    	    				Log.e("INS",fileEx);
+    	    				String fname = FilenameUtils.removeExtension(f.getName());
+    	    				if(myDb.insertRecording(fname, strDate, "", lengthInSec, 0, 1, true, "."+fileEx,"",yourDir.getAbsolutePath().toString()+ "/" )) {
+    	    					//Toast.makeText(getApplicationContext(), "Recording saved as "+ strDefaultRecordingName, Toast.LENGTH_SHORT).show(); 
+    	    					fileSucc++;
+    	    				}  
+    	    				else{
+    	    					fileFail++;
+    	    					errorName = errorName +" "+f.getName();
+    	    					//Toast.makeText(getApplicationContext(), "Cannot write on database", Toast.LENGTH_SHORT).show(); 
+    	    				}
+    	    			}
+    	    			else{
+    	    				fileFail++;
+    	    				errorName = errorName +" "+f.getName();
+    	    			}
+    	    		}
+    	    		else{
+	    				fileFail++;
+	    				errorName = errorName +" "+f.getName();
+	    			}
+    	    	}
+    	    }
+    	}
+    	if (fileFail > 0){
+    		new AlertDialog.Builder(FeedActivity.this)
+   		    .setTitle("Unable to add "+ fileFail+ " files")
+   		    .setMessage("Cannot add these file(s): \n"+errorName)
+   		    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+   		        public void onClick(DialogInterface dialog, int which) { 
+   		            // continue with delete
+   		        }
+   		     })
+   		    .setIcon(android.R.drawable.ic_dialog_alert).show();
+    	}
+    	strDate = dateFunc.getDate();
+		myDb.updateImportDate(strDate);
+		RePopulate();
+    }
+    
+    private void makeImportFolder(){
+		String filepath = Environment.getExternalStorageDirectory().getPath();
+		File importDirec = new File(filepath + "/" + AUDIO_RECORDER_FOLDER, "IMPORTS");
+		if (!importDirec.exists()) {
+			importDirec.mkdirs();
+		}
+    }
+    
+    String parseUserRecordingID;
+	boolean parseIsFinalized = false;
+	Date parseDateFinalized = new Date();
+	Date parseDateUploaded = new Date();
+    private void checkParse(){
+    	Log.e("sfsd-xxxxxxxxxxx",myDb.getInstallCode());
+    	ParseQuery<ParseObject> queryCredits = ParseQuery.getQuery("Product");
+		queryCredits.whereEqualTo("user",ParseUser.getCurrentUser());
+		queryCredits.whereEqualTo("installCode",myDb.getInstallCode());
+		queryCredits.selectKeys((Arrays.asList("userRecordingID","isFinalized", "dateFinalized","createdAt")));
+		queryCredits.orderByAscending("createdAt");
+		{
+			queryCredits.findInBackground(new FindCallback<ParseObject>() {
+				@Override
+				public void done(List<ParseObject> arg0,
+						com.parse.ParseException arg1) {
+					// TODO Auto-generated method stub
+					if (arg1 == null) {
+						for (ParseObject object : arg0) {
+							//tem_id = object.getObjectId();
+							//item_credit = 0;
+							//item_credit = (Integer) object.getNumber("creditsLeft");
+							
+							parseUserRecordingID = object.getString("userRecordingID");
+							Log.e("sfsd-xxxxxxxxxxx",parseUserRecordingID);
+							parseDateFinalized =  object.getDate("dateFinalized");
+							parseIsFinalized = object.getBoolean("isFinalized");
+							parseDateUploaded = object.getCreatedAt();
+							//Log.e("sdgdfg", parseDateFinalized);
+							String formattedDate = dateFunc.getRawDateStringFromParse(parseDateFinalized);
+							String formattedDateUpload = dateFunc.getRawDateStringFromParse(parseDateUploaded);
+	                        if (parseIsFinalized == true){
+	                        	myDb.updateRecordingFinalize(parseUserRecordingID,formattedDate);
+	                        	
+	                        }
+	                        else{
+	                        	myDb.updateRecordingUploadDate(parseUserRecordingID, formattedDateUpload);
+	                        }
+	                        isRefreshed = true;
+						}
+					}
+					else{
+						
+					}
+				}
+			});
+		}	
 		
     }
-
+    
     public void populateTable(){
     	 setContentView(R.layout.activity_feed);
   
@@ -324,6 +508,13 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 			explicitIntent.putExtra("INTENT_DATE_FINALIZED",tc_recDateFin.getText().toString());
 			explicitIntent.putExtra("INTENT_PATH",tc_recPath.getText().toString());
 			explicitIntent.putExtra("INTENT_DURATION_RAW",tc_recDuratRaw.getText().toString());
+			Log.e("accc",tc_recName.getText().toString());
+			Log.e("bccc",tc_recDurat.getText().toString());
+			Log.e("dccc",tc_recStat.getText().toString());
+			Log.e("fccc",tc_recOrigin.getText().toString());
+			Log.e("gccc",tc_recFileType.getText().toString());
+			Log.e("hccc",tc_recPath.getText().toString());
+			Log.e("iccc",tc_recDuratRaw.getText().toString());
 			
 			startActivity(explicitIntent);
 			isEnteringUpdateActivity = true;

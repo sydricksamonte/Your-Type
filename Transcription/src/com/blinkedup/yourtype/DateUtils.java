@@ -43,6 +43,18 @@ public class DateUtils {
 		return converted;
 	}
 	
+	public String convertedToInstall(){
+		Date localeDate = new Date();
+		String converted;
+		Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+
+	    DateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");    
+	    formatter.setTimeZone(TimeZone.getDefault());  
+
+	    converted = formatter.format(localeDate.getTime());
+		return converted;
+	}
+	
 	public String convIntToLength(String len){
 		  int parsedLen = Integer.parseInt(len);
 		  int hr = parsedLen/3600;
@@ -85,5 +97,32 @@ public class DateUtils {
         
         return strDate;
 	}
+	
+	public String getRawDateStringFromParse(Date dateString){
+	 //String dateString = "03/26/2012 11:49:00 AM";
+		Log.e("sdgdfg", dateString.toString());
+	
+	    String strDate = "";
+	       
+	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+	        strDate = sdf.format(dateString.getTime());
 
+	    return strDate;
+	}
+	
+	public Date convertStringToRawDate(String dateString){
+		 //String dateString = "03/26/2012 11:49:00 AM";
+		Date date = new Date();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+		try {  
+		    date = format.parse(dateString);  
+		    System.out.println(date);  
+		} catch (ParseException e) {  
+		    // TODO Auto-generated catch block  
+		    e.printStackTrace();  
+		}
+		    return date;
+		}
+	
 }
