@@ -328,6 +328,8 @@ public class UploadActivity extends Activity{
 		                    																					ParseObject AudioRec = new ParseObject("Product");
 		                    																					AudioRec.put("Description", recDesc);
 		                    																					AudioRec.put("Type", recStrTransType);
+		                    																					AudioRec.put("installCode", mydb.getInstallCode());
+		                    																					AudioRec.put("userRecordingID",rec_id);
 		                    																					AudioRec.put("user", ParseUser.getCurrentUser());
 		                    																					AudioRec.put("audio", file);
 		                    																					AudioRec.put("isFinalized", false);
