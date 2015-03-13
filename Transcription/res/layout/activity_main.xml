@@ -19,6 +19,71 @@
         android:alpha="0.7"
         android:orientation="vertical" >
         
+    <TextView
+        android:id="@+id/txtwelcome"
+       android:layout_width="fill_parent" 
+        android:layout_height="wrap_content" 
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="20dp"
+        android:paddingBottom="10dp"
+        android:text="You are logged in as"
+        android:textSize="15sp"
+        android:gravity="center" />
+    
+    <TextView
+        android:id="@+id/textViewOutput"
+         android:layout_width="fill_parent" 
+        android:layout_height="wrap_content" 
+        android:layout_below="@+id/txtwelcome"
+        android:layout_centerHorizontal="true"
+        android:text="" 
+        android:textSize="18sp"
+        android:gravity="center"
+        android:paddingBottom="20dp" />
+    
+    <Button android:id="@+id/credits" 
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"        
+        android:layout_width="fill_parent"
+        android:layout_height="37dp"
+        android:background="@drawable/register_button"
+        android:textColor="#666666"
+        android:textSize="14sp" 
+        android:text="Show Credits Detail" />
+    
+         <TextView
+        android:id="@+id/tvCredits"
+         android:layout_width="fill_parent" 
+        android:layout_height="wrap_content" 
+        android:layout_below="@+id/txtwelcome"
+        android:layout_centerHorizontal="true"
+        android:text="No Credits" 
+        android:textSize="13sp"
+        android:gravity="center"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp" />
+         
+         <Button
+        android:id="@+id/btnBuyCredits"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"        
+        android:layout_width="fill_parent"
+        android:layout_height="37dp"
+        android:background="@drawable/login_button"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp" 
+          android:text="Buy Credits"/>
+         
+         <Button android:id="@+id/logout" 
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="20dp"        
+        android:layout_width="fill_parent"
+        android:layout_height="37dp"
+        android:background="@drawable/register_button"
+        android:textColor="#666666"
+        android:textSize="14sp" 
+        android:text="Logout" />
 
         
     <EditText android:id="@+id/etUsername" 

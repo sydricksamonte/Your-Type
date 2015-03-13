@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -46,8 +47,10 @@ import com.parse.ParseUser;
 public class MainActivity extends ActivityGroup {
 
 	EditText etUsername, etPassword;
-	Button btnSave, btnLoad, btnLogin, btnlogout;
-	ListView lstAllUsers;
+	Button btnSave, btnLoad, btnLogin, btnlogout, credits, showCredits, btnBuyCredits, logout;
+	ListView lstAllUsers;	
+	TextView txtwelcome, textViewOutput, textView1, tvtabs, tvCredits;
+	
 	
 	ArrayAdapter<String> adapter;
 	
@@ -66,8 +69,18 @@ public class MainActivity extends ActivityGroup {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		
+		
 		etUsername = (EditText) findViewById(R.id.etUsername);
 		etPassword = (EditText) findViewById(R.id.etPassword);
+		txtwelcome = (TextView) findViewById(R.id.txtwelcome);
+		textViewOutput = (TextView) findViewById(R.id.textViewOutput);
+		textView1 = (TextView) findViewById(R.id.textView1);
+		tvtabs = (TextView) findViewById(R.id.tvtabs);
+		tvCredits = (TextView) findViewById(R.id.tvCredits);
+		
+		
+		
 		lstAllUsers = (ListView) findViewById(R.id.lstAllUsers);
 		adapter = new ArrayAdapter<String>(this, R.layout.dropdown_item);
 		lstAllUsers.setAdapter(adapter);
@@ -77,6 +90,11 @@ public class MainActivity extends ActivityGroup {
 		btnLoad = (Button) findViewById(R.id.btnLoad);
 		btnLogin = (Button) findViewById(R.id.btnLogin);
 		btnlogout = (Button) findViewById(R.id.btnlogout);
+		credits = (Button) findViewById(R.id.credits);
+		showCredits = (Button) findViewById(R.id.credits);
+		btnBuyCredits = (Button) findViewById(R.id.btnBuyCredits);
+		logout = (Button) findViewById(R.id.logout);
+		
 		btnSave.setOnClickListener(new MyButtonEventHandler());
 		btnLoad.setOnClickListener(new MyButtonEventHandler());
 		btnlogout.setOnClickListener(new MyButtonEventHandler());
@@ -85,6 +103,51 @@ public class MainActivity extends ActivityGroup {
 		  
 		pl = new ParseLoader();
 		pl.initParse(this);
+		
+		txtwelcome.setVisibility(View.GONE); 
+		textViewOutput.setVisibility(View.GONE); 
+		credits.setVisibility(View.GONE);
+		tvCredits.setVisibility(View.GONE);
+		btnBuyCredits.setVisibility(View.GONE);
+		logout.setVisibility(View.GONE);
+		
+		
+		LoginsessionCache();
+		
+		
+		logout.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(), "You are logged out.", 3).show();
+				ParseUser.logOut();
+            //	ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+				Intent in = new Intent(MainActivity.this, TabHostActivity.class);
+		        startActivity(in);
+				}			
+		});
+		
+		btnBuyCredits.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				//Intent activityIntentToRegister = new Intent(v.getContext(), RegisterActivity.class);
+				//replaceContentView("RActivity", activityIntentToRegister);
+				Intent explicitIntent = new Intent(MainActivity.this,
+						InAppPurchase.class);
+				startActivity(explicitIntent);
+				}			
+		});
+		
+		showCredits.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				//Intent activityIntentToRegister = new Intent(v.getContext(), RegisterActivity.class);
+				//replaceContentView("RActivity", activityIntentToRegister);
+				Intent explicitIntent = new Intent(MainActivity.this,
+						ShowDetailActivity.class);
+				startActivity(explicitIntent);
+				}			
+		});
+		
 		
 		btnSave.setOnClickListener(new OnClickListener(){
 			@Override
@@ -196,77 +259,158 @@ public class MainActivity extends ActivityGroup {
 				}
 				else if (v.getId() == R.id.btnLogin){
 					
-					//start activity progress
-					
-					myPd_ring = ProgressDialog.show(MainActivity.this, "Please wait", "Logging in..", true);
-			        myPd_ring.setCancelable(false);
-					 new Thread(new Runnable() {  
-				            @Override
-				            public void run() {
-				                  // TODO Auto-generated method stub
-				                  try{
-				                  	if (Network.isNetworkAvailable(MainActivity.this)){
-				                  		MainActivity.this.runOnUiThread(new Runnable() {
-				                           @Override
-				                           public void run() {
-				                        	 
-
-					ParseUser.logInInBackground( etUsername.getText().toString(), etPassword.getText().toString(), new LogInCallback() {
-						  public void done(ParseUser user, ParseException e) {
-						    if (user != null) {
-						    	Toast.makeText(getApplicationContext(), "Welcome " + etUsername.getText().toString(), 3).show();
-								
-						    	
-						    	//	Begin Implementation reference for tabs to display when in another activity
-
-								Intent activity3Intent = new Intent(MainActivity.this, Welcome.class);
-								activity3Intent.putExtra("NAME", etUsername.getText().toString());
-								StringBuffer urlString = new StringBuffer();
-								//Activity1 parentActivity = (Activity1)getParent();
-								replaceContentView("Welcome", activity3Intent);
-									
-						    	
-					
-						    } else {
-						    	Toast.makeText(getApplicationContext(), "Sign-in failed. Incorrect log-in details", 3).show();
-						    }
-						  }
-						});
-					
-				
-					//continuation for progress bar
-				                       	    }
-				                           
-							                  		});
-				                  		myPd_ring.dismiss();
-							                  	}
-							                  	else
-							                  	{
-							                  		myPd_ring.dismiss();
-							                  		mHandler.sendEmptyMessage(1);
-							                  	}
-							                  }
-							                  catch(Exception e){
-							                	  myPd_ring.dismiss();
-							                	  mHandler.sendEmptyMessage(3);
-							                  }
-							            }
-								 }).start();
-								 
-								//end activity progress
+					Loginsession();
 					
 				}
 				
-				else if (v.getId() == R.id.btnlogout){
-				
-					ParseUser.logOut();
-					Toast.makeText(getApplicationContext(), "You are logged out ", 3).show();
-					//ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-				}
+			
 		}
 		
 		
 	}
+	
+	public void Loginsession(){
+		
+		//start activity progress
+		
+		myPd_ring = ProgressDialog.show(MainActivity.this, "Please wait", "Logging in..", true);
+        myPd_ring.setCancelable(false);
+		 new Thread(new Runnable() {  
+	            @Override
+	            public void run() {
+	                  // TODO Auto-generated method stub
+	                  try{
+	                  	if (Network.isNetworkAvailable(MainActivity.this)){
+	                  		MainActivity.this.runOnUiThread(new Runnable() {
+	                           @Override
+	                           public void run() {
+	                        	 
+
+		ParseUser.logInInBackground( etUsername.getText().toString(), etPassword.getText().toString(), new LogInCallback() {
+			  public void done(ParseUser user, ParseException e) {
+			    if (user != null) {
+			    	Toast.makeText(getApplicationContext(), "Welcome " + etUsername.getText().toString(), 3).show();
+			    	
+			    	Log.e("Userlogin", user.getUsername()+"");
+			    	
+			    	VisibilityDisplay();
+			    	
+			    	
+			    
+			    	
+		
+			    } else {
+			    	Toast.makeText(getApplicationContext(), "Sign-in failed. Incorrect log-in details", 3).show();
+			    }
+			  }
+			});
+		
+	
+		//continuation for progress bar
+	                       	    }
+	                           
+				                  		});
+	                  		myPd_ring.dismiss();
+				                  	}
+				                  	else
+				                  	{
+				                  		myPd_ring.dismiss();
+				                  		mHandler.sendEmptyMessage(1);
+				                  	}
+				                  }
+				                  catch(Exception e){
+				                	  myPd_ring.dismiss();
+				                	  mHandler.sendEmptyMessage(3);
+				                  }
+				            }
+					 }).start();
+					 
+					//end activity progress
+		
+	}
+	
+	
+	public void LoginsessionCache(){
+		
+		//start activity progress
+		
+		myPd_ring = ProgressDialog.show(MainActivity.this, "", "", true);
+        myPd_ring.setCancelable(false);
+		 new Thread(new Runnable() {  
+	            @Override
+	            public void run() {
+	                  // TODO Auto-generated method stub
+	                  try{
+	                  	if (Network.isNetworkAvailable(MainActivity.this)){
+	                  		MainActivity.this.runOnUiThread(new Runnable() {
+	                           @Override
+	                           public void run() {
+	                        	 
+
+		ParseUser.logInInBackground( etUsername.getText().toString(), etPassword.getText().toString(), new LogInCallback() {
+			  public void done(ParseUser user, ParseException e) {
+			    if (user != null) {
+			    //	Toast.makeText(getApplicationContext(), "Welcome " + etUsername.getText().toString(), 3).show();
+			    	
+			    	Log.e("Userlogin", user.getUsername()+"");
+			    	
+			    	VisibilityDisplay();
+			    	
+			    	
+			    
+			    	
+		
+			    } else {
+			    	//Toast.makeText(getApplicationContext(), "Sign-in failed. Incorrect log-in details", 3).show();
+			    }
+			  }
+			});
+		
+	
+		//continuation for progress bar
+	                       	    }
+	                           
+				                  		});
+	                  		myPd_ring.dismiss();
+				                  	}
+				                  	else
+				                  	{
+				                  		myPd_ring.dismiss();
+				                  		mHandler.sendEmptyMessage(1);
+				                  	}
+				                  }
+				                  catch(Exception e){
+				                	  myPd_ring.dismiss();
+				                	  mHandler.sendEmptyMessage(3);
+				                  }
+				            }
+					 }).start();
+					 
+					//end activity progress
+		
+	}
+	
+	
+	public void VisibilityDisplay(){
+
+		txtwelcome.setVisibility(View.VISIBLE); 
+    	textViewOutput.setVisibility(View.VISIBLE); 
+    	credits.setVisibility(View.VISIBLE);
+    	tvCredits.setVisibility(View.VISIBLE);
+    	btnBuyCredits.setVisibility(View.VISIBLE);
+    	logout.setVisibility(View.VISIBLE);
+    	
+    	textViewOutput.setText(etUsername.getText().toString());
+    	etUsername.setVisibility(View.GONE); 
+    	etPassword.setVisibility(View.GONE); 
+    	btnLogin.setVisibility(View.GONE); 
+    	textView1.setVisibility(View.GONE);
+    	btnSave.setVisibility(View.GONE);
+    	tvtabs.setVisibility(View.GONE);
+		
+	}
+	
+	
 	public void replaceContentView(String id, Intent newIntent) {
 		View view = getLocalActivityManager().startActivity(id,newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)) .getDecorView(); this.setContentView(view);
 	} 
