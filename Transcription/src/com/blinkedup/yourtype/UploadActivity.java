@@ -206,7 +206,6 @@ public class UploadActivity extends Activity{
 		creditorIndex = 0;
 		    
 		btnUpload.setOnClickListener(new OnClickListener() {
-	
 			@Override
 			public void onClick(View v) {
 				btnUpload.setEnabled(false);
@@ -278,6 +277,7 @@ public class UploadActivity extends Activity{
 		                    																.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 		                    																	public void onClick(DialogInterface dialog, int which) { 
 		                    																		// continue with delete
+		                    																		myPd_ring.dismiss();
 		                    																	}
 		                    																})
 		                    																.setIcon(android.R.drawable.ic_dialog_alert).show();

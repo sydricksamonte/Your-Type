@@ -55,6 +55,7 @@ public class FeedDetailActivity extends Activity{
 	TextView tc_recDuratBack;
 	DateUtils du;
 	RecordingDB mydb;
+	
 	ImageButton dynBtnPlay;
 	ImageButton dynBtnPause;
 	ImageButton dynBtnDelete;

@@ -226,6 +226,22 @@ public class RecordingDB extends SQLiteOpenHelper{
 		return count;
 	} 
 	
+	public boolean isFileExistent(String name) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor dataCount = db.rawQuery("select "+ RECORDING_NAME +" from " + DATABASE_TABLE + " WHERE "+ RECORDING_NAME +" = '"+ name+ "' AND "+ RECORDING_ORIGIN +" = '"+ 1+ "' AND "+ RECORDING_ISACTIVE +" = '"+ 1+ "' LIMIT 1", null);
+
+		int count = dataCount.getCount();
+		boolean isExistent = false;
+		if (count == 1){
+			isExistent = true;
+		}
+		else{
+			isExistent = false;
+		}
+		dataCount.close();
+		return isExistent;
+	} 
+	
 	public int retrieveLastId() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery("select "+ RECORDING_ID +" from " + DATABASE_TABLE + " ORDER BY "+ RECORDING_ID +" DESC LIMIT 1 ", null);
@@ -287,7 +303,7 @@ public class RecordingDB extends SQLiteOpenHelper{
 		catch(Exception e){
 			
 		}
-		Log.e("aedasd",name);
+
 		return name;
 	}
 	
