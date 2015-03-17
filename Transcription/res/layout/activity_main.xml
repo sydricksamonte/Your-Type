@@ -52,17 +52,41 @@
         android:textSize="14sp" 
         android:text="Show Credits Detail" />
     
-         <TextView
-        android:id="@+id/tvCredits"
+    <TextView
+        android:id="@+id/tvdispCredits"
          android:layout_width="fill_parent" 
         android:layout_height="wrap_content" 
         android:layout_below="@+id/txtwelcome"
         android:layout_centerHorizontal="true"
-        android:text="No Credits" 
-        android:textSize="13sp"
+        android:text="Remaining Credits" 
+        style="@android:style/TextAppearance.Small"
         android:gravity="center"
-        android:paddingBottom="20dp"
+        android:paddingBottom="3dp"
         android:paddingTop="20dp" />
+    
+         <TextView
+        android:id="@+id/tvCredits"
+         android:layout_width="fill_parent" 
+        android:layout_height="wrap_content" 
+        android:layout_below="@+id/tvdispCredits"
+        android:layout_centerHorizontal="true"
+        android:text="No Credits" 
+        style="@android:style/TextAppearance.Medium"
+        android:gravity="center"
+        android:paddingBottom="2dp" />
+        
+        <TextView
+        android:id="@+id/tvdispCreditsDate"
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content" 
+        android:layout_below="@+id/txtwelcome"
+        android:layout_centerHorizontal="true"
+        android:text="" 
+        style="@android:style/TextAppearance.Small"
+        android:gravity="center"
+        android:paddingBottom="20dp" 
+        
+        />
          
          <Button
         android:id="@+id/btnBuyCredits"

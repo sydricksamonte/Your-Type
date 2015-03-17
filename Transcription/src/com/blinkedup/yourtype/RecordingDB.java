@@ -48,6 +48,7 @@ public class RecordingDB extends SQLiteOpenHelper{
 	  /** A constant, stores the the table name */
     private static final String DATABASE_TABLE_3 = "Installs";
     
+    
     /** An instance variable for SQLiteDatabase */
     private SQLiteDatabase mDB;  
     DateUtils dateFunc;
@@ -345,6 +346,64 @@ public class RecordingDB extends SQLiteOpenHelper{
 
 	      mDB.update(DATABASE_TABLE_2, contentValues, UPDATE_ID +"="+1, null);
 	      return true;
+	}
+	
+	public boolean deleteAllUpdate(String date) {
+		
+	    //  SQLiteDatabase db = this.getWritableDatabase();
+	      ContentValues contentValues = new ContentValues();
+
+	      contentValues.put(UPDATE_DATE_UPDATE, date);
+	      contentValues.put(UPDATE_REMAINING, 0);
+	      contentValues.put(UPDATE_ISACTIVE, true);
+
+	      mDB.update(DATABASE_TABLE_2, contentValues, UPDATE_ID +"="+1, null);
+	      return true;
+	}
+
+	public String getRemainingCredit() {
+		
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery("select "+ UPDATE_REMAINING +" from " + DATABASE_TABLE_2 + " WHERE "+ UPDATE_ISACTIVE +" = '1' ", null);
+		
+		String last = "0";
+		
+		try{
+			cursor.moveToFirst();
+			last = cursor.getString(0);
+			
+			if (last.equals("0")){
+				last = "No Creditsx";
+			}
+		}
+		catch (Exception e){	
+			last = "No Credits!";
+		}
+		cursor.close();
+		return last;
+	}
+	
+	public String getCreditRecentDate() {
+		String fDate;
+		Date rawDate = new Date();
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery("select "+ UPDATE_DATE_UPDATE +" from " + DATABASE_TABLE_2 + " WHERE "+ UPDATE_ISACTIVE +" = '1' ", null);
+		
+		String last = "0";
+		
+		try{
+			cursor.moveToFirst();
+			last = cursor.getString(0);
+			dateFunc = new DateUtils();
+			//rawDate = dateFunc.convertStringToRawDate(last);
+			fDate = dateFunc.convertStringToDate(last);
+			
+		}
+		catch (Exception e){	
+			fDate = "";
+		}
+		cursor.close();
+		return fDate;
 	}
 	
 	@Override

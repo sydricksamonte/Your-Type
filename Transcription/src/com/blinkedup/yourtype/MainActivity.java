@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -35,7 +34,6 @@ import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -49,9 +47,9 @@ public class MainActivity extends ActivityGroup {
 	EditText etUsername, etPassword;
 	Button btnSave, btnLoad, btnLogin, btnlogout, credits, showCredits, btnBuyCredits, logout;
 	ListView lstAllUsers;	
-	TextView txtwelcome, textViewOutput, textView1, tvtabs, tvCredits;
+	TextView txtwelcome, textViewOutput, textView1, tvtabs, tvCredits, tvdispCreditsDate, tvdispCredits;
 	
-	
+	RecordingDB mydb;
 	ArrayAdapter<String> adapter;
 	
 	ParseObject parseObj;
@@ -65,11 +63,21 @@ public class MainActivity extends ActivityGroup {
 	AlertDialog aDial;
 	Handler mHandler;
 	
+	@Override
+	protected void onResume() {
+	    super.onResume();
+	    if (ParseUser.getCurrentUser() != null){
+	    displayRemainingCredits();
+	    }
+	    // Normal case behavior follows
+	}
+	
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		
+		mydb = new RecordingDB(this);
 		
 		etUsername = (EditText) findViewById(R.id.etUsername);
 		etPassword = (EditText) findViewById(R.id.etPassword);
@@ -78,8 +86,8 @@ public class MainActivity extends ActivityGroup {
 		textView1 = (TextView) findViewById(R.id.textView1);
 		tvtabs = (TextView) findViewById(R.id.tvtabs);
 		tvCredits = (TextView) findViewById(R.id.tvCredits);
-		
-		
+		tvdispCreditsDate = (TextView) findViewById(R.id.tvdispCreditsDate);
+		tvdispCredits  = (TextView) findViewById(R.id.tvdispCredits);
 		
 		lstAllUsers = (ListView) findViewById(R.id.lstAllUsers);
 		adapter = new ArrayAdapter<String>(this, R.layout.dropdown_item);
@@ -104,23 +112,18 @@ public class MainActivity extends ActivityGroup {
 		pl = new ParseLoader();
 		pl.initParse(this);
 		
-		txtwelcome.setVisibility(View.GONE); 
-		textViewOutput.setVisibility(View.GONE); 
-		credits.setVisibility(View.GONE);
-		tvCredits.setVisibility(View.GONE);
-		btnBuyCredits.setVisibility(View.GONE);
-		logout.setVisibility(View.GONE);
-		
-		
-		LoginsessionCache();
-		
+		if (ParseUser.getCurrentUser() != null){
+			VisibilityDisplay();
+		}
+		else{
+			DisplayLoggedOut();
+		}
 		
 		logout.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(getApplicationContext(), "You are logged out.", 3).show();
 				ParseUser.logOut();
-            //	ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
 				Intent in = new Intent(MainActivity.this, TabHostActivity.class);
 		        startActivity(in);
 				}			
@@ -160,7 +163,6 @@ public class MainActivity extends ActivityGroup {
 				}			
 		});
 		
-		
 		// message to progress bar
 		mHandler = new Handler()
 		{
@@ -194,16 +196,12 @@ public class MainActivity extends ActivityGroup {
 		};
 	}
 	
-	
-	
 	public boolean isOnline(){
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo netInfo = cm.getActiveNetworkInfo();
 		if ((netInfo != null) && (netInfo.isConnected()))  return true; ;
 		return false;
 	}
-	
-	
 
 	private class MyListItemClickListener implements OnItemClickListener{
 		public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
@@ -233,8 +231,6 @@ public class MainActivity extends ActivityGroup {
 			confirmDialog.show();
 		}
 	}
-	
-
 
 	private class MyButtonEventHandler implements OnClickListener{
 
@@ -261,18 +257,12 @@ public class MainActivity extends ActivityGroup {
 					
 					Loginsession();
 					
-				}
-				
-			
+				}	
 		}
-		
-		
 	}
 	
 	public void Loginsession(){
-		
 		//start activity progress
-		
 		myPd_ring = ProgressDialog.show(MainActivity.this, "Please wait", "Logging in..", true);
         myPd_ring.setCancelable(false);
 		 new Thread(new Runnable() {  
@@ -283,34 +273,25 @@ public class MainActivity extends ActivityGroup {
 	                  	if (Network.isNetworkAvailable(MainActivity.this)){
 	                  		MainActivity.this.runOnUiThread(new Runnable() {
 	                           @Override
-	                           public void run() {
-	                        	 
-
-		ParseUser.logInInBackground( etUsername.getText().toString(), etPassword.getText().toString(), new LogInCallback() {
-			  public void done(ParseUser user, ParseException e) {
-			    if (user != null) {
-			    	Toast.makeText(getApplicationContext(), "Welcome " + etUsername.getText().toString(), 3).show();
-			    	
-			    	Log.e("Userlogin", user.getUsername()+"");
-			    	
-			    	VisibilityDisplay();
-			    	
-			    	
-			    
-			    	
-		
-			    } else {
-			    	Toast.makeText(getApplicationContext(), "Sign-in failed. Incorrect log-in details", 3).show();
-			    }
-			  }
-			});
-		
-	
+	                           public void run() {	
+	                        	   ParseUser.logInInBackground( etUsername.getText().toString(), etPassword.getText().toString(), new LogInCallback() {
+	                        		   public void done(ParseUser user, ParseException e) {
+	                        			   if (user != null) {
+	                        				 //  Toast.makeText(getApplicationContext(), "Welcome " + etUsername.getText().toString(), 3).show();
+	                        				   Log.e("Userlogin", user.getUsername()+"");    	
+	                        				   VisibilityDisplay();		 
+	                        				   myPd_ring.dismiss();
+	                        			   } else {
+	                        				   Toast.makeText(getApplicationContext(), "Sign-in failed. Incorrect log-in details", 3).show();
+	                        				   myPd_ring.dismiss();
+	                        			   }
+	                        		   }
+	                        	   });
 		//continuation for progress bar
 	                       	    }
 	                           
 				                  		});
-	                  		myPd_ring.dismiss();
+	                  		
 				                  	}
 				                  	else
 				                  	{
@@ -390,23 +371,101 @@ public class MainActivity extends ActivityGroup {
 		
 	}
 	
+	public void displayRemainingCredits(){
+		String rem = mydb.getRemainingCredit();
+		tvCredits.setText(getDurationString(Integer.parseInt(rem)));
+		if (mydb.getCreditRecentDate().equals("")){
+			tvdispCreditsDate.setText("");
+		}
+		else{
+			tvdispCreditsDate.setText("Last updated on: "+mydb.getCreditRecentDate());
+		}
+	}
+	
+	private String getDurationString(int seconds) {
+
+	    int hours = seconds / 3600;
+	    int minutes = (seconds % 3600) / 60;
+	    seconds = seconds % 60;
+	    
+	    String hr;
+	    String min;
+	    String sec;
+	    if (hours == 1){
+	    	hr = " hour ";
+	    }
+	    else{
+	    	hr = " hours ";
+	    }
+	    
+	    if (minutes == 1){
+	    	min = " minute ";
+	    }
+	    else{
+	    	min = " minutes ";
+	    }
+	    
+	    if (seconds == 1){
+	    	sec = " second ";
+	    }
+	    else{
+	    	sec = " seconds ";
+	    }
+	    
+	    String lenSec = "";
+	    if (seconds != 0){
+	    	lenSec = seconds + sec;
+	    }
+	    if (minutes != 0){
+	    	lenSec =  minutes + min + lenSec;
+	    }
+	    if (hours != 0){
+	    	lenSec = hours + hr + lenSec;
+		}
+	    return lenSec;
+	}
+
 	
 	public void VisibilityDisplay(){
 
+		displayRemainingCredits();
 		txtwelcome.setVisibility(View.VISIBLE); 
     	textViewOutput.setVisibility(View.VISIBLE); 
     	credits.setVisibility(View.VISIBLE);
     	tvCredits.setVisibility(View.VISIBLE);
     	btnBuyCredits.setVisibility(View.VISIBLE);
     	logout.setVisibility(View.VISIBLE);
+    	tvdispCreditsDate.setVisibility(View.VISIBLE);
+    	tvdispCredits.setVisibility(View.VISIBLE);
     	
-    	textViewOutput.setText(etUsername.getText().toString());
+    	textViewOutput.setText(ParseUser.getCurrentUser().getUsername().toString());
     	etUsername.setVisibility(View.GONE); 
     	etPassword.setVisibility(View.GONE); 
     	btnLogin.setVisibility(View.GONE); 
     	textView1.setVisibility(View.GONE);
     	btnSave.setVisibility(View.GONE);
     	tvtabs.setVisibility(View.GONE);
+		
+	}
+	
+	public void DisplayLoggedOut(){
+
+		txtwelcome.setVisibility(View.GONE); 
+    	textViewOutput.setVisibility(View.GONE); 
+    	credits.setVisibility(View.GONE);
+    	tvCredits.setVisibility(View.GONE);
+    	btnBuyCredits.setVisibility(View.GONE);
+    	logout.setVisibility(View.GONE);
+    	tvdispCreditsDate.setVisibility(View.GONE);
+    	tvdispCredits.setVisibility(View.GONE);
+    	
+    	//textViewOutput.setText(etUsername.getText().toString());
+    	etUsername.setVisibility(View.VISIBLE); 
+    	etPassword.setVisibility(View.VISIBLE); 
+    	btnLogin.setVisibility(View.VISIBLE); 
+    	textView1.setVisibility(View.VISIBLE);
+    	btnSave.setVisibility(View.VISIBLE);
+    	tvtabs.setVisibility(View.VISIBLE);
 		
 	}
 	
