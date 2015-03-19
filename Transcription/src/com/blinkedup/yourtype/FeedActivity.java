@@ -95,7 +95,6 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
     private void RePopulate() {
     	getSupportLoaderManager().restartLoader(0, null, this);
     	mAdapter.notifyDataSetChanged();
-    
     }
     
     @Override
@@ -120,6 +119,9 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 		    	if (msg.what == 2){
 		    		Toast.makeText(FeedActivity.this, "Please connect to internet to check for changes in transcription status", 5).show();
 		    		btnRefresh.setEnabled(true);
+		    	}
+		    	if (msg.what == 5){
+		    		RePopulate();
 		    	}
 		 	}
 		};
@@ -209,14 +211,20 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 		                    			});
 		                    		}
 		                    		else{
-			                    		ImportFiles();
-			                    		mHandler.sendEmptyMessage(2);
+		                    			try {
+		                    				ImportFiles();
+		                    				mHandler.sendEmptyMessage(2);
+		    							} catch (IOException e) {}
+			                    		
+			                    		
 			                    	}
 		                    	}
 		                    	else{
 		                    		Log.e("NOTICE","No user attached");
-		                    		mHandler.sendEmptyMessage(1);
-		                    		ImportFiles();
+		                    		try {
+	                    				ImportFiles();
+	                    				mHandler.sendEmptyMessage(1);
+	    							} catch (IOException e) {}
 		                    	}
 		                    }
 		                    catch(Exception e){
@@ -245,25 +253,20 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
     private void ImportFiles() throws IOException{
     	makeImportFolder();
     	
-    	Date curDate = new Date();
-		//Date lastDateUpdate = myDb.getLastImportDate();
-		Date fileDate = new Date();
-    	
 		String strDate = dateFunc.getDate();
 		
 		String filepath = Environment.getExternalStorageDirectory().getPath();
-		Log.e("FILE!",filepath);
-		//Log.e("FILE! u",lastDateUpdate.toString());
-		
-		File yourFile;
+	
 		MediaPlayer mp = new MediaPlayer();
 		FileInputStream fs;
 		FileDescriptor fd;
 		
 		String fileEx = "";
-		myPd_ring.dismiss();/////////
-    	File yourDir = new File(filepath + "/" + AUDIO_RECORDER_FOLDER ,"IMPORTS");
-    	int fileSucc = 0;
+		myPd_ring.dismiss();
+    	
+		File yourDir = new File(filepath + "/" + AUDIO_RECORDER_FOLDER ,"IMPORTS");
+    	
+		int fileSucc = 0;
     	int fileFail = 0;
     	String errorName ="";
     	long fileSize = 0;
@@ -335,8 +338,10 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
    		    .setIcon(android.R.drawable.ic_dialog_alert).show();
     	}
     	strDate = dateFunc.getDate();
-		myDb.updateImportDate(strDate);
-		RePopulate();
+		if (myDb.updateImportDate(strDate)){
+			//RePopulate();
+			mHandler.sendEmptyMessage(5);
+		}
     }
     
     private void makeImportFolder(){
@@ -366,7 +371,6 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 				public void done(List<ParseObject> arg0,
 						com.parse.ParseException arg1) {
 					// TODO Auto-generated method stub
-					Log.e("fdgf","dfsrf");
 					recListSize = arg0.size();
 					if (arg1 == null) {
 						if (recListSize == 0){
@@ -376,9 +380,7 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 						}
 						else{
 						for (ParseObject object : arg0) {
-							//tem_id = object.getObjectId();
-							//item_credit = 0;
-							//item_credit = (Integer) object.getNumber("creditsLeft");
+							
 							recListCount++;
 							parseUserRecordingID = object.getString("userRecordingID");
 	

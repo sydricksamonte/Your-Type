@@ -107,14 +107,15 @@ public class RecordingDB extends SQLiteOpenHelper{
 	
 	/** Returns all the customers in the table */
 	public Cursor getAllCustomers(String key){
+		SQLiteDatabase db = this.getReadableDatabase();
 		if (key == ""){
-			return mDB.query(DATABASE_TABLE, new String[] { RECORDING_ID,  RECORDING_NAME , RECORDING_DATE_ADDED, RECORDING_DATE_UPLOADED
+			return db.query(DATABASE_TABLE, new String[] { RECORDING_ID,  RECORDING_NAME , RECORDING_DATE_ADDED, RECORDING_DATE_UPLOADED
         		, RECORDING_DURATION, RECORDING_STATUS, RECORDING_ORIGIN, RECORDING_ISACTIVE, RECORDING_FILE_TYPE, RECORDING_DATE_FINALIZED,  RECORDING_PATH  } , 
         		RECORDING_ISACTIVE + "= '1'", null, null, null, 
         		RECORDING_DATE_ADDED + " desc ");
 		}
 		else{
-			return mDB.query(DATABASE_TABLE, new String[] { RECORDING_ID,  RECORDING_NAME , RECORDING_DATE_ADDED, RECORDING_DATE_UPLOADED
+			return db.query(DATABASE_TABLE, new String[] { RECORDING_ID,  RECORDING_NAME , RECORDING_DATE_ADDED, RECORDING_DATE_UPLOADED
 	        		, RECORDING_DURATION, RECORDING_STATUS, RECORDING_ORIGIN, RECORDING_ISACTIVE, RECORDING_FILE_TYPE, RECORDING_DATE_FINALIZED,  RECORDING_PATH  } , 
 	        		RECORDING_ISACTIVE + "= '1' AND " + RECORDING_STATUS + " = "+"'"+ key +"'"+ "", null, null, null, 
 	        		RECORDING_DATE_ADDED + " desc ");
@@ -182,7 +183,7 @@ public class RecordingDB extends SQLiteOpenHelper{
 		db.update(DATABASE_TABLE, cv, RECORDING_ID +"="+id, null);
 		return true;
 	}
-	public void updateImportDate(String date) {
+	public boolean updateImportDate(String date) {
 
 		SQLiteDatabase db = this.getWritableDatabase();
 
@@ -191,7 +192,7 @@ public class RecordingDB extends SQLiteOpenHelper{
 		cv.put(INSTALL_CODE, 1);
 		
 		db.update(DATABASE_TABLE_3, cv, INSTALL_CODE +"="+1, null);
-		return ;
+		return true;
 	}
 	
 	public boolean updateRecordingUploadDate(String id, String date) {
@@ -273,6 +274,14 @@ public class RecordingDB extends SQLiteOpenHelper{
 		}
 		cursor.close();
 		return  last;
+	}
+	
+	public void initDB() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery("select "+ INSTALL_CODE +" from " + DATABASE_TABLE_3 + " DESC LIMIT 1 ", null);
+
+		cursor.close();
+		return;
 	}
 	
 	public Date getLastImportDate() {
