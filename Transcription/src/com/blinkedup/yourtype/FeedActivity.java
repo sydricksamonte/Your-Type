@@ -17,12 +17,15 @@ import com.parse.ParseUser;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -126,12 +129,17 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 		getSupportLoaderManager().initLoader(0, null, this);
 		
 		btnAll = (ImageButton)findViewById(R.id.btnSortAll);
-		
+		btnAll.setBackgroundResource(R.drawable.btn_a_pressed);
 		btnAll.setOnClickListener( new OnClickListener() {
 			@Override
 	            public void onClick(View v) {
 				 arrArg[0] = "";
 				 RePopulate();
+				 
+				 btnAll.setBackgroundResource(R.drawable.btn_a_pressed);
+				 btnWaiting.setBackgroundResource(R.drawable.btn_w); 
+				 btnUp.setBackgroundResource(R.drawable.btn_u);
+				 btnDone.setBackgroundResource(R.drawable.btn_d);
 				}
 			});
 		
@@ -141,6 +149,11 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 	            public void onClick(View v) {
 					arrArg[0] = "0";
 					RePopulate();
+					
+					btnAll.setBackgroundResource(R.drawable.btn_a);
+					btnWaiting.setBackgroundResource(R.drawable.btn_w_pressed);
+					btnUp.setBackgroundResource(R.drawable.btn_u);
+					btnDone.setBackgroundResource(R.drawable.btn_d);
 				}
 			});
 		btnUp = (ImageButton)findViewById(R.id.btnSortUp);
@@ -149,6 +162,11 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 	            public void onClick(View v) {
 				 arrArg[0] = "1";
 				 RePopulate();
+				 
+				 btnAll.setBackgroundResource(R.drawable.btn_a);
+				 btnWaiting.setBackgroundResource(R.drawable.btn_w);
+				 btnUp.setBackgroundResource(R.drawable.btn_u_pressed);
+				 btnDone.setBackgroundResource(R.drawable.btn_d);
 				}
 			});
 		
@@ -159,6 +177,10 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 				 arrArg[0] = "2";
 				 RePopulate();
 				
+				 btnAll.setBackgroundResource(R.drawable.btn_a);
+				 btnWaiting.setBackgroundResource(R.drawable.btn_w);
+				 btnUp.setBackgroundResource(R.drawable.btn_u);
+				 btnDone.setBackgroundResource(R.drawable.btn_d_pressed);
 				}
 			});
 		
@@ -167,7 +189,7 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 			@Override
 	            public void onClick(View v) {
 				myPd_ring = ProgressDialog.show(FeedActivity.this, "Please wait", "Updating...", true);
-		        myPd_ring.setCancelable(false);
+		        myPd_ring.setCancelable(true);
 		       
 		        new Thread(new Runnable() {  
 		              @Override
@@ -177,7 +199,8 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 		                    try{
 		                    	
 		                    	if (ParseUser.getCurrentUser() != null){
-		                    		if (Network.isNetworkAvailable(FeedActivity.this)){
+		                    		if (isOnline()){
+		                    		//if (Network.isNetworkAvailable(FeedActivity.this)){
 		                    			runOnUiThread(new Runnable() {
 		                    				@Override
 		                    				public void run() {
@@ -212,7 +235,13 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 				}
 			});
     }
-   
+    public boolean isOnline(){
+    	ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    	NetworkInfo netInfo = cm.getActiveNetworkInfo();
+    	if ((netInfo != null) && (netInfo.isConnected()))  return true; ;
+    	return false;
+    }
+    
     private void ImportFiles() throws IOException{
     	makeImportFolder();
     	

@@ -87,7 +87,8 @@
        			android:layout_width="38dip"
          		android:layout_height="38dip"
         		android:background="@drawable/btn_question"
-				android:layout_gravity="center_vertical|center_horizontal"/>
+				android:layout_gravity="center_vertical|center_horizontal"
+				android:visibility="gone"/>
         	
         	<View 
         		android:layout_width="0dip" 
