@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="25dp"
+    android:padding="20dp"
     android:background="@drawable/ldpi_normal"
     tools:context=".InAppPurchase" >
 
@@ -13,10 +13,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-         android:background="@drawable/shape"
-        android:radius="50dp"
-        android:alpha="0.7"
+        android:padding="15dp"
+        android:background="@drawable/shape"
+        android:radius="10dp"
+        android:alpha="0.85"
         android:orientation="vertical" >
         
     <TextView
@@ -25,10 +25,10 @@
         android:layout_height="wrap_content" 
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:paddingTop="20dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="5dp"
         android:text="You are logged in as"
-        android:textSize="15sp"
+        style="@android:style/TextAppearance.Small"
         android:gravity="center" />
     
     <TextView
@@ -38,9 +38,9 @@
         android:layout_below="@+id/txtwelcome"
         android:layout_centerHorizontal="true"
         android:text="" 
-        android:textSize="18sp"
+        style="@android:style/TextAppearance.Medium"
         android:gravity="center"
-        android:paddingBottom="20dp" />
+        android:paddingBottom="15dp" />
     
     <Button android:id="@+id/credits" 
         android:layout_marginTop="8dp"
@@ -62,7 +62,7 @@
         style="@android:style/TextAppearance.Small"
         android:gravity="center"
         android:paddingBottom="3dp"
-        android:paddingTop="20dp" />
+        android:paddingTop="15dp" />
     
          <TextView
         android:id="@+id/tvCredits"
@@ -84,7 +84,7 @@
         android:text="" 
         style="@android:style/TextAppearance.Small"
         android:gravity="center"
-        android:paddingBottom="20dp" 
+        android:paddingBottom="15dp" 
         
         />
          
@@ -97,7 +97,7 @@
         android:background="@drawable/login_button"
         android:textColor="#FFFFFF"
         android:textSize="14sp" 
-          android:text="Buy Credits"/>
+        android:text="Buy Credits"/>
          
          <Button android:id="@+id/logout" 
         android:layout_marginTop="8dp"
