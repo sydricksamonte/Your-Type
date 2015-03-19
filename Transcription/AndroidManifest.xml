@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.android.vending.BILLING" />
-
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -44,6 +44,7 @@
         <activity android:name=".FeedDetailActivity" />
         <activity android:name=".UploadActivity" />
         <activity android:name=".InAppPurchase" />
+        <activity android:name=".ShowDetailActivity" />
         <activity
             android:name=".RecordingsActivity"
             android:label="@string/title_activity_recordings" >
