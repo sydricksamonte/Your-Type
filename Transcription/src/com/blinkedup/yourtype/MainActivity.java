@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -45,7 +46,7 @@ import com.parse.ParseUser;
 public class MainActivity extends ActivityGroup {
 
 	EditText etUsername, etPassword;
-	Button btnSave, btnLoad, btnLogin, btnlogout, credits, showCredits, btnBuyCredits, logout;
+	Button btnSave, btnLoad, btnLogin, btnlogout, showCredits, btnBuyCredits, logout;
 	ListView lstAllUsers;	
 	TextView txtwelcome, textViewOutput, textView1, tvtabs, tvCredits, tvdispCreditsDate, tvdispCredits;
 	
@@ -66,12 +67,16 @@ public class MainActivity extends ActivityGroup {
 	@Override
 	protected void onResume() {
 	    super.onResume();
-	    if (ParseUser.getCurrentUser() != null){
-	    displayRemainingCredits();
-	    }
+	    updateUseableButtons();
 	    // Normal case behavior follows
 	}
 	
+	private boolean isNetworkAvailable() {
+	    ConnectivityManager connectivityManager 
+	          = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -98,7 +103,6 @@ public class MainActivity extends ActivityGroup {
 		btnLoad = (Button) findViewById(R.id.btnLoad);
 		btnLogin = (Button) findViewById(R.id.btnLogin);
 		btnlogout = (Button) findViewById(R.id.btnlogout);
-		credits = (Button) findViewById(R.id.credits);
 		showCredits = (Button) findViewById(R.id.credits);
 		btnBuyCredits = (Button) findViewById(R.id.btnBuyCredits);
 		logout = (Button) findViewById(R.id.logout);
@@ -112,13 +116,7 @@ public class MainActivity extends ActivityGroup {
 		pl = new ParseLoader();
 		pl.initParse(this);
 		
-		if (ParseUser.getCurrentUser() != null){
-			VisibilityDisplay();
-		}
-		else{
-			DisplayLoggedOut();
-		}
-		
+		updateUseableButtons();
 		logout.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
@@ -134,9 +132,15 @@ public class MainActivity extends ActivityGroup {
 			public void onClick(View v) {
 				//Intent activityIntentToRegister = new Intent(v.getContext(), RegisterActivity.class);
 				//replaceContentView("RActivity", activityIntentToRegister);
+				if (isOnline()){
+				
 				Intent explicitIntent = new Intent(MainActivity.this,
 						InAppPurchase.class);
 				startActivity(explicitIntent);
+				}
+				else{
+					Toast.makeText(getApplicationContext(), "Please connect to internet", 3).show();
+				}
 				}			
 		});
 		
@@ -145,10 +149,22 @@ public class MainActivity extends ActivityGroup {
 			public void onClick(View v) {
 				//Intent activityIntentToRegister = new Intent(v.getContext(), RegisterActivity.class);
 				//replaceContentView("RActivity", activityIntentToRegister);
-				Intent explicitIntent = new Intent(MainActivity.this,
-						ShowDetailActivity.class);
-				startActivity(explicitIntent);
-				}			
+				
+				
+				if (isOnline()){
+					
+					Intent explicitIntent = new Intent(MainActivity.this,
+							ShowDetailActivity.class);
+					startActivity(explicitIntent);
+					}
+					else{
+						Toast.makeText(getApplicationContext(), "Please connect to internet", 3).show();
+					}
+						
+			
+			
+				}	
+			
 		});
 		
 		
@@ -194,6 +210,30 @@ public class MainActivity extends ActivityGroup {
            		}
 		    }
 		};
+	}
+	
+	public void updateUseableButtons(){
+		if (ParseUser.getCurrentUser() != null){
+			VisibilityDisplay();
+			
+			if (isNetworkAvailable()){
+				btnBuyCredits.setText("Buy Credits");
+				showCredits.setText("Show Credit Details");
+				showCredits.setVisibility(View.VISIBLE);
+				showCredits.setEnabled(true);
+				btnBuyCredits.setEnabled(true);
+			}
+			else{
+				btnBuyCredits.setText("Connect to Internet to Buy Credits");
+				showCredits.setVisibility(View.GONE);
+				showCredits.setEnabled(false);
+				btnBuyCredits.setEnabled(false);
+			}
+		}
+		else{
+			DisplayLoggedOut();
+		} 
+		
 	}
 	
 	public boolean isOnline(){
@@ -254,7 +294,9 @@ public class MainActivity extends ActivityGroup {
 					}
 				}
 				else if (v.getId() == R.id.btnLogin){
-					
+					 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+					 // imm.hideSoftInputFromWindow(etUsername.getWindowToken(), 0);
+					  imm.hideSoftInputFromWindow(etPassword.getWindowToken(), 0);
 					Loginsession();
 					
 				}	
@@ -330,6 +372,7 @@ public class MainActivity extends ActivityGroup {
 
 		ParseUser.logInInBackground( etUsername.getText().toString(), etPassword.getText().toString(), new LogInCallback() {
 			  public void done(ParseUser user, ParseException e) {
+				 
 			    if (user != null) {
 			    //	Toast.makeText(getApplicationContext(), "Welcome " + etUsername.getText().toString(), 3).show();
 			    	
@@ -373,7 +416,14 @@ public class MainActivity extends ActivityGroup {
 	
 	public void displayRemainingCredits(){
 		String rem = mydb.getRemainingCredit();
+		int showInt = Integer.parseInt(rem);
+		if (showInt == 0){
+			tvCredits.setText("No Credits");
+		}
+		else{
 		tvCredits.setText(getDurationString(Integer.parseInt(rem)));
+		}
+		
 		if (mydb.getCreditRecentDate().equals("")){
 			tvdispCreditsDate.setText("");
 		}
@@ -431,7 +481,7 @@ public class MainActivity extends ActivityGroup {
 		displayRemainingCredits();
 		txtwelcome.setVisibility(View.VISIBLE); 
     	textViewOutput.setVisibility(View.VISIBLE); 
-    	credits.setVisibility(View.VISIBLE);
+    	showCredits.setVisibility(View.VISIBLE); 
     	tvCredits.setVisibility(View.VISIBLE);
     	btnBuyCredits.setVisibility(View.VISIBLE);
     	logout.setVisibility(View.VISIBLE);
@@ -452,7 +502,7 @@ public class MainActivity extends ActivityGroup {
 
 		txtwelcome.setVisibility(View.GONE); 
     	textViewOutput.setVisibility(View.GONE); 
-    	credits.setVisibility(View.GONE);
+    	showCredits.setVisibility(View.GONE); 
     	tvCredits.setVisibility(View.GONE);
     	btnBuyCredits.setVisibility(View.GONE);
     	logout.setVisibility(View.GONE);
