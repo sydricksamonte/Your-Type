@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:orientation="horizontal" 
+    android:padding="10dp" >
 
     <com.parse.ParseImageView
         android:id="@+id/icon"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="15dip"
         android:layout_marginRight="5dip"
         android:visibility="gone" />
     
@@ -17,7 +19,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Reference ID#"
-        android:layout_marginLeft="15dip"
         android:paddingTop="5dp"/>
      
    
@@ -28,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/refID"
         android:textColor="#000"
-         android:layout_marginLeft="15dip"
+
         android:paddingTop="5dp"/>
     
 
@@ -41,41 +42,58 @@
         android:layout_below="@+id/text1"
         android:textColor="#000"
         android:textStyle="bold"
-        android:layout_marginLeft="15dip"
-        android:paddingTop="5dp" />
+        android:paddingTop="1dp" />
      
       <TextView
         android:id="@+id/timeLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Minutes Left"
+        android:text=""
         android:textStyle="bold"
         android:textColor="#000"
         android:layout_toRightOf="@id/text2"
         android:layout_alignTop="@+id/text1"
-        android:layout_marginLeft="5dip"
         android:paddingTop="30dp"/>
      
-     
+     	<TextView
+        android:id="@+id/lblType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Transaction type: "
+        android:textColor="#000"
+        android:layout_below="@+id/text2"
+        android:paddingTop="1dp"
+       />
+     	
         <TextView
         android:id="@+id/text3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/icon"
-        android:layout_toRightOf="@id/icon"
+        android:textColor="#2980b9"
+        android:layout_toRightOf="@id/lblType"
         android:layout_below="@+id/text2"
-        android:textColor="#FF0000"
-         android:layout_marginLeft="15dip"
-        android:paddingTop="5dp" />
+        android:paddingLeft="2dp"
+        android:paddingTop="1dp" />
 
+       	<TextView
+        android:id="@+id/lblDateP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Purchased on: "
+        android:textColor="#000"
+        android:layout_below="@+id/lblType"
+        android:paddingTop="1dp"
+       	/>
+        
     <TextView
         android:id="@+id/timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text3"
-        android:layout_toRightOf="@id/icon" 
-         android:layout_marginLeft="15dip"
-        android:layout_marginTop="5dip"
-        android:paddingBottom="5dp" />
+        android:textColor="#000"
+        android:layout_toRightOf="@id/lblDateP"
+        android:layout_below="@+id/lblType"
+        android:paddingLeft="2dp"
+        android:paddingTop="1dp"
+        android:paddingBottom ="5dp" />
 
 </RelativeLayout>
