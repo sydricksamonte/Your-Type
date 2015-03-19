@@ -1,7 +1,55 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+ 	
+ 	<LinearLayout
+        android:layout_width="fill_parent"
+  		android:layout_height="70dp"
+        android:orientation="vertical"
+  		android:background="@drawable/border_maker_flat"
+  		android:layout_weight="1"
+  		android:layout_gravity="center_vertical|center_horizontal">
+  		
+    	
+ 	    <TextView
+        android:id="@+id/lblStatRem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Credits"
+        style="@android:style/TextAppearance.Small"
+        android:textColor="#ecf0f1" 
+        android:paddingTop="2dp"
+        android:layout_gravity="center_vertical|center_horizontal"/>
+      
+ 		<TextView
+        android:id="@+id/lblTotRemaining"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ecf0f1"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_below="@+id/lblStatRem"
+        android:paddingBottom="1dp"
+        android:layout_gravity="center_vertical|center_horizontal"/>
+ 		
+ 		<TextView
+        android:id="@+id/lblDateOf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Purchased on: "
+        style="@android:style/TextAppearance.Small"
+        android:textColor="#ecf0f1" 
+        android:layout_below="@+id/lblTotRemaining"
+        android:paddingBottom="2dp"
+        android:layout_gravity="center_vertical|center_horizontal"/>
+      
+ 	   
+	</LinearLayout>
+	<LinearLayout
+        android:layout_width="fill_parent"
+  		android:layout_height="wrap_content"
+        android:orientation="horizontal"
+  		android:paddingTop="70dp">
     <Button
         android:id="@+id/toggleButton"
         android:layout_width="fill_parent"
@@ -12,9 +60,9 @@
 
     <ListView
         android:id="@+id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_above="@id/toggleButton"
-        android:layout_alignParentTop="true" />
-
+         />
+	</LinearLayout>
 </RelativeLayout>
