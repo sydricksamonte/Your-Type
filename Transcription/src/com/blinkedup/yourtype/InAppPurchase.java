@@ -10,6 +10,7 @@ import common.services.billing.IabHelper;
 import common.services.billing.IabResult;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -25,6 +26,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -71,6 +73,19 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
 	Handler mHandler;
 	int creditsLeft = 0;
 	
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case android.R.id.home:
+	            // app icon in action bar clicked; goto parent activity.
+	            this.finish();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
 	@SuppressLint("HandlerLeak")
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -88,7 +103,14 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
 		
 		pl.initParse(this);
 		
-		
+		if (android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.HONEYCOMB) {
+			 ActionBar actionBar = getActionBar();
+			 actionBar.setHomeButtonEnabled(true);
+			 actionBar.setDisplayHomeAsUpEnabled(true);
+		}
+		else{
+			 Log.e("NOTICE","Device cannot handle ActionBar");
+		}
 	
 		
 		btnGold.setOnClickListener( new OnClickListener() {
