@@ -373,11 +373,11 @@ public class RecordingDB extends SQLiteOpenHelper{
 			last = cursor.getString(0);
 			
 			if (last.equals("0")){
-				last = "No Creditsx";
+				last = "0";
 			}
 		}
 		catch (Exception e){	
-			last = "No Credits!";
+			last = "0";
 		}
 		cursor.close();
 		return last;
