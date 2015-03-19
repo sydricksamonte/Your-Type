@@ -15,7 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -26,7 +28,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 import com.parse.ParseUser;
 
-@SuppressLint("NewApi") public class ShowDetailActivity extends Activity {
+@SuppressLint({ "NewApi", "CutPasteId" }) public class ShowDetailActivity extends Activity {
 
 	private ParseQueryAdapter<ParseObject> mainAdapter;
 	private CustomAdapter urgentTodosAdapter;
@@ -41,6 +43,7 @@ import com.parse.ParseUser;
 	ParseLoader pl;
 	DateUtils dateFunc;
 	
+	TextView lblDateOf, lblTotRemaining, lblStatRem;
 	int item_credit;
 	int doneLoad = 0;
 	// app icon in action bar clicked; goto parent activity.
@@ -63,6 +66,13 @@ import com.parse.ParseUser;
 		dateFunc = new DateUtils();
 		myDb = new RecordingDB(this);
 	
+		lblDateOf = (TextView)findViewById(R.id.lblDateOf);
+		lblTotRemaining = (TextView)findViewById(R.id.lblTotRemaining);
+		lblStatRem = (TextView)findViewById(R.id.lblStatRem);
+		lblDateOf.setText("");	
+		lblStatRem.setText("");	
+		lblTotRemaining.setText("...");
+			
 		if (android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.HONEYCOMB) {
 			ActionBar actionBar = getActionBar();
 			actionBar.setHomeButtonEnabled(true);
@@ -100,13 +110,21 @@ import com.parse.ParseUser;
                    						public void done(List<ParseObject> objects, ParseException e) {
                    							if (e == null){
                    								myDb.deleteAllUpdate(strDate);
+                   								int looper = 0;
                    								for (ParseObject object : objects) {
                    									item_credit = 0;
                    									item_credit = (Integer) object.getNumber("creditsLeft");
                    									
                    									int newInt = myDb.addToCredits(item_credit);
+                   									looper = looper + item_credit;
+                   									Log.e("1---xddss",looper+"");
+                   									Log.e("2---xddss",item_credit+"");
                    									myDb.insertUpdate(strDate, newInt);
                    								}
+                   								lblStatRem.setText("Total Credits:");	
+                   								Log.e("xddss",looper+"");
+                   								lblDateOf.setText("Calculated on: "+dateFunc.convertStringToDate(strDate));	
+                   								lblTotRemaining.setText(dateFunc.getDurationString(looper));
                    							}
                    							doneLoad++;
                    							finishLoader();
@@ -114,7 +132,7 @@ import com.parse.ParseUser;
                    					});
                    				}
 		
-		
+                   				
                    				// Initialize main ParseQueryAdapter
                    				mainAdapter = new ParseQueryAdapter<ParseObject>(ShowDetailActivity.this, "Credit");
                    				mainAdapter.setTextKey("payType");
@@ -131,6 +149,7 @@ import com.parse.ParseUser;
                    					doneLoad++;
                    					finishLoader();
                    				}
+                   			
                    			}
                    		});
                    }
@@ -146,4 +165,21 @@ import com.parse.ParseUser;
 		myPd_ring.dismiss();
 		}
 	}
+	/*public void displayRemainingCredits(){
+		String rem = mydb.getRemainingCredit();
+		int showInt = Integer.parseInt(rem);
+		if (showInt == 0){
+			tvCredits.setText("No Credits");
+		}
+		else{
+		tvCredits.setText(getDurationString(Integer.parseInt(rem)));
+		}
+		
+		if (mydb.getCreditRecentDate().equals("")){
+			tvdispCreditsDate.setText("");
+		}
+		else{
+			tvdispCreditsDate.setText("Last updated on: "+mydb.getCreditRecentDate());
+		}
+	}*/
 }

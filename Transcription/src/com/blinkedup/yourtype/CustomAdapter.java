@@ -14,6 +14,7 @@ import com.parse.ParseUser;
 
 public class CustomAdapter extends ParseQueryAdapter<ParseObject> {
 
+	DateUtils du;
 	public CustomAdapter(Context context) {
 		// Use the QueryFactory to construct a PQA that will only show
 		// Todos marked as isActive
@@ -26,16 +27,19 @@ public class CustomAdapter extends ParseQueryAdapter<ParseObject> {
 				
 				query.whereEqualTo("isActive", true);
 				query.whereEqualTo("UserId", currentUser);
+				query.orderByDescending("createdAt");
 				return query;
 			}
 			
 			
 		});
 	}
-
+	
+	
 	// Customize the layout by overriding getItemView
 	@Override
 	public View getItemView(ParseObject object, View v, ViewGroup parent) {
+		du = new DateUtils();
 		if (v == null) {
 			v = View.inflate(getContext(), R.layout.urgent_item, null);
 		}
@@ -58,8 +62,8 @@ public class CustomAdapter extends ParseQueryAdapter<ParseObject> {
 		  
 	    TextView titleTextView2 = (TextView) v.findViewById(R.id.text2);
 	    int creditsLeft = object.getInt("creditsLeft");
-	    int creditsLeftConvert = creditsLeft/60;
-	    titleTextView2.setText(creditsLeftConvert +"");
+	    
+	    titleTextView2.setText(du.getDurationString(creditsLeft));
 	
 		
 		// Add the title view
@@ -68,7 +72,11 @@ public class CustomAdapter extends ParseQueryAdapter<ParseObject> {
 
 		// Add a reminder of how long this item has been outstanding
 		TextView timestampView = (TextView) v.findViewById(R.id.timestamp);
-		timestampView.setText(object.getCreatedAt().toString());
+		
+		String formattedDate = du.getRawDateStringFromParse(object.getCreatedAt());
+		
+		timestampView.setText(du.convertStringToDate(formattedDate));
+		
 		return v;
 	}
 
