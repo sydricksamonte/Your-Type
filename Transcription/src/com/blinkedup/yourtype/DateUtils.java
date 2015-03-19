@@ -125,4 +125,51 @@ public class DateUtils {
 		    return date;
 		}
 	
+	public String getDurationString(int seconds) {
+
+	    int hours = seconds / 3600;
+	    int minutes = (seconds % 3600) / 60;
+	    seconds = seconds % 60;
+	    
+	    String hr;
+	    String min;
+	    String sec;
+	    if (hours == 1){
+	    	hr = " hour ";
+	    }
+	    else{
+	    	hr = " hours ";
+	    }
+	    
+	    if (minutes == 1){
+	    	min = " minute ";
+	    }
+	    else{
+	    	min = " minutes ";
+	    }
+	    
+	    if (seconds == 1){
+	    	sec = " second";
+	    }
+	    else{
+	    	sec = " seconds";
+	    }
+	    
+	    String lenSec = "";
+	    if (seconds != 0){
+	    	lenSec = seconds + sec;
+	    }
+	    if (minutes != 0){
+	    	lenSec =  minutes + min + lenSec;
+	    }
+	    if (hours != 0){
+	    	lenSec = hours + hr + lenSec;
+		}
+	    
+	    if ((seconds == 0) && (minutes == 0) && (hours == 0)){
+	    	lenSec = "No credits";
+	    }
+	    return lenSec + " left";
+	}
+	
 }
