@@ -82,9 +82,7 @@ public class AudioRecordingActivity extends Activity {
 	
 	private Animation animFadeIn;
     private Animation animFadeOut;
-    
-    //progress bar
-    private ProgressBar progressBar1;
+    private Animation animFadeRepeating;
     private ProgressBar progressBar;
 	private int progressStatus = 0;
 	private int maxTime = 3360;
@@ -94,6 +92,9 @@ public class AudioRecordingActivity extends Activity {
 	private Handler handler = new Handler();
 	static boolean runThread = true;
     
+	long timerEnd = 0;
+	
+	boolean isMediaRecording = false;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
@@ -112,6 +113,7 @@ public class AudioRecordingActivity extends Activity {
         timerView.setText(formatTime(0));
         animFadeIn = AnimationUtils.loadAnimation(this, R.anim.anim_fade_in);
         animFadeOut = AnimationUtils.loadAnimation(this, R.anim.anim_fade_out);
+        animFadeRepeating = AnimationUtils.loadAnimation(this, R.anim.anim_fade_in_repeating);
         // Initialize an ArrayList to hold the laps
         laps = new Laps();
 
@@ -119,9 +121,6 @@ public class AudioRecordingActivity extends Activity {
         timerHandler = new Handler();
         
         String strDate = dateFunc.getDate();
-        
-        // Log.w("asd!",file.getAbsolutePath().toString() + "/" + input.getEditableText().toString() +  file_exts[currentFormat]);
-         
    
         tglPlayPause = (ToggleButton) findViewById(R.id.tglPlayPause);
         isEnabledToAnimateIn = true;
@@ -143,6 +142,8 @@ public class AudioRecordingActivity extends Activity {
     					timerprogress();
     					
     					if (isEnabledToAnimateIn == true){
+    						tglPlayPause.startAnimation(animFadeRepeating);
+    						
     						stopButton.startAnimation(animFadeIn);
     						stopButton.setVisibility(View.VISIBLE);
     						isEnabledToAnimateIn = false;
@@ -151,9 +152,7 @@ public class AudioRecordingActivity extends Activity {
     				}
     				else{
     					 // get time button pressed
-
-    					
-    		            
+            
     	   				stopButtonClick(now);		
     	   				stopRecording();
     	   				resetButtonClick(now);
@@ -165,9 +164,7 @@ public class AudioRecordingActivity extends Activity {
     		}
    		
     	});
-        
-     // Bind the method to be called when the reset button pressed        
-       
+         
         stopButton.setOnClickListener(new View.OnClickListener() {			
    			public void onClick(View v) {
    		        // get time button pressed
@@ -198,18 +195,20 @@ public class AudioRecordingActivity extends Activity {
 	
 	private void timerprogress() {
 		//start of progress bar
-		progressBar1 = (ProgressBar) findViewById(R.id.progressBar1);
+		//progressBar1 = (ProgressBar) findViewById(R.id.progressBar1);
     	progressBar = (ProgressBar) findViewById(R.id.progressBar1);
 		textView1 = (TextView) findViewById(R.id.textView1);
 		textView3 = (TextView) findViewById(R.id.textView3);
 		// Start long running operation in a background thread
-		maxTime = 3360;
-
+		//maxTime = 3360;
+		
 	
 		new Thread(new Runnable() {
 
             public void run() {
-                long timerEnd = System.currentTimeMillis() + maxTime * 1000;
+            	
+            	
+                timerEnd = System.currentTimeMillis() + maxTime * 1000;
 
                 while (timerEnd >  System.currentTimeMillis()) {
 
@@ -222,10 +221,15 @@ public class AudioRecordingActivity extends Activity {
 
                     handler.post(new Runnable() {
                         public void run() {                     
-                        	progressBar1.setProgress(progressStatusRemaining);  
+                        	if (isMediaRecording){
                         	progressBar.setProgress(progressStatus);  
                         	textView1.setText(progressStatusRemaining+"");
-                        	textView3.setText(conversion+" minutes remaining time.");
+                        	if (conversion > 1){
+                        		textView3.setText(conversion + " Minutes Remaining");
+                        	}
+                        	else{
+                        		textView3.setText(conversion + " Minute Remaining");
+                        	}
                        
                      	
                         	
@@ -237,7 +241,12 @@ public class AudioRecordingActivity extends Activity {
         	   				stopRecording();
         	   				resetButtonClick(now); 
                        }
-                     
+                        }
+                        	else{
+                        		timerEnd = System.currentTimeMillis() + maxTime * 1000;
+                        		
+                        		
+                        	}
                         }                   
                     });
 
@@ -249,12 +258,10 @@ public class AudioRecordingActivity extends Activity {
                        
                     }
                 }
+            	
             
             }
         }).start(); 
-		
-
-		
 	}
 
 	@Override
@@ -285,6 +292,7 @@ public class AudioRecordingActivity extends Activity {
 	 // Method called when the stop button pressed
 	 private void stopButtonClick(long now)
 	 {		
+		tglPlayPause.startAnimation(animFadeIn);
 	 	// ignore if stop button pressed when timer already stopped
 	 	if (timerRunning == false)
 	 	{
@@ -337,33 +345,36 @@ public class AudioRecordingActivity extends Activity {
 	 };
 
 		// convert the time in milliseconds to a string of hours, minutes, seconds, and hundreds (thousands rounded up or down)
-	int total;	
+	 int total;	
+	 int seconds = 0; 	
+	 int minutes = 0; 
+	 int minutesToSec = 0;
+	 int hours = 0;
 	 private String formatTime(long timeMs)
 		{
 			String retValue;
 			
-			// add 5 ms to round thousands up or down (i.e. 5ms -> 0.01)
-			timeMs = timeMs + 5;
+			//timeMs = timeMs + 5;
 			
-			// seconds equals milliseconds / 1000
-			int seconds = (int) (timeMs / 1000); 	
-			// minutes equals second / 60
-			int minutes = seconds / 60; 
-			int minutesToSec = minutes * 60;
-			// hours equal minutes / 60
-			int hours = minutes / 60;
-			// find the left over minutes
+			seconds = (int) (timeMs / 1000); 	
+			minutes = seconds / 60; 
+			minutesToSec = minutes * 60;
+			hours = minutes / 60;
 			minutes = minutes % 60;
-			// find the left over seconds
 			seconds = seconds % 60;
-			// calculate the hundreds rounding the thousands up or down after previously adding 5
+			
 			int hundreds = (int)(timeMs % 1000) / 10;
 			
 			// create the string of hours, minutes, seconds, and hundreds
-			retValue = String.format("%d:%02d:%02d", hours, minutes, seconds);       
+			
+			if (timeMs >= 3600000 ){
+				retValue = String.format("%d:%02d:%02d", hours, minutes, seconds); 
+			}
+			else{
+				retValue = String.format("%01d:%02d", minutes, seconds); 
+			}
 			
 			total = (minutesToSec + seconds);
-			System.out.println(total);
 			return retValue;
 		}
 	 
@@ -453,12 +464,8 @@ public class AudioRecordingActivity extends Activity {
 		}
 
 	
-		return (file.getAbsolutePath() + "/" +  strDefaultRecordingName + file_exts[currentFormat]);	
-
-	
+		return (file.getAbsolutePath() + "/" +  strDefaultRecordingName + file_exts[currentFormat]);
 	}
-	
-	
 	
 	private void rename() {
 		 String srt = "";
@@ -535,16 +542,9 @@ public class AudioRecordingActivity extends Activity {
     	AlertDialog alertDialog = alert.create();
     	alertDialog.show();
     	
-
-    
-    	
-    }
-	
-	
+	}
 	
 	private void startRecording() {
-		
-
 		
 		long now = System.currentTimeMillis();
 		startButtonClick(now);
@@ -557,24 +557,34 @@ public class AudioRecordingActivity extends Activity {
 
 		recorder.setOnErrorListener(errorListener);
 		recorder.setOnInfoListener(infoListener);
-
+		
 		try {
 			recorder.prepare();
 			recorder.start();
-		
+			isMediaRecording = true;
+			
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	private void defaultPlayer(){
 
+		timerView.setText("0:00");
+		isMediaRecording = false;
+		progressBar.setProgress(0);
+		textView3.setText("Tap red circle to start recording");
+	}
+	
 	private void stopRecording() {
 		if (null != recorder) {
 			recorder.stop();
 			recorder.reset();
 			recorder.release();
-			timerView.setText("0:00");
+			defaultPlayer();
+			
+			
 			if (isEnabledToAnimateOut == true){
 				stopButton.startAnimation(animFadeOut);
 				stopButton.setVisibility(View.INVISIBLE);
@@ -607,10 +617,6 @@ public class AudioRecordingActivity extends Activity {
 							}
 						}).show();
 	}
-	
-	
-
-
 
 	private MediaRecorder.OnErrorListener errorListener = new MediaRecorder.OnErrorListener() {
 		@Override
@@ -633,8 +639,6 @@ public class AudioRecordingActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
-	
-		
 			case R.id.btnFormat: {
 				displayFormatDialog();
 
