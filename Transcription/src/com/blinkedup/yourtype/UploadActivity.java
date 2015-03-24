@@ -339,8 +339,8 @@ public class UploadActivity extends Activity{
 		                    																							public void done(ParseException e) {
 		                    																								if (e == null){
 		                    																									progressBar.dismiss();
-		                    																									Toast.makeText(UploadActivity.this, "Recording sent for typing", Toast.LENGTH_SHORT).show();
-                                             			    		                        	
+		                    																									Toast.makeText(UploadActivity.this, "Record sent for typing", 4).show();
+		                    																									btnUpload.setEnabled(false);
 		                    																									String strDate = du.getDate();
 		                    																									if(mydb.updateRecordingUploadDate(rec_id,strDate)) {
 		                    																										//function to subtract total credits
@@ -447,6 +447,7 @@ public class UploadActivity extends Activity{
 		                    																										//   [queryCredits orderByAscending:@"createdAt"];
 		                    																										Intent explicitBackIntent = new Intent(UploadActivity.this,TabHostActivity.class);
 		                    																										startActivity(explicitBackIntent);
+		                    																										finish();
 		                    																									}  
 		                    																								}
 		                    																								else{
