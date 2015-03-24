@@ -7,6 +7,6 @@ import com.parse.Parse;
 public class ParseLoader {
 
 		public void initParse(Context tx){
-			Parse.initialize(tx, "fLvSSaHOIsoXBRBzDG21n4o8mH3sQIsKh9pLYu9X", "A9ETXfq7Oz5ARKaFbsSRfv6WUQ4l5ynGb4Tv8Ljz");
+			Parse.initialize(tx, "0ikOdxhP171MAYPw6ljaiQ4a9e5gtLPjsnchI7cw", "71gcHocqK5xDQPTmlYlThGGLfE2QznL69iXidUye");
 		}
 }
