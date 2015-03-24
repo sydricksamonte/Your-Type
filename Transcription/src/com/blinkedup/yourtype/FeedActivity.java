@@ -201,11 +201,12 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 		                    try{
 		                    	
 		                    	if (ParseUser.getCurrentUser() != null){
-		                    		if (isOnline()){
-		                    		//if (Network.isNetworkAvailable(FeedActivity.this)){
+		                    		//if (isOnline()){
+		                    		if (Network.isNetworkAvailable(FeedActivity.this)){
 		                    			runOnUiThread(new Runnable() {
 		                    				@Override
 		                    				public void run() {
+		                    					Log.e("INTERNET","Connecting to parse");
 		                    					checkParse();
 		                    				}
 		                    			});
@@ -379,48 +380,60 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 							} catch (IOException e) {}
 						}
 						else{
-						for (ParseObject object : arg0) {
+							for (ParseObject object : arg0) {
 							
-							recListCount++;
-							parseUserRecordingID = object.getString("userRecordingID");
+								recListCount++;
+								parseUserRecordingID = object.getString("userRecordingID");
 	
-							parseDateFinalized =  object.getDate("dateFinalized");
-							parseIsFinalized = object.getBoolean("isFinalized");
-							parseDateUploaded = object.getCreatedAt();
+								parseIsFinalized = object.getBoolean("isFinalized");
+								parseDateUploaded = object.getCreatedAt();
 							
-							String formattedDate = dateFunc.getRawDateStringFromParse(parseDateFinalized);
-							String formattedDateUpload = dateFunc.getRawDateStringFromParse(parseDateUploaded);
-	                        if (parseIsFinalized == true){
-	                        	myDb.updateRecordingFinalize(parseUserRecordingID,formattedDate);
-	                        }
-	                        else{
-	                        	myDb.updateRecordingUploadDate(parseUserRecordingID, formattedDateUpload);
-	                        }
-	                        if (recListCount == recListSize){
-	                        	try {
-									ImportFiles();
-								} catch (IOException e) {}
-	                        }
-	                        isRefreshed = true;
-						}
+								String formattedDate = dateFunc.getRawDateStringFromParse(parseDateFinalized);
+								String formattedDateUpload = dateFunc.getRawDateStringFromParse(parseDateUploaded);
+								if (parseIsFinalized == true){
+	                        		try{
+	                        			parseDateFinalized =  object.getDate("dateFinalized");
+	                        			myDb.updateRecordingFinalize(parseUserRecordingID,formattedDate);
+	                        			Log.e("FINALIZED","IN");
+	                        		}
+	                        		catch (Exception e){
+	                        			Log.e("FINALIZED","OUT");
+	                        			
+	                        		}
+								}
+								else{
+									myDb.updateRecordingUploadDate(parseUserRecordingID, formattedDateUpload);
+								}
+								
+								if (recListCount == recListSize){
+									try {
+										Log.e("STATUS","ENTERED IMPORT...");
+										ImportFiles();
+									} 
+									catch (IOException e) {
+										Log.e("ERROR", e.getLocalizedMessage());
+									}
+									recListCount = 0;
+								}
+								isRefreshed = true;
+							}
 						}
 					}
 					else{
 						try {
 							ImportFiles();
-						} catch (IOException e) {}
+						} 
+						catch (IOException e) {}
 					}
 				}
 			});
 		}	
-		
     }
     
     public void populateTable(){
     	 setContentView(R.layout.activity_feed);
   
-  
-          dateFunc = new DateUtils();
+    	 dateFunc = new DateUtils();
           mListView = (ListView) findViewById(R.id.listview);  
           //ListView listview = (ListView) findViewById(R.id.listview1);
           mListView.setOnItemClickListener(this);
