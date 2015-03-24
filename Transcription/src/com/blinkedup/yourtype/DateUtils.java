@@ -100,9 +100,7 @@ public class DateUtils {
 	
 	public String getRawDateStringFromParse(Date dateString){
 	 //String dateString = "03/26/2012 11:49:00 AM";
-		Log.e("sdgdfg", dateString.toString());
-	
-	    String strDate = "";
+	  String strDate = "";
 	       
 	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -112,7 +110,6 @@ public class DateUtils {
 	}
 	
 	public Date convertStringToRawDate(String dateString){
-		 //String dateString = "03/26/2012 11:49:00 AM";
 		Date date = new Date();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 		try {  
