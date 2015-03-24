@@ -93,6 +93,7 @@ public class AudioRecordingActivity extends Activity {
 	static boolean runThread = true;
     
 	long timerEnd = 0;
+	int showDialog = 0;
 	
 	boolean isMediaRecording = false;
 	@Override
@@ -108,6 +109,7 @@ public class AudioRecordingActivity extends Activity {
 		mydb = new RecordingDB(this);
 		dateFunc = new DateUtils();
 		
+		showDialog = 0;
      // Locate the view to the elapsed time on screen and initialize
         timerView = (TextView) findViewById(R.id.timerValue);
         timerView.setText(formatTime(0));
@@ -468,16 +470,15 @@ public class AudioRecordingActivity extends Activity {
 	}
 	
 	private void rename() {
-		 String srt = "";
-		// this context will use when we work with Alert Dialog
-				final Context context = this;
+		if (showDialog == 0){
+			showDialog = 1;
+		final Context context = this;
 
 		/* Alert Dialog Code Start*/ 	
     	AlertDialog.Builder alert = new AlertDialog.Builder(context);
-    	alert.setTitle("Save Recording"); //Set Alert dialog title here
-    	alert.setMessage("File will be saved in Recordings tab."); //Message here
+    	alert.setTitle("Rename Recording"); //Set Alert dialog title here
+    	alert.setMessage("File is saved on Recordings tab."); //Message here
 
-        // Set an EditText view to get user input 
         final EditText input = new EditText(context);
         alert.setView(input);
         input.setText(strDefaultRecordingName);
@@ -486,62 +487,59 @@ public class AudioRecordingActivity extends Activity {
  		final String strDate = dateFunc.getDate();
  		
     	alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-    	public void onClick(DialogInterface dialog, int whichButton) {
-    	 //You will get as string input data in this variable.
-    	 // here we convert the input to a string and show in a toast.
+    		public void onClick(DialogInterface dialog, int whichButton) {
     		 		
-    	String srt = input.getEditableText().toString();
-    	
-    	Intent in = new Intent(AudioRecordingActivity.this, TabHostActivity.class);
-        startActivity(in);
+    			String srt = input.getEditableText().toString();
+    			Intent in = new Intent(AudioRecordingActivity.this, TabHostActivity.class);
+    			startActivity(in);
     	 
-    //	Toast.makeText(context,srt,Toast.LENGTH_LONG).show();    
-    	final String stripText = mydb.StripText(input.getEditableText().toString());
-     	  if (file != null && file.exists()) {
-     		 if (stripText.length() == 0){
- 				Toast.makeText(getApplicationContext(), "Cannot Set Empty Text, Saved as "+strDefaultRecordingName, Toast.LENGTH_SHORT).show(); 
- 				
-     		 }
-     		 else if (mydb.countNameDuplicate(stripText) == 0){
-     			 File from = new File(getFilename().toString());
-     			 File to = new File(file.getAbsolutePath().toString() + "/" + stripText + file_exts[currentFormat]); 
-     			 from.renameTo(to);
+    			final String stripText = mydb.StripText(input.getEditableText().toString());
+    			if (file != null && file.exists()) {
+    				if (stripText.length() == 0){
+    					Toast.makeText(getApplicationContext(), "Cannot Set Empty Text, Saved as "+strDefaultRecordingName, Toast.LENGTH_SHORT).show(); 
+    				}
+    				else if (mydb.countNameDuplicate(stripText) == 0){
+    					File from = new File(getFilename().toString());
+    					File to = new File(file.getAbsolutePath().toString() + "/" + stripText + file_exts[currentFormat]); 
+    					from.renameTo(to);
                 
-     			 if(mydb.insertRecording(stripText, strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
-     				 Toast.makeText(getApplicationContext(), "Recording "+stripText+" has been saved", Toast.LENGTH_SHORT).show(); 
-     			 }  
-     			 else{
-     				if(mydb.insertRecording(strDefaultRecordingName, strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
-     					Toast.makeText(getApplicationContext(), "Error renaming record, has been saved as "+strDefaultRecordingName, Toast.LENGTH_SHORT).show(); 
-     					}  
-     				else{
-     					Toast.makeText(getApplicationContext(), "Cannot write on database", Toast.LENGTH_SHORT).show(); 
-     			     	
-     				}
-     			}
-     		 } 
-     	  }
-     	  else{
-				Toast.makeText(getApplicationContext(), "Cannot write on database", Toast.LENGTH_SHORT).show(); 
-		  }
-    	} 
-  	}); 
+    					if(mydb.insertRecording(stripText, strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
+    						Toast.makeText(getApplicationContext(), "Recording "+stripText+" has been saved", Toast.LENGTH_SHORT).show(); 
+    					}  
+    					else{
+    						if(mydb.insertRecording(strDefaultRecordingName, strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
+    							Toast.makeText(getApplicationContext(), "Error renaming record, has been saved as "+strDefaultRecordingName, Toast.LENGTH_SHORT).show(); 
+    						}  
+    						else{
+    							Toast.makeText(getApplicationContext(), "Cannot write on database", Toast.LENGTH_SHORT).show(); 
+    						}
+    					}
+    				} 
+    			}
+    			else{
+    				Toast.makeText(getApplicationContext(), "Cannot write on database", Toast.LENGTH_SHORT).show(); 
+    			}
+    		} 
+    	}); 
     	alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-    	  public void onClick(DialogInterface dialog, int whichButton) {
+    		@Override
+    		public void onClick(DialogInterface dialog, int whichButton) {
     	    // Canceled.
-    		  dialog.cancel();
-    		  	if(mydb.insertRecording(strDefaultRecordingName, strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
-    		  		 Toast.makeText(getApplicationContext(), "Recording saved as "+ strDefaultRecordingName, Toast.LENGTH_SHORT).show(); 
-  				}  
+    			showDialog = 0;
+    			if(mydb.insertRecording(strDefaultRecordingName, strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
+    				Toast.makeText(getApplicationContext(), "Recording saved as "+ strDefaultRecordingName, Toast.LENGTH_SHORT).show(); 
+    				dialog.dismiss();
+    		  	}  
   				else{
   					Toast.makeText(getApplicationContext(), "Cannot write on database", Toast.LENGTH_SHORT).show(); 
-  			     	
+  					dialog.dismiss();
   				}
-    	  }
-    }); //End of alert.setNegativeButton
-    	AlertDialog alertDialog = alert.create();
-    	alertDialog.show();
-    	
+    			return;
+    		}
+    	}); 
+    	//AlertDialog alertDialog = alert.create();
+    	alert.show();	
+	}
 	}
 	
 	private void startRecording() {
