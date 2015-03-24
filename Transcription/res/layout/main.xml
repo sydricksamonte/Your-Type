@@ -16,7 +16,15 @@
         android:textColor="#FFFFFF"
         android:textSize="15sp" />
 
-    <ToggleButton
+	<LinearLayout
+   	 	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+ 		android:layout_weight="1"
+		android:gravity="center|bottom"
+        android:orientation="vertical"
+  	>
+    
+      	<ToggleButton
         android:id="@+id/tglPlayPause"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -26,30 +34,32 @@
         android:textColor="#fff"
         android:textOff=""
         android:textOn="" />
-
-    <TextView
+      
+    	<TextView
         android:id="@+id/timerValue"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
-        android:layout_marginBottom="25dp"
         android:gravity="center"
         android:text="timerVal"
         android:textColor="#FFFFFF"
         android:textSize="30sp" />
-    
 
-    <Button
+    	<Button
         android:id="@+id/reset"
         android:layout_width="86dp"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
         android:background="@drawable/button_white_control"
-        android:gravity="center"
-        android:layout_marginBottom="20dp" />
-
+        android:gravity="center" />
+	</LinearLayout>
+    
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1"
+        android:gravity="center|bottom"
+        android:orientation="vertical"
+         >
 
         <TextView
             android:id="@+id/textView1"
@@ -91,7 +101,7 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="34dp"
+        android:layout_height="10dp"
         android:orientation="horizontal" >
 
         <Button
