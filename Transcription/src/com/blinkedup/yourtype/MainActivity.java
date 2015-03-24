@@ -1,6 +1,7 @@
 package com.blinkedup.yourtype;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
@@ -58,6 +59,7 @@ public class MainActivity extends ActivityGroup {
 	List<String> data;
 	ParseLoader pl;
 	
+	DateUtils du;
 	ProgressDialog barProgressDialog;
 	Handler updateBarHandler;
 	ProgressDialog myPd_ring;
@@ -84,6 +86,7 @@ public class MainActivity extends ActivityGroup {
 		
 		mydb = new RecordingDB(this);
 		
+		du = new DateUtils();
 		etUsername = (EditText) findViewById(R.id.etUsername);
 		etPassword = (EditText) findViewById(R.id.etPassword);
 		txtwelcome = (TextView) findViewById(R.id.txtwelcome);
@@ -124,6 +127,8 @@ public class MainActivity extends ActivityGroup {
 				ParseUser.logOut();
 				Intent in = new Intent(MainActivity.this, TabHostActivity.class);
 		        startActivity(in);
+		        String strDate = du.getDate();
+		        mydb.deleteAllUpdate(strDate);
 				}			
 		});
 		
@@ -302,7 +307,7 @@ public class MainActivity extends ActivityGroup {
 				}	
 		}
 	}
-	
+	int item_credit = 0;
 	public void Loginsession(){
 		//start activity progress
 		myPd_ring = ProgressDialog.show(MainActivity.this, "Please wait", "Logging in..", true);
@@ -319,10 +324,38 @@ public class MainActivity extends ActivityGroup {
 	                        	   ParseUser.logInInBackground( etUsername.getText().toString(), etPassword.getText().toString(), new LogInCallback() {
 	                        		   public void done(ParseUser user, ParseException e) {
 	                        			   if (user != null) {
-	                        				 //  Toast.makeText(getApplicationContext(), "Welcome " + etUsername.getText().toString(), 3).show();
-	                        				   Log.e("Userlogin", user.getUsername()+"");    	
-	                        				   VisibilityDisplay();		 
-	                        				   myPd_ring.dismiss();
+	                        				   final String strDate = du.getDate();
+	                        					
+	                              				ParseQuery<ParseObject> queryCredits = ParseQuery.getQuery("Credit");
+	                              				queryCredits.whereEqualTo("UserId",ParseUser.getCurrentUser());
+	                              				queryCredits.whereEqualTo("isActive",true);
+	                              				queryCredits.selectKeys((Arrays.asList("creditsLeft")));
+	                              				queryCredits.orderByAscending("createdAt");
+	                              				{
+	                              					queryCredits.findInBackground(new FindCallback<ParseObject>() {
+	                              						public void done(List<ParseObject> objects, ParseException e) {
+	                              							if (e == null){
+	                              								
+	                              								int looper = 0;
+	                              								for (ParseObject object : objects) {
+	                              									item_credit = 0;
+	                              									item_credit = (Integer) object.getNumber("creditsLeft");
+	                              									
+	                              									int newInt = mydb.addToCredits(item_credit);
+	                              									looper = looper + item_credit;
+	                              								
+	                              									mydb.insertUpdate(strDate, newInt);
+	                              								}
+	 	          	                        				   VisibilityDisplay();		 
+	 	          	                        				   myPd_ring.dismiss();
+	                              							}
+	                              					
+	                              						}
+	                              					});
+	                              				}
+	                              				
+	                              				//  Toast.makeText(getApplicationContext(), "Welcome " + etUsername.getText().toString(), 3).show();
+	                        				  
 	                        			   } else {
 	                        				   Toast.makeText(getApplicationContext(), "Sign-in failed. Incorrect log-in details", 3).show();
 	                        				   myPd_ring.dismiss();
