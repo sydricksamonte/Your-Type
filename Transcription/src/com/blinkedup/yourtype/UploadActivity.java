@@ -132,6 +132,7 @@ public class UploadActivity extends Activity{
 		}
 	}
 	  
+	int saveLocal = 0;
 	@SuppressLint({ "NewApi", "HandlerLeak" })
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -211,6 +212,7 @@ public class UploadActivity extends Activity{
 				btnUpload.setEnabled(false);
 				myPd_ring = ProgressDialog.show(UploadActivity.this, "Please wait", "Verifying information", true);
 		        myPd_ring.setCancelable(false);
+		        saveLocal = 0;
 		        
 		        new Thread(new Runnable() {  
 		              @Override
@@ -237,6 +239,7 @@ public class UploadActivity extends Activity{
 		                    							Toast.makeText(UploadActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
 		                    						}
 		                    						else{
+		                    							
 		                    							for (ParseObject objectd : objecter) {
                     			
 		                    								Boolean isValStr = objectd.getBoolean("isValid");
@@ -340,6 +343,17 @@ public class UploadActivity extends Activity{
 		                    																								if (e == null){
 		                    																									progressBar.dismiss();
 		                    																									Toast.makeText(UploadActivity.this, "Record sent for typing", 4).show();
+		                    																									if (saveLocal == 0){
+																																	String rem = mydb.getRemainingCredit();
+																																	String strDate = du.getDate();
+																																	int curDeal = Integer.parseInt(recDurat);
+																																	int remCred =  Integer.parseInt(rem);
+																																	int newBal = remCred - curDeal;
+																																	Log.e("c"+curDeal,"v"+remCred);
+																																	mydb.insertUpdate(strDate,newBal);
+																																	saveLocal = 1;
+																																	}
+		                    																									
 		                    																									btnUpload.setEnabled(false);
 		                    																									String strDate = du.getDate();
 		                    																									if(mydb.updateRecordingUploadDate(rec_id,strDate)) {
@@ -414,7 +428,9 @@ public class UploadActivity extends Activity{
 		                    																																				Integer theremaining = 0;
 		                    																																				int dnumber = theremaining;
 		                    																																				cred.put("creditsLeft",dnumber);
-		                    																																				cred.saveInBackground();
+		                    																																				cred.saveEventually();
+		                    																																				
+		                    																																				
 		                    																																				//NSLog(@"item_credit %d diff_item_credit %d SAVE LOG %@",item_credit,diff_item_credit,dnumber);
 		                    																																			}
 		                    																																		}
