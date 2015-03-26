@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -290,7 +291,14 @@ public class FeedDetailActivity extends Activity{
 				 		
 				}
 			});
-		
+			dynBtnPlay.setOnLongClickListener(new OnLongClickListener() {
+			    public boolean onLongClick(View arg0) {
+			        Toast.makeText(getApplicationContext(), "Play" ,
+			              Toast.LENGTH_SHORT).show();
+			        return true; 
+			    }
+			});
+			
 			dynBtnDelete.setOnClickListener( new OnClickListener() {
 				 @Override
 		            public void onClick(View v) {
@@ -329,6 +337,13 @@ public class FeedDetailActivity extends Activity{
 					 }	
 				 }       
 		   });
+			dynBtnDelete.setOnLongClickListener(new OnLongClickListener() {
+			    public boolean onLongClick(View arg0) {
+			        Toast.makeText(getApplicationContext(), "Delete" ,
+			              Toast.LENGTH_SHORT).show();
+			        return true; 
+			    }
+			});
 			
 			dynBtnRename.setOnClickListener( new OnClickListener() {
 				 @Override
@@ -398,7 +413,13 @@ public class FeedDetailActivity extends Activity{
 					}
 				 }
 		   });
-			
+			dynBtnRename.setOnLongClickListener(new OnLongClickListener() {
+			    public boolean onLongClick(View arg0) {
+			        Toast.makeText(getApplicationContext(), "Rename" ,
+			              Toast.LENGTH_SHORT).show();
+			        return true; 
+			    }
+			});
 			 
 			dynBtnPause.setOnClickListener( new OnClickListener() {
 			 @Override
@@ -417,7 +438,13 @@ public class FeedDetailActivity extends Activity{
 				}	
 			 }
 		});
-		
+			dynBtnPause.setOnLongClickListener(new OnLongClickListener() {
+			    public boolean onLongClick(View arg0) {
+			        Toast.makeText(getApplicationContext(), "Pause" ,
+			              Toast.LENGTH_SHORT).show();
+			        return true; 
+			    }
+			});
 	
 		dynBtnUpload.setOnClickListener( new OnClickListener() {
 
@@ -454,7 +481,13 @@ public class FeedDetailActivity extends Activity{
             	}
             }
         });
-		
+		dynBtnUpload.setOnLongClickListener(new OnLongClickListener() {
+		    public boolean onLongClick(View arg0) {
+		        Toast.makeText(getApplicationContext(), "Upload" ,
+		              Toast.LENGTH_SHORT).show();
+		        return true; 
+		    }
+		});
 
 		seekBar = (SeekBar) findViewById(R.id.seekBar1);
 		seekVolume = (SeekBar) findViewById(R.id.volShow);

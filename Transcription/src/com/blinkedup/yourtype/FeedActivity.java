@@ -39,6 +39,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -105,6 +106,9 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 		
         arrArg[0] = "";
         populateTable();
+        
+  
+        
         isRefreshed = false;
         myDb = new RecordingDB(this);
         
@@ -144,6 +148,14 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 				 btnDone.setBackgroundResource(R.drawable.btn_d);
 				}
 			});
+		btnAll.setOnLongClickListener(new OnLongClickListener() {
+		    public boolean onLongClick(View arg0) {
+		        Toast.makeText(getApplicationContext(), "Show All Recordings" ,
+		              Toast.LENGTH_SHORT).show();
+		        return true; 
+		    }
+		});
+		
 		
 		btnWaiting = (ImageButton)findViewById(R.id.btnSortWaiting);
 		btnWaiting.setOnClickListener( new OnClickListener() {
@@ -158,6 +170,14 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 					btnDone.setBackgroundResource(R.drawable.btn_d);
 				}
 			});
+		btnWaiting.setOnLongClickListener(new OnLongClickListener() {
+		    public boolean onLongClick(View arg0) {
+		        Toast.makeText(getApplicationContext(), "Show Waiting for Upload Recordings" ,
+		              Toast.LENGTH_SHORT).show();
+		        return true; 
+		    }
+		});
+		
 		btnUp = (ImageButton)findViewById(R.id.btnSortUp);
 		btnUp.setOnClickListener( new OnClickListener() {
 			@Override
@@ -171,6 +191,14 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 				 btnDone.setBackgroundResource(R.drawable.btn_d);
 				}
 			});
+		btnUp.setOnLongClickListener(new OnLongClickListener() {
+		    public boolean onLongClick(View arg0) {
+		        Toast.makeText(getApplicationContext(), "Show Uploaded Recordings" ,
+		              Toast.LENGTH_SHORT).show();
+
+		        return true;    // <- set to true
+		    }
+		});
 		
 		btnDone = (ImageButton)findViewById(R.id.btnSortDone);
 		btnDone.setOnClickListener( new OnClickListener() {
@@ -185,6 +213,13 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 				 btnDone.setBackgroundResource(R.drawable.btn_d_pressed);
 				}
 			});
+		btnDone.setOnLongClickListener(new OnLongClickListener() {
+		    public boolean onLongClick(View arg0) {
+		        Toast.makeText(getApplicationContext(), "Show Done (Returned and sent via email) Recordings" ,
+		              Toast.LENGTH_SHORT).show();
+		        return true; 
+		    }
+		});
 		
 		btnRefresh = (ImageButton)findViewById(R.id.btnRefresh);
 		btnRefresh.setOnClickListener( new OnClickListener() {
@@ -235,6 +270,13 @@ public class FeedActivity extends FragmentActivity implements LoaderCallbacks<Cu
 		        }).start();
 				
 			}		
+		});
+		btnRefresh.setOnLongClickListener(new OnLongClickListener() {
+		    public boolean onLongClick(View arg0) {
+		        Toast.makeText(getApplicationContext(), "Refresh + Update Recording List" ,
+		              Toast.LENGTH_SHORT).show();
+		        return true;   
+		    }
 		});
 		btnQuestion = (ImageButton)findViewById(R.id.btnButtonQuestion);
 		btnQuestion.setOnClickListener( new OnClickListener() {
