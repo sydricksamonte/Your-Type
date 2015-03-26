@@ -79,7 +79,7 @@ public class TermsOfServiceActivity extends Activity {
 		    	}
 		    	else if (msg.what == 2){
 		    		aDial.setTitle("Error in connection");
-           			aDial.setMessage("Cannot connect to server. /n/nPlease try again later.");
+           			aDial.setMessage("Cannot connect to server. \nPlease try again later.");
            			aDial.show();
 		    	}
 		    	else if (msg.what == 3){
