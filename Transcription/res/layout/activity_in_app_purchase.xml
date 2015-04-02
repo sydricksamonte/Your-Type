@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="88dp"
         android:background="@drawable/shape_corner_gold"
-        android:text="Gold"
+        android:text=""
         android:radius="6dip"
         android:textColor="#FFFFFF" />
 
@@ -36,7 +36,7 @@
         android:layout_toRightOf="@+id/buttonGold"
         android:layout_below="@+id/textGold"
         android:paddingLeft="20dip"
-        android:text="2 hours and 30 minutes of audio upload"
+        android:text="Loading description.."
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <Button
@@ -48,7 +48,7 @@
         android:layout_toLeftOf="@+id/textView1"
          android:background="@drawable/shape_corner_silver"
         android:textColor="#FFFFFF"
-        android:text="Silver" />
+        android:text="" />
     
      <TextView
         android:id="@+id/textSilver"
@@ -68,7 +68,7 @@
         android:layout_toRightOf="@+id/buttonSilver"
         android:layout_below="@+id/textSilver"
         android:paddingLeft="20dip"
-        android:text="1 hour and 15 minutes of audio upload"
+        android:text="Loading description.."
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <Button
@@ -79,7 +79,7 @@
         android:layout_marginTop="20dp"
         android:layout_toLeftOf="@+id/textView2"
         android:background="@drawable/shape_corner_bronze"
-        android:text="Bronze"
+        android:text=""
         android:textColor="#FFFFFF" />
 
     <TextView
@@ -99,8 +99,44 @@
         android:layout_toRightOf="@+id/buttonBronze"
         android:layout_below="@+id/textBronze"
         android:paddingLeft="20dip"
-        android:text="30 minutes of audio upload"
+        android:text="Loading description.."
         android:textAppearance="?android:attr/textAppearanceSmall" />
-    
+
+    <TextView
+        android:id="@+id/tvGold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/buttonGold"
+        android:layout_alignBottom="@+id/buttonGold"
+        android:layout_alignLeft="@+id/buttonGold"
+        android:layout_marginLeft="18dp"
+        android:text="Loading.."
+        android:textSize="18sp" 
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/tvSilver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/buttonSilver"
+        android:layout_alignBottom="@+id/buttonSilver"
+        android:layout_alignRight="@+id/tvGold"
+        android:text="Loading.."
+        android:textSize="18sp" 
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/tvBronze"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/buttonBronze"
+        android:layout_alignBottom="@+id/buttonBronze"
+        android:layout_alignLeft="@+id/tvSilver"
+        android:text="Loading.."
+        android:textSize="18sp" 
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
      
 </RelativeLayout>

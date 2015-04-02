@@ -7,7 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.TabHost;
 
-public class TabHostActivity extends TabActivity {
+public class TabHostActivityPricing extends TabActivity {
 	/** Called when the activity is first created. */
 	
 	@Override
@@ -60,7 +60,7 @@ public class TabHostActivity extends TabActivity {
 		// Do the same for the other tabs
 		
 		//set tab which one you want open first time 0 or 1 or 2
-		tabHost.setCurrentTab(0);
+		tabHost.setCurrentTab(3);
 		
 		
 	     tabHost.setup();

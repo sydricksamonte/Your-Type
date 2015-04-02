@@ -109,6 +109,8 @@ public class AudioRecordingActivity extends Activity {
 		mydb = new RecordingDB(this);
 		dateFunc = new DateUtils();
 		
+		
+		
 		showDialog = 0;
      // Locate the view to the elapsed time on screen and initialize
         timerView = (TextView) findViewById(R.id.timerValue);
@@ -155,9 +157,13 @@ public class AudioRecordingActivity extends Activity {
     				else{
     					 // get time button pressed
             
-    	   				stopButtonClick(now);		
+    	   				stopButtonClick(now);	
+    	   				
     	   				stopRecording();
+    	   				
     	   				resetButtonClick(now);
+    	   				
+    	   			
     	   			
     	   		
     					
@@ -172,10 +178,14 @@ public class AudioRecordingActivity extends Activity {
    		        // get time button pressed
    				long now = System.currentTimeMillis();
 
-   				stopButtonClick(now);		
+   				stopButtonClick(now);	
+   				
    				stopRecording();
+   				
    				resetButtonClick(now);
-   			
+   				
+   				
+   				
    			}
    		});
         //////////
@@ -469,6 +479,50 @@ public class AudioRecordingActivity extends Activity {
 		return (file.getAbsolutePath() + "/" +  strDefaultRecordingName + file_exts[currentFormat]);
 	}
 	
+	
+	private void buyCredits() {
+	//	if (showDialog == 0){
+	//		showDialog = 1;
+		final Context context = this;
+
+		/* Alert Dialog Code Start*/ 	
+    	AlertDialog.Builder alert1 = new AlertDialog.Builder(context);
+    	alert1.setTitle("Buy Credits Now!"); //Set Alert dialog title here
+    	alert1.setMessage("Click OK for pricing details."); //Message here
+
+       
+ 		
+    	alert1.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+    		public void onClick(DialogInterface dialog, int whichButton) {
+    		 		
+    			//code here
+    		
+    			Intent in = new Intent(AudioRecordingActivity.this, TabHostActivityPricing.class);
+    			startActivity(in);
+    		
+    			
+    			
+    		} 
+    	}); 
+    	alert1.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+    		@Override
+    		public void onClick(DialogInterface dialog, int whichButton) {
+    	    // Canceled.
+    			showDialog = 0;
+    		
+    			//code here
+    			
+    		
+    			return;
+    		}
+    	}); 
+    	//AlertDialog alertDialog = alert.create();
+    	alert1.show();	
+	}
+	
+	
+	
+	
 	private void rename() {
 		if (showDialog == 0){
 			showDialog = 1;
@@ -488,10 +542,11 @@ public class AudioRecordingActivity extends Activity {
  		
     	alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
     		public void onClick(DialogInterface dialog, int whichButton) {
-    		 		
+    				
     			String srt = input.getEditableText().toString();
-    			Intent in = new Intent(AudioRecordingActivity.this, TabHostActivity.class);
-    			startActivity(in);
+    			//Intent in = new Intent(AudioRecordingActivity.this, TabHostActivity.class);
+    			//startActivity(in);
+    			buyCredits();
     	 
     			final String stripText = mydb.StripText(input.getEditableText().toString());
     			if (file != null && file.exists()) {
@@ -519,12 +574,14 @@ public class AudioRecordingActivity extends Activity {
     			else{
     				Toast.makeText(getApplicationContext(), "Cannot write on database", Toast.LENGTH_SHORT).show(); 
     			}
+    			
     		} 
     	}); 
     	alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
     		@Override
     		public void onClick(DialogInterface dialog, int whichButton) {
     	    // Canceled.
+    			buyCredits();
     			showDialog = 0;
     			if(mydb.insertRecording(strDefaultRecordingName, strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
     				Toast.makeText(getApplicationContext(), "Recording saved as "+ strDefaultRecordingName, Toast.LENGTH_SHORT).show(); 
@@ -539,8 +596,12 @@ public class AudioRecordingActivity extends Activity {
     	}); 
     	//AlertDialog alertDialog = alert.create();
     	alert.show();	
+    
 	}
+		
 	}
+	
+
 	
 	private void startRecording() {
 		
@@ -576,6 +637,7 @@ public class AudioRecordingActivity extends Activity {
 	}
 	
 	private void stopRecording() {
+		
 		if (null != recorder) {
 			recorder.stop();
 			recorder.reset();
@@ -594,7 +656,7 @@ public class AudioRecordingActivity extends Activity {
 		 	tglPlayPause.setChecked(false);
 		}
 		rename();
-	
+		
 	}
 	
 	private void displayFormatDialog() {
@@ -645,4 +707,6 @@ public class AudioRecordingActivity extends Activity {
 			}
 		}
 	};
+	
+	
 }

@@ -53,8 +53,12 @@ public class Welcome extends ActivityGroup {
         btnBuyCredits.setOnClickListener(new View.OnClickListener() {
         	@Override
   	      	public void onClick(View view) {
-        		Intent intent = new Intent(Welcome.this, InAppPurchase.class);
-        		startActivity(intent);
+        		//Intent intent = new Intent(Welcome.this, TabHostActivity.class);
+        		//startActivity(intent);
+        		
+        		Intent activityIntentToRegister = new Intent(Welcome.this, InAppPurchase.class);
+				replaceContentView("InAppPurchase", activityIntentToRegister);
+ 		
   	      	}
         });
         

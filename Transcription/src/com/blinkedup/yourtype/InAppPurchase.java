@@ -1,8 +1,13 @@
 package com.blinkedup.yourtype;
 
+import java.util.List;
+
 import com.blinkedup.yourtype.InAppBilling;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -29,6 +34,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -73,21 +79,33 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
 	Handler mHandler;
 	int creditsLeft = 0;
 	
+	//for parse query of pricing
+	ArrayAdapter<String> adapter;
+	ParseObject parseObj;
+	ParseQuery<ParseObject> pqueryObj;
+	List<String> data;
+	String obj;
+	String restName1, restName2, restName3, restName4, restName5, restName6;
+	AlertDialog aDial;
+
+	
+	
 	
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	        case android.R.id.home:
+	// back button start.
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//	    switch (item.getItemId()) {
+//	        case android.R.id.home:
 	            // app icon in action bar clicked; goto parent activity.
-	            this.finish();
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
-	}
+//	            this.finish();
+//	            return true;
+//	        default:
+//	            return super.onOptionsItemSelected(item);
+//	    }
+//	}
 	
 	@SuppressLint("HandlerLeak")
-	@Override
+//	@Override
 	protected void onCreate(Bundle savedInstanceState)
 		{
 		
@@ -100,17 +118,127 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
 		dateFunc = new DateUtils();
 		pl = new ParseLoader();
 		log = new Logger();
-		
+		mHandler=new Handler(); //for parse query of pricing
 		pl.initParse(this);
 		
-		if (android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.HONEYCOMB) {
-			 ActionBar actionBar = getActionBar();
-			 actionBar.setHomeButtonEnabled(true);
-			 actionBar.setDisplayHomeAsUpEnabled(true);
-		}
-		else{
-			 Log.e("NOTICE","Device cannot handle ActionBar");
-		}
+		mHandler = new Handler()
+		{
+		    public void handleMessage(Message msg)
+		    {
+		    	aDial =  new AlertDialog.Builder(InAppPurchase.this)
+          		 .setTitle("")
+          		 .setMessage("")
+          		 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+          			 public void onClick(DialogInterface dialog, int which) {
+          				InAppPurchase.this.finish();
+          			}
+          		 }).setIcon(android.R.drawable.ic_dialog_alert).create();
+		    	
+		    	if (msg.what == 1){
+		    		aDial.setTitle("No connection");
+           			aDial.setMessage("Cannot connect to the Internet");
+           			aDial.show();
+		    	}
+		    	else if (msg.what == 2){
+		    		aDial.setTitle("Error in connection");
+           			aDial.setMessage("Cannot connect to server. \nPlease try again later.");
+           			aDial.show();
+		    	}
+		    	else if (msg.what == 3){
+		    		aDial.setTitle("Error");
+           			aDial.setMessage("Network error encountered");
+           			aDial.show();
+           		}
+		    }
+		};
+		
+		myPd_ring = ProgressDialog.show(InAppPurchase.this, "Please wait", "Updating Information", true);
+        myPd_ring.setCancelable(false);
+        
+        new Thread(new Runnable() {  
+        	 @Override
+             public void run() {
+                   // TODO Auto-generated method stub
+                   try{
+                   	if (Network.isNetworkAvailable(InAppPurchase.this)){
+                   		InAppPurchase.this.runOnUiThread(new Runnable() {
+                            @Override	
+public void run() {
+		
+		//for parse query of pricing
+		// Sync A ParseObject
+				ParseQuery<ParseObject> query = ParseQuery.getQuery("Pricing");
+				query.whereExists("Gold");
+				query.whereExists("Silver");
+				query.whereExists("Bronze");
+
+				query.findInBackground(new FindCallback<ParseObject>() {
+
+				    @Override
+				    public void done(List<ParseObject> questions, ParseException e) {
+				        // The query returns a list of objects from the "questions" class
+				        if(e==null){
+				          for (ParseObject question : questions) {
+				            // Get the questionTopic value from the question object
+				            Log.d("question", "Topic: " + question.getString("Gold"));
+				            restName1 = question.getString("Gold");
+				            restName2 = question.getString("Silver");
+				            restName3 = question.getString("Bronze");
+				            restName4 = question.getString("Description_Gold");
+				            restName5 = question.getString("Description_Silver");
+				            restName6 = question.getString("Description_Bronze");
+				            addData();
+				            myPd_ring.dismiss();
+				          }       
+				        } else {
+				             Log.d("notretreive", "Error: " + e.getMessage());
+				             myPd_ring.dismiss();
+		    	             mHandler.sendEmptyMessage(2);
+				        }
+				    }
+		    	});
+		    }
+		});
+	}
+	else
+	{
+		myPd_ring.dismiss();
+		mHandler.sendEmptyMessage(1);
+	}
+	}
+	catch(Exception e){
+	myPd_ring.dismiss();
+	mHandler.sendEmptyMessage(3);
+	}
+	}
+	}).start();
+	}
+	
+	public void addData() {
+		TextView tv1 = (TextView) findViewById(R.id.tvGold);
+		TextView tv2 = (TextView) findViewById(R.id.tvSilver);
+		TextView tv3 = (TextView) findViewById(R.id.tvBronze);
+		TextView tv4 = (TextView) findViewById(R.id.textView1);
+		TextView tv5 = (TextView) findViewById(R.id.textView2);
+		TextView tv6 = (TextView) findViewById(R.id.textView3);
+		tv1.setText(restName1);
+		tv2.setText(restName2);
+		tv3.setText(restName3);
+		tv4.setText(restName4);
+		tv5.setText(restName5);
+		tv6.setText(restName6);
+	
+		
+		 // back button continuation.
+		
+//		if (android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.HONEYCOMB) {
+//			 ActionBar actionBar = getActionBar();
+//			 actionBar.setHomeButtonEnabled(true);
+//			 actionBar.setDisplayHomeAsUpEnabled(true);
+//		}
+//{
+//			 Log.e("NOTICE","Device cannot handle ActionBar");
+//		}
 	
 		
 		btnGold.setOnClickListener( new OnClickListener() {

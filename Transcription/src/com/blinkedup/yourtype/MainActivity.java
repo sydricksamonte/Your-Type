@@ -135,13 +135,15 @@ public class MainActivity extends ActivityGroup {
 		btnBuyCredits.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				//Intent activityIntentToRegister = new Intent(v.getContext(), RegisterActivity.class);
-				//replaceContentView("RActivity", activityIntentToRegister);
+				
 				if (isOnline()){
 				
 				Intent explicitIntent = new Intent(MainActivity.this,
-						InAppPurchase.class);
+						TabHostActivityPricing.class);
 				startActivity(explicitIntent);
+					
+				//	Intent activityIntentToRegister = new Intent(v.getContext(), InAppPurchase.class);
+				//	replaceContentView("InAppPurchase", activityIntentToRegister);
 				}
 				else{
 					Toast.makeText(getApplicationContext(), "Please connect to internet", 3).show();
