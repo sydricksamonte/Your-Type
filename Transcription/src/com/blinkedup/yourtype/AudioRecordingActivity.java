@@ -544,10 +544,16 @@ public class AudioRecordingActivity extends Activity {
     		public void onClick(DialogInterface dialog, int whichButton) {
     				
     			String srt = input.getEditableText().toString();
-    			//Intent in = new Intent(AudioRecordingActivity.this, TabHostActivity.class);
-    			//startActivity(in);
-    			buyCredits();
-    	 
+    			
+    			String rem = mydb.getRemainingCredit();
+    			int showInt = Integer.parseInt(rem);
+    			if (showInt <= 60){
+    				buyCredits();
+    			}
+    			else{
+    			Intent in = new Intent(AudioRecordingActivity.this, TabHostActivity.class);
+    			startActivity(in);
+    			}
     			final String stripText = mydb.StripText(input.getEditableText().toString());
     			if (file != null && file.exists()) {
     				if (stripText.length() == 0){
