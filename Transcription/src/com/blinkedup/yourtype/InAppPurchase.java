@@ -24,6 +24,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -109,6 +111,7 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
 	protected void onCreate(Bundle savedInstanceState)
 		{
 		
+		
 		// call super class
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_in_app_purchase);
@@ -135,9 +138,9 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
           		 }).setIcon(android.R.drawable.ic_dialog_alert).create();
 		    	
 		    	if (msg.what == 1){
-		    		aDial.setTitle("No connection");
-           			aDial.setMessage("Cannot connect to the Internet");
-           			aDial.show();
+		    
+		    		if (!isOnline()) { Toast.makeText(getApplicationContext(), "Please connect to Internet.", 3).show(); return; };
+		    		
 		    	}
 		    	else if (msg.what == 2){
 		    		aDial.setTitle("Error in connection");
@@ -163,6 +166,10 @@ public class InAppPurchase extends Activity implements InAppBilling.InAppBilling
                    	if (Network.isNetworkAvailable(InAppPurchase.this)){
                    		InAppPurchase.this.runOnUiThread(new Runnable() {
                             @Override	
+
+                            
+
+                            
 public void run() {
 		
 		//for parse query of pricing
@@ -386,6 +393,13 @@ public void run() {
 		}
 
 	// create child text view
+	
+	public boolean isOnline(){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if ((netInfo != null) && (netInfo.isConnected()))  return true; ;
+        return false;
+                        	}
 	
 	private TextView createTextView(int id, String text, float textSize, int margin)
 		{

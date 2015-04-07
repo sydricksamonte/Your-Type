@@ -201,9 +201,7 @@ public class MainActivity extends ActivityGroup {
           		 }).setIcon(android.R.drawable.ic_dialog_alert).create();
 		    	
 		    	if (msg.what == 1){
-		    		aDial.setTitle("No connection");
-           			aDial.setMessage("Cannot connect to the Internet");
-           			aDial.show();
+		    		if (!isOnline()) { Toast.makeText(getApplicationContext(), "Please connect to Internet.", 3).show(); return; };
 		    	}
 		    	else if (msg.what == 2){
 		    		aDial.setTitle("Error in connection");
