@@ -480,7 +480,7 @@ public class AudioRecordingActivity extends Activity {
 	}
 	
 	
-	private void buyCredits() {
+	private void buyCredits(String mes) {
 	//	if (showDialog == 0){
 	//		showDialog = 1;
 		final Context context = this;
@@ -488,7 +488,7 @@ public class AudioRecordingActivity extends Activity {
 		/* Alert Dialog Code Start*/ 	
     	AlertDialog.Builder alert1 = new AlertDialog.Builder(context);
     	alert1.setTitle("Buy Credits Now!"); //Set Alert dialog title here
-    	alert1.setMessage("Click OK for pricing details."); //Message here
+    	alert1.setMessage(mes); //Message here
 
        
  		
@@ -511,17 +511,12 @@ public class AudioRecordingActivity extends Activity {
     			showDialog = 0;
     		
     			//code here
-    			
-    		
     			return;
     		}
     	}); 
     	//AlertDialog alertDialog = alert.create();
     	alert1.show();	
 	}
-	
-	
-	
 	
 	private void rename() {
 		if (showDialog == 0){
@@ -547,8 +542,11 @@ public class AudioRecordingActivity extends Activity {
     			
     			String rem = mydb.getRemainingCredit();
     			int showInt = Integer.parseInt(rem);
-    			if (showInt <= 60){
-    				buyCredits();
+    			if ((showInt <= 60) && (showInt >= 1)){
+    				buyCredits("Your credits are running low. \n\nPurchase now and transcribe more recordings.");
+    			}
+    			else if ((showInt <= 0)){
+    				buyCredits("Your dont have any credits left. \n\nPurchase now for continuous usage");
     			}
     			else{
     			Intent in = new Intent(AudioRecordingActivity.this, TabHostActivity.class);
@@ -587,7 +585,14 @@ public class AudioRecordingActivity extends Activity {
     		@Override
     		public void onClick(DialogInterface dialog, int whichButton) {
     	    // Canceled.
-    			buyCredits();
+    			String rem = mydb.getRemainingCredit();
+    			int showInt = Integer.parseInt(rem);
+    			if ((showInt <= 60) && (showInt >= 1)){
+    				buyCredits("Your credits are running low. \n\nPurchase now and transcribe more recordings.");
+    			}
+    			else if ((showInt <= 0)){
+    				buyCredits("Your dont have any credits left. \n\nPurchase now for continuous usage");
+    			}
     			showDialog = 0;
     			if(mydb.insertRecording(strDefaultRecordingName, strDate, "", total, 0, 0, true, file_exts[currentFormat],"",file.getAbsolutePath().toString() + "/" )) {
     				Toast.makeText(getApplicationContext(), "Recording saved as "+ strDefaultRecordingName, Toast.LENGTH_SHORT).show(); 

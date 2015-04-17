@@ -169,4 +169,12 @@ public class DateUtils {
 	    return lenSec + " left";
 	}
 	
+	public Boolean checkIfToday(Date theDate){
+		Date date = new Date();
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+		Log.e("xdfds",""+theDate);
+		Log.e("ydfds",""+date);
+		return fmt.format(theDate).equals(fmt.format(date));
+	}
+	
 }

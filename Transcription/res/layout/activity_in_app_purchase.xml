@@ -10,7 +10,7 @@
 
     <Button
         android:id="@+id/buttonGold"
-        android:layout_width="100dp"
+        android:layout_width="110dp"
         android:layout_height="60dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="88dp"
@@ -19,7 +19,7 @@
         android:radius="6dip"
         android:textColor="#FFFFFF" />
 
-    <TextView
+      <TextView
         android:id="@+id/textGold"
         android:layout_toRightOf="@+id/buttonGold"
         android:layout_width="wrap_content"
@@ -36,12 +36,12 @@
         android:layout_toRightOf="@+id/buttonGold"
         android:layout_below="@+id/textGold"
         android:paddingLeft="20dip"
-        android:text="Loading description.."
+        android:text="..."
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <Button
         android:id="@+id/buttonSilver"
-        android:layout_width="100dp"
+        android:layout_width="110dp"
         android:layout_height="60dp"
         android:layout_below="@+id/textView1"
         android:layout_marginTop="20dp"
@@ -50,7 +50,7 @@
         android:textColor="#FFFFFF"
         android:text="" />
     
-     <TextView
+      <TextView
         android:id="@+id/textSilver"
         android:layout_toRightOf="@+id/buttonSilver"
         android:layout_width="wrap_content"
@@ -68,12 +68,12 @@
         android:layout_toRightOf="@+id/buttonSilver"
         android:layout_below="@+id/textSilver"
         android:paddingLeft="20dip"
-        android:text="Loading description.."
+        android:text="..."
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <Button
         android:id="@+id/buttonBronze"
-        android:layout_width="100dp"
+        android:layout_width="110dp"
         android:layout_height="60dp"
         android:layout_below="@+id/textView2"
         android:layout_marginTop="20dp"
@@ -82,7 +82,7 @@
         android:text=""
         android:textColor="#FFFFFF" />
 
-    <TextView
+     <TextView
         android:id="@+id/textBronze"
         android:layout_toRightOf="@+id/buttonBronze"
         android:layout_width="wrap_content"
@@ -91,6 +91,7 @@
         android:paddingLeft="20dip"
         android:text="Bronze"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+        
     
     <TextView
         android:id="@+id/textView3"
@@ -99,10 +100,10 @@
         android:layout_toRightOf="@+id/buttonBronze"
         android:layout_below="@+id/textBronze"
         android:paddingLeft="20dip"
-        android:text="Loading description.."
+        android:text="..."
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <TextView
+   <!-- <TextView
         android:id="@+id/tvGold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -138,5 +139,5 @@
         android:textSize="18sp" 
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceSmall" />
-     
+     -->
 </RelativeLayout>

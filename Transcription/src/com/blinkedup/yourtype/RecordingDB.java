@@ -15,7 +15,7 @@ public class RecordingDB extends SQLiteOpenHelper{
 	private static String DBNAME = "dbYourTypeTrans";
 	
 	/** Version number of the database */
-	private static int VERSION = 6;
+	private static int VERSION = 8;
 
 	public static final String RECORDING_ID = "_id";
 	public static final String RECORDING_NAME = "_name";
@@ -47,6 +47,16 @@ public class RecordingDB extends SQLiteOpenHelper{
 	
 	  /** A constant, stores the the table name */
     private static final String DATABASE_TABLE_3 = "Installs";
+    
+    
+    public static final String PRICE_ID = "_id";
+   	public static final String PRICE_NAME = "_price_name";
+   	public static final String PRICE_PRICE = "_price_price";
+   	public static final String PRICE_DESC = "_price_desc";
+   	public static final String PRICE_DATE = "_price_update_date";
+   	
+   	  /** A constant, stores the the table name */
+       private static final String DATABASE_TABLE_4 = "Prices";
     
     
     /** An instance variable for SQLiteDatabase */
@@ -102,6 +112,14 @@ public class RecordingDB extends SQLiteOpenHelper{
 				+ INSTALL_CODE +  " ," + INSTALL_IMPORT_UPDATE +  "  ) VALUES  ("+ "'" + dateFunc.convertedToInstall() + "'" + "," + "'" + dateFunc.getDate() + "'"+" );";
 		
 		db.execSQL(DATABASE_INSERT_DEFAULT_3);
+		
+		//does not appear on 1st release starts here
+		//appeared on 1.0.2
+		String DATABASE_CREATE_4 = "create table if not exists "+  DATABASE_TABLE_4 + "(" + PRICE_ID + " integer PRIMARY KEY AUTOINCREMENT UNIQUE, "
+				+ PRICE_NAME + " text," + PRICE_PRICE + " float,"   + PRICE_DESC + " text," + PRICE_DATE+ " date );";
+		db.execSQL(DATABASE_CREATE_4);
+		//does not appear on 1st release ends here
+		Log.e("DATABASE","EXEC CREATE DONE!");
 	}		
 	
 	
@@ -415,9 +433,115 @@ public class RecordingDB extends SQLiteOpenHelper{
 		return fDate;
 	}
 	
+	public boolean getPackagesCheck() {
+		
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery("select count("+ PRICE_PRICE +") from " + DATABASE_TABLE_4 , null);
+		
+		String last = "0";
+		try{
+			cursor.moveToFirst();
+			last = cursor.getString(0);
+			
+			if (last.equals("0")){
+				cursor.close();
+				return false;
+			}
+			else{
+				cursor.close();
+				return true;
+			}
+		}
+		catch (Exception e){
+			cursor.close();
+			return false;
+		}
+		
+		
+	}
+	
+	public String getPackagePriceInfo(String name) {
+	
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery("select "+ PRICE_PRICE +" from " + DATABASE_TABLE_4 + " WHERE "+ PRICE_NAME +" = '"+name+"' ", null);
+		
+		String last = "";
+		try{
+			cursor.moveToFirst();
+			last = cursor.getString(0);
+		}
+		catch (Exception e){}
+		cursor.close();
+		return last;
+	}
+	
+	public String getPackageDateInfo(String name) {
+		String fDate;
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery("select "+ PRICE_DATE +" from " + DATABASE_TABLE_4 + " WHERE "+ PRICE_NAME +" = '"+name+"' ", null);
+		
+		String last = "";
+		try{
+			cursor.moveToFirst();
+			last = cursor.getString(0);
+			Log.e("fDate",last);
+			
+			
+		}
+		catch (Exception e){	
+			fDate = "";
+		}
+		cursor.close();
+		Log.e("fDate",last);
+		return last;
+	}
+	
+	public String getPackageDescInfo(String name) {
+		
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery("select "+ PRICE_DESC +" from " + DATABASE_TABLE_4 + " WHERE "+ PRICE_NAME +" = '"+name+"' ", null);
+		
+		String last = "";
+		try{
+			cursor.moveToFirst();
+			last = cursor.getString(0);
+		}
+		catch (Exception e){}
+		cursor.close();
+		return last;
+	}
+	
+	String DATABASE_CREATE_4 = "create table if not exists "+  DATABASE_TABLE_4 + "(" + PRICE_ID + " integer PRIMARY KEY AUTOINCREMENT UNIQUE, "
+			+ PRICE_NAME + " text," + PRICE_PRICE + " float,"   + PRICE_DESC + " text," + PRICE_DATE+ " date );";
+
+	public boolean deletePrices() {
+		
+		//  SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(DATABASE_TABLE_4, "1 = 1", null);
+		return true;
+	}
+
+	public boolean insertPrice(String name, String dateAdded, float price, String desc) {
+		
+	      ContentValues contentValues = new ContentValues();
+
+	      contentValues.put(PRICE_NAME, name);
+	      contentValues.put(PRICE_DATE, dateAdded);
+	      contentValues.put(PRICE_PRICE, price);	
+	      contentValues.put(PRICE_DESC, desc);
+
+	      mDB.insert(DATABASE_TABLE_4, null, contentValues);
+	      return true;
+	   }
+
 	@Override
 	public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub	
+		String DATABASE_CREATE_4 = "create table if not exists "+  DATABASE_TABLE_4 + "(" + PRICE_ID + " integer PRIMARY KEY AUTOINCREMENT UNIQUE, "
+				+ PRICE_NAME + " text," + PRICE_PRICE + " float,"   + PRICE_DESC + " text," + PRICE_DATE+ " date );";
+		arg0.execSQL(DATABASE_CREATE_4);
+		Log.e("DATABASE","EXEC UPDATE DONE!");
 	}
 
 }
